@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -24,23 +25,56 @@ const ContactUs = () => {
 
   return (
     <section className="py-16 px-4 bg-gray-50" id="contact-us">
-      <div className="container mx-auto max-w-4xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8">
-              Contact Us
-            </h2>
+      <div className="container mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          {/* Left Section */}
+          <div className="p-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">Contact Us</h2>
+            <p className="text-center text-gray-600 mb-6">
+              We’d love to hear from you! Get in touch with us using the form on the right or through the details below.
+            </p>
+            <div className="mb-6">
             <img
               src="/contact/contact-us.jpg"
               alt="About Us"
               className="w-full rounded-lg shadow-lg"
             />
+            </div>
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold mb-2">Our Contact Info</h3>
+              <p className="text-gray-700">
+                <strong>Email:</strong>{" "}
+                <a href="mailto:contact@yourdomain.com" className="text-blue-600 hover:underline">
+                  contact@yourdomain.com
+                </a>
+              </p>
+              <p className="text-gray-700">
+                <strong>Phone:</strong> <a href="tel:+123456789" className="text-blue-600 hover:underline">+1 (234) 567-890</a>
+              </p>
+            </div>
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold mb-2">Follow Us</h3>
+              <div className="flex space-x-4 justify-center">
+                <a href="https://facebook.com" className="text-blue-600 hover:text-blue-700">
+                  <FaFacebookF size={24} />
+                </a>
+                <a href="https://twitter.com" className="text-blue-400 hover:text-blue-500">
+                  <FaTwitter size={24} />
+                </a>
+                <a href="https://linkedin.com" className="text-blue-700 hover:text-blue-800">
+                  <FaLinkedinIn size={24} />
+                </a>
+                <a href="https://instagram.com" className="text-pink-600 hover:text-pink-700">
+                  <FaInstagram size={24} />
+                </a>
+              </div>
+            </div>
           </div>
+
+          {/* Right Section - Contact Form */}
           <div>
-            <form
-              onSubmit={handleSubmit}
-              className="bg-white p-8 shadow-md rounded-lg"
-            >
+            <h3 className="text-3xl sm:text-4xl font-bold text-center mb-8">Get In Touch</h3>
+            <form onSubmit={handleSubmit} className="bg-white p-8 shadow-md rounded-lg">
               {/* Name Field */}
               <div className="mb-6">
                 <label

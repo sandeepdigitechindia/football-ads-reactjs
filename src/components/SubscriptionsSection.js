@@ -15,6 +15,7 @@ const SubscriptionPlans = () => {
         { title: "Dedicated account manager", status: false },
       ],
       link: "/subscriptions/3-month",
+      popular: true,
     },
     {
       title: "6-Month Plan",
@@ -28,6 +29,7 @@ const SubscriptionPlans = () => {
         { title: "Dedicated account manager", status: false },
       ],
       link: "/subscriptions/6-month",
+      popular: false,
     },
     {
       title: "9-Month Plan",
@@ -41,6 +43,7 @@ const SubscriptionPlans = () => {
         { title: "Dedicated account manager", status: false },
       ],
       link: "/subscriptions/9-month",
+      popular: true,
     },
     {
       title: "1-Year Plan",
@@ -54,6 +57,7 @@ const SubscriptionPlans = () => {
         { title: "Dedicated account manager", status: true },
       ],
       link: "/subscriptions/1-year",
+      popular: false,
     },
   ];
 
@@ -64,42 +68,63 @@ const SubscriptionPlans = () => {
           Our Subscription Plans
         </h2>
 
-        {/* Subscription Plans */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-lg rounded-lg overflow-hidden p-6 border"
+  {plans.map((plan, index) => (
+    <div
+      key={index}
+      className={`relative bg-white shadow-lg rounded-lg overflow-hidden p-6 border transform transition duration-300 hover:scale-105 hover:shadow-2xl ${
+        plan.popular ? "border-blue-600" : "border-gray-200"
+      }`}
+    >
+      {/* Popular Badge */}
+      {plan.popular && (
+        <span className="absolute top-0 left-0 bg-blue-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-br-lg">
+          Popular
+        </span>
+      )}
+
+      <h3 className="text-xl text-blue-600 font-semibold mb-4 text-center">
+        {plan.title}
+      </h3>
+      <p className="text-gray-700 mb-4 text-center">{plan.description}</p>
+      
+      {/* Features List */}
+      <ul className="text-gray-600 text-left mb-6 space-y-2">
+        {plan.features.map((feature, idx) => (
+          <li key={idx} className="flex items-center gap-2">
+            <span
+              className={`${
+                feature.status ? "text-green-500" : "text-red-500"
+              } font-bold`}
             >
-              <h3 className="text-xl text-blue-600 font-semibold mb-4">{plan.title}</h3>
-              <p className="text-gray-700 mb-4">{plan.description}</p>
-              <ul className="text-gray-600 text-left mb-4">
-                {plan.features.map((feature, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center gap-2"
-                  >
-                    <span
-                      className={`${
-                        feature.status ? "text-green-500" : "text-red-500"
-                      } font-bold`}
-                    >
-                      {feature.status ? "✔" : "✘"}
-                    </span>
-                    {feature.title}
-                  </li>
-                ))}
-              </ul>
-              <div className="text-lg font-bold mb-4">{plan.price}</div>
-              <Link
-                to={plan.link}
-                className="block bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700"
-              >
-                Buy Now
-              </Link>
-            </div>
-          ))}
-        </div>
+              {feature.status ? "✔" : "✘"}
+            </span>
+            {feature.title}
+          </li>
+        ))}
+      </ul>
+      
+      {/* Price */}
+      <div className="text-2xl font-bold mb-6 text-center">
+        {plan.price}
+        <span className="text-sm text-gray-500 ml-2">/ month</span>
+      </div>
+
+      {/* Buy Now Button */}
+      <Link
+        to={plan.link}
+        className={`block text-center py-2 px-4 rounded-md text-white font-medium ${
+          plan.popular
+            ? "bg-blue-600 hover:bg-blue-700"
+            : "bg-gray-600 hover:bg-gray-700"
+        }`}
+      >
+        Buy Now
+      </Link>
+    </div>
+  ))}
+</div>
+
 
         {/* Full Access Link */}
         <div className="mt-8">

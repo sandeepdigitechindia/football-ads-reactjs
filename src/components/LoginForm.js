@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -48,74 +48,98 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 mb-10 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl text-blue-600 font-bold text-center mb-6">Login</h2>
-      <form onSubmit={handleSubmit} noValidate>
-        {/* Email Field */}
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg ${
-              errors.email ? "border-red-500" : "border-gray-300"
-            } focus:outline-none focus:ring focus:ring-blue-300`}
-            placeholder="Enter your email"
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4 py-16">
+      <div className="flex flex-col lg:flex-row w-full max-w-5xl bg-white shadow-lg rounded-lg overflow-hidden">
+        {/* Left Side - Image and Text */}
+        <div className="w-full lg:w-1/2 bg-blue-600 text-white p-8 flex flex-col justify-center">
+          <h2 className="text-3xl font-bold mb-4">Welcome Back!</h2>
+          <p className="text-lg mb-6">
+            Log in to your account to access exclusive content and manage your settings.
+          </p>
+          <img
+            src="/about/login.jpg" // Replace with your image path
+            alt="Login Illustration"
+            className="mt-4 rounded-lg w-full object-cover"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-          )}
         </div>
 
-        {/* Password Field */}
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg ${
-              errors.password ? "border-red-500" : "border-gray-300"
-            } focus:outline-none focus:ring focus:ring-blue-300`}
-            placeholder="Enter your password"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-          )}
-        </div>
+        {/* Right Side - Login Form */}
+        <div className="w-full lg:w-1/2 p-8">
+          <h2 className="text-2xl text-blue-600 font-bold text-center mb-6">Login</h2>
+          <form onSubmit={handleSubmit} noValidate>
+            {/* Email Field */}
+            <div className="mb-4">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
+                placeholder="Enter your email"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
+            </div>
 
-        {/* Submit Button */}
-        <div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
-          >
-            Login
-          </button>
-        </div>
-      </form>
+            {/* Password Field */}
+            <div className="mb-6">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
+                placeholder="Enter your password"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
+            </div>
 
-      <p className="text-center mt-2">
-        Don't have an account?<br />
-        <Link to="/register" className="text-blue-600">
-          Get started now!
-        </Link>
-      </p>
+            {/* Submit Button */}
+            <div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+
+          <p className="text-center mt-2">
+            Don't have an account?<br />
+            <Link to="/register" className="text-blue-600">
+              Get started now!
+            </Link>
+          </p>
+          <p className="text-center mt-2">
+            Go to Dashboard<br />
+            <Link to="/user/bashboard" className="text-blue-600">
+              Dashboard
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

@@ -107,7 +107,7 @@ const AdditionalServicesSection = () => {
 
         {/* Call to Action */}
         <div className="mt-8">
-          <a href="/services-for-clubs" className="text-lg font-semibold text-blue-600 hover:underline">
+          <a href="/services" className="text-lg font-semibold text-blue-600 hover:underline">
             Learn More About Our Services
           </a>
         </div>

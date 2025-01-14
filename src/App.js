@@ -11,6 +11,13 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Layout from './components/Layout';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import FAQ from './pages/FAQ';
+import Dashboard from './pages/user/Dashboard';
+import Settings from './pages/user/Settings';
+import UserSubscriptions from './pages/user/Subscriptions';
+import UserPosts from './pages/user/Posts';
 
 const App = () => {
   return (
@@ -21,11 +28,19 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/ads" element={<Ads />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
-        <Route path="/services-for-clubs" element={<ServicesForClubs />} />
+        <Route path="/services" element={<ServicesForClubs />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/faqs" element={<FAQ />} />
+        <Route path="/user/dashboard" element={<Dashboard />} />
+        <Route path="/user/setting" element={<Settings />} />
+        <Route path="/user/subscriptions" element={<UserSubscriptions />} />
+        <Route path="/user/posts" element={<UserPosts />} />
+
       </Routes>
       </Layout>
       <Footer />
