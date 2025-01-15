@@ -140,7 +140,7 @@ const LoginForm = () => {
             Don't have an account?
             <br />
             <Link to="/register" className="text-blue-600">
-              Get started now!
+              Sign Up
             </Link>
           </p>
           <p className="text-center mt-2">

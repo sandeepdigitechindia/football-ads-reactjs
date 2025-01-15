@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
@@ -60,7 +60,7 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 text-nowrap mt-2 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-5 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.ads ? 'block' : 'hidden'
                   }`}
                 >
@@ -92,7 +92,7 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 text-nowrap mt-2 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-5 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.subscriptions ? 'block' : 'hidden'
                   }`}
                 >
@@ -124,7 +124,7 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 text-nowrap mt-2 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-5 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.services ? 'block' : 'hidden'
                   }`}
                 >

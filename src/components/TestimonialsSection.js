@@ -1,105 +1,121 @@
-import React from 'react';
+import React, { useState } from 'react';
+// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
 
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+// import required modules
+import { Navigation } from 'swiper/modules';
+import { FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/fa6';
+import { testimonialData } from '../constants/Testimonial';
 
 const TestimonialsSection = () => {
-  const testimonials = [
-    {
-      name: 'John Doe',
-      photo: '/testimonial/man.png',
-      quote: 'Football Ads helped me connect with the best clubs for my career! Highly recommend it!',
-      rating: 5,
-    },
-    {
-      name: 'Jane Smith',
-      photo: '/testimonial/man.png',
-      quote: 'A fantastic platform! I was able to promote my services and reach more people.',
-      rating: 4,
-    },
-    {
-      name: 'Michael Brown',
-      photo: '/testimonial/man.png',
-      quote: 'The best experience I’ve had. Easy to use, and the results speak for themselves!',
-      rating: 5,
-    },
-    {
-      name: 'Emily Johnson',
-      photo: '/testimonial/man.png',
-      quote: 'Great service! The exposure I got was far beyond my expectations.',
-      rating: 4,
-    },
-    {
-      name: 'David Williams',
-      photo: '/testimonial/man.png',
-      quote: 'The platform is intuitive and very effective at helping football players get noticed.',
-      rating: 5,
-    },
-  ];
 
-  return (
-    <section className="py-16 px-4 bg-gray-50">
-      <div className="container mx-auto text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-8">What Our Clients Say</h2>
+    const [isBeginning, setIsBeginning] = useState(true);
+    const [isEnd, setIsEnd] = useState(false);
 
-        {/* Swiper Slider */}
-        <Swiper
-          spaceBetween={30}
-          slidesPerView={1}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-            },
-            1024: {
-              slidesPerView: 3,
-            },
-          }}
-          
-        >
-          {testimonials.map((testimonial, index) => (
-            <SwiperSlide key={index} className="flex justify-center">
-              <div className="bg-white shadow-xl rounded-lg p-8 max-w-xs mx-auto transform transition duration-500 hover:scale-105 hover:shadow-2xl">
-                {/* Avatar */}
-                <div className="flex justify-center mb-6">
-                  <img
-                    src={testimonial.photo}
-                    alt={testimonial.name}
-                    className="w-24 h-24 rounded-full object-cover border-4 border-blue-600"
-                  />
-                </div>
+    const breakpointsResponsive = {
+        '@0.00': {
+            slidesPerView: 1,
+            spaceBetween: 10,
+        },
+        '@0.75': {
+            slidesPerView: 2,
+            spaceBetween: 20,
+        },
+        '@1.00': {
+            slidesPerView: 3,
+            spaceBetween: 10,
+        },
+        '@1.50': {
+            slidesPerView: 3,
+            spaceBetween: 30,
+        },
+    }
 
-                {/* Quote */}
-                <p className="text-gray-700 text-lg mb-4 italic">{testimonial.quote}</p>
+    const handleSwiperEvents = (swiper) => {
+        setIsBeginning(swiper.isBeginning);
+        setIsEnd(swiper.isEnd);
+    }
 
-                {/* Rating */}
-                <div className="flex justify-center items-center mb-6">
-                  {[...Array(5)].map((_, starIndex) => (
-                    <svg
-                      key={starIndex}
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={`w-5 h-5 ${starIndex < testimonial.rating ? 'text-yellow-500' : 'text-gray-300'}`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      aria-hidden="true"
+    return (
+        <div className='w-full h-full space-y-5 relative lg:px-24 md:px-16 py-20 sm:px-7 px-4 flex items-center justify-center flex-col'>
+
+            <div className="w-full flex items-center justify-between">
+                <h2 className="text-2xl font-semibold">
+                    Testimonials
+                </h2>
+
+                {/* Custom buttons */}
+                <div className="flex items-center gap-6">
+                    <button className={`custom-prev text-neutral-50 bg-blue-600 hover:bg-blue-700 p-2 rounded-full z-10 ${isBeginning ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        disabled={isBeginning}
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 15.27l-6.18 3.24 1.64-7.03L1 6.89l7.19-.61L10 0l2.81 5.28 7.19.61-4.46 4.59 1.64 7.03L10 15.27z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  ))}
+                        <FaChevronLeft size={20} />
+                    </button>
+                    <button className={`custom-next text-neutral-50 bg-blue-600 hover:bg-blue-700 p-2 rounded-full z-10 ${isEnd ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        disabled={isEnd}
+                    >
+                        <FaChevronRight size={20} />
+                    </button>
                 </div>
 
-                {/* Client Name */}
-                <h3 className="text-lg font-semibold text-blue-600">{testimonial.name}</h3>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-    </section>
-  );
-};
+            </div>
 
-export default TestimonialsSection;
+            <div className="w-full py-2">
+                <Swiper
+                    slidesPerView={1}
+                    spaceBetween={5}
+                    navigation={{
+                        nextEl: '.custom-next',
+                        prevEl: '.custom-prev',
+                    }}
+                    breakpoints={breakpointsResponsive}
+                    onSlideChange={(swiper) => handleSwiperEvents(swiper)}
+                    onInit={(swiper) => handleSwiperEvents(swiper)}
+                    modules={[Navigation]}
+                    className="mySwiper p-1 ![&_.swiper-wrapper]:!ease-in-out ![&_.swiper-wrapper]:!duration-300"
+                >
+                    {testimonialData.map((item) => (
+                        <SwiperSlide key={item.id}>
+
+                            <div className="w-full h-auto p-6 space-y-10 group bg-neutral-800/10 rounded-xl border border-neutral-800/70">
+                                <p className=" text-base font-normal">
+                                    {item.desc}
+                                </p>
+
+                                <div className="w-full flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <img src={item.img} alt={item.name} className="w-12 h-12 object-center object-cover rounded-full border" />
+
+                                        <div className="space-y-1">
+                                            <p className=" text-base font-semibold">
+                                                {item.name}
+                                            </p>
+                                            <p className=" text-xs font-normal italic">
+                                                {item.role} of Company {item.company}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-1 bg-yellow-500/5 rounded-full px-2 py-1">
+                                        <FaStar className='text-yellow-600 text-sm' />
+                                        <p className="text-xs text-yellow-600">
+                                            {item.rating}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+
+        </div>
+    )
+}
+
+export default TestimonialsSection

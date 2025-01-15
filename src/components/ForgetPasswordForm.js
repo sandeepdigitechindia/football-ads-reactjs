@@ -103,14 +103,6 @@ const ForgetPasswordForm = () => {
               </button>
             </div>
           </form>
-
-          <p className="text-center mt-2">
-            Don't have an account?
-            <br />
-            <Link to="/register" className="text-blue-600">
-              Get started now!
-            </Link>
-          </p>
         </div>
       </div>
     </div>
