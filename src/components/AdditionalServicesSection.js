@@ -14,7 +14,7 @@ const AdditionalServicesSection = () => {
             <p className="text-gray-700 mb-4">We help clubs and agents find the best talents by organizing scouting events and trials.</p>
             <div className="aspect-w-16 aspect-h-9 mb-4">
               <iframe 
-                src="https://www.youtube.com/embed/VIDEO_ID" 
+                src="https://www.youtube.com/embed/1CB_xGYibQU?si=TlSBnhsCHVK5yDEb" 
                 title="Scouting Organization Video"
                 className="w-full h-full rounded-lg"
                 frameBorder="0"
@@ -30,7 +30,7 @@ const AdditionalServicesSection = () => {
             <p className="text-gray-700 mb-4">We assist in organizing football tournaments, from planning to execution, for all levels.</p>
             <div className="aspect-w-16 aspect-h-9 mb-4">
               <iframe 
-                src="https://www.youtube.com/embed/VIDEO_ID" 
+                src="https://www.youtube.com/embed/co3pn3eL5-Y?si=Dz05U_bHfSncfQV_" 
                 title="Tournament Organization Video"
                 className="w-full h-full rounded-lg"
                 frameBorder="0"
@@ -46,7 +46,7 @@ const AdditionalServicesSection = () => {
             <p className="text-gray-700 mb-4">We provide tailored services based on specific needs. Let us know how we can help you!</p>
             <div className="aspect-w-16 aspect-h-9 mb-4">
               <iframe 
-                src="https://www.youtube.com/embed/VIDEO_ID" 
+                src="https://www.youtube.com/embed/t_v9-LtDbaw?si=Z_2aDbZp4uUNhpWE" 
                 title="Tournament Organization Video"
                 className="w-full h-full rounded-lg"
                 frameBorder="0"
@@ -62,7 +62,7 @@ const AdditionalServicesSection = () => {
             <p className="text-gray-700 mb-4">We help clubs and agents find the best talents by organizing scouting events and trials.</p>
             <div className="aspect-w-16 aspect-h-9 mb-4">
               <iframe 
-                src="https://www.youtube.com/embed/VIDEO_ID" 
+                src="https://www.youtube.com/embed/KWKBch5hC5E?si=OYZD3fMrn5DCsggp" 
                 title="Scouting Organization Video"
                 className="w-full h-full rounded-lg"
                 frameBorder="0"
@@ -78,7 +78,7 @@ const AdditionalServicesSection = () => {
             <p className="text-gray-700 mb-4">We assist in organizing football tournaments, from planning to execution, for all levels.</p>
             <div className="aspect-w-16 aspect-h-9 mb-4">
               <iframe 
-                src="https://www.youtube.com/embed/VIDEO_ID" 
+                src="https://www.youtube.com/embed/co3pn3eL5-Y?si=Dz05U_bHfSncfQV_" 
                 title="Tournament Organization Video"
                 className="w-full h-full rounded-lg"
                 frameBorder="0"
@@ -94,7 +94,7 @@ const AdditionalServicesSection = () => {
             <p className="text-gray-700 mb-4">We provide tailored services based on specific needs. Let us know how we can help you!</p>
             <div className="aspect-w-16 aspect-h-9 mb-4">
               <iframe 
-                src="https://www.youtube.com/embed/VIDEO_ID" 
+                src="https://www.youtube.com/embed/Rm2YVbN7Zsw?si=cMB2nPc2LUF5XsoP" 
                 title="Tournament Organization Video"
                 className="w-full h-full rounded-lg"
                 frameBorder="0"

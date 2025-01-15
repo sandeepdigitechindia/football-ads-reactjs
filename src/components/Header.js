@@ -60,13 +60,13 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 mt-2 bg-gray-800 text-white rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-2 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.ads ? 'block' : 'hidden'
                   }`}
                 >
-                  <li><Link to="/ads" className="block px-4 py-2 hover:bg-gray-700">Advertisement for players</Link></li>
-                  <li><Link to="/ads" className="block px-4 py-2 hover:bg-gray-700">Advertisement for coaches</Link></li>
-                  <li><Link to="/ads" className="block px-4 py-2 hover:bg-gray-700">Advertisement for jobs in football</Link></li>
+                  <li><Link to="/ads" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">Advertisement for players</Link></li>
+                  <li><Link to="/ads" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">Advertisement for coaches</Link></li>
+                  <li><Link to="/ads" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">Advertisement for jobs in football</Link></li>
                 </ul>
               </li>
               
@@ -92,14 +92,14 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 mt-2 bg-gray-800 text-white rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-2 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.subscriptions ? 'block' : 'hidden'
                   }`}
                 >
-                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-gray-700">3-Month Plan</Link></li>
-                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-gray-700">6-Month Plan</Link></li>
-                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-gray-700">9-Month Plan</Link></li>
-                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-gray-700">1-Year Plan</Link></li>
+                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">3-Month Plan</Link></li>
+                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">6-Month Plan</Link></li>
+                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">9-Month Plan</Link></li>
+                  <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">1-Year Plan</Link></li>
                 </ul>
               </li>
               <li className="relative group">
@@ -124,13 +124,13 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 mt-2 bg-gray-800 text-white rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-2 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.services ? 'block' : 'hidden'
                   }`}
                 >
-                  <li><Link to="/services" className="block px-4 py-2 hover:bg-gray-700">Scouting Organization</Link></li>
-                  <li><Link to="/services" className="block px-4 py-2 hover:bg-gray-700">Tournament Organization</Link></li>
-                  <li><Link to="/services" className="block px-4 py-2 hover:bg-gray-700">Custom Services</Link></li>
+                  <li><Link to="/services" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">Scouting Organization</Link></li>
+                  <li><Link to="/services" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">Tournament Organization</Link></li>
+                  <li><Link to="/services" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">Custom Services</Link></li>
                 </ul>
               </li>
               <li><Link to="/about" className="text-white hover:text-orange-500">About</Link></li>
@@ -140,7 +140,7 @@ const Header = () => {
 
           {/* Authentication Buttons */}
           <div className="hidden md:flex">
-            <Link to="/login" className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition duration-300">Login / Register</Link>
+            <Link to="/login" className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition duration-300">Login</Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -261,7 +261,7 @@ const Header = () => {
               <li><Link to="/contact" className="text-white hover:text-orange-500">Contact</Link></li>
             </ul>
             <div>
-              <Link to="/login" className="text-white hover:text-orange-500">Login / Register</Link>
+              <Link to="/login" className="text-white hover:text-orange-500">Login</Link>
             </div>
           </div>
         </div>
