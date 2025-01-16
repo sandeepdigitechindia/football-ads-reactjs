@@ -12,7 +12,6 @@ const Header = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
   const toggleDropdown = (key) => {
     setDropdownOpen((prevState) => {
       const newState = Object.keys(prevState).reduce((acc, curr) => {
@@ -22,6 +21,24 @@ const Header = () => {
       return newState;
     });
   };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest('.dropdown-menu')) {
+        setDropdownOpen({
+          ads: false,
+          subscriptions: false,
+          services: false,
+        });
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
 
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
@@ -38,7 +55,7 @@ const Header = () => {
           <nav className="hidden md:flex space-x-8">
             <ul className="flex space-x-8 relative">
             <li><Link to="/" className="text-white hover:text-orange-500">Home</Link></li>
-              <li className="relative group">
+              <li className="relative dropdown-menu group">
                 <button
                   onClick={() => toggleDropdown('ads')}
                   className="flex items-center text-white hover:text-orange-500"
@@ -60,7 +77,7 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 text-nowrap mt-5 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-[26px] bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.ads ? 'block' : 'hidden'
                   }`}
                 >
@@ -70,7 +87,7 @@ const Header = () => {
                 </ul>
               </li>
               
-              <li className="relative group">
+              <li className="relative dropdown-menu group">
                 <button
                   onClick={() => toggleDropdown('subscriptions')}
                   className="flex items-center text-white hover:text-orange-500"
@@ -92,7 +109,7 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 text-nowrap mt-5 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-[26px] bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.subscriptions ? 'block' : 'hidden'
                   }`}
                 >
@@ -102,7 +119,7 @@ const Header = () => {
                   <li><Link to="/subscriptions" className="block px-4 py-2 hover:bg-blue-900 hover:text-white">1-Year Plan</Link></li>
                 </ul>
               </li>
-              <li className="relative group">
+              <li className="relative dropdown-menu group">
                 <button
                   onClick={() => toggleDropdown('services')}
                   className="flex items-center text-white hover:text-orange-500"
@@ -124,7 +141,7 @@ const Header = () => {
                   </svg>
                 </button>
                 <ul
-                  className={`absolute left-0 text-nowrap mt-5 bg-white w-70 text-black rounded shadow-lg group-hover:block ${
+                  className={`absolute left-0 text-nowrap mt-[26px] bg-white w-70 text-black rounded shadow-lg group-hover:block ${
                     dropdownOpen.services ? 'block' : 'hidden'
                   }`}
                 >
@@ -140,7 +157,7 @@ const Header = () => {
 
           {/* Authentication Buttons */}
           <div className="hidden md:flex">
-            <Link to="/login" className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition duration-300">Login</Link>
+            <Link to="/login" className="px-8 py-2 border border-white rounded hover:bg-white hover:text-black transition duration-300">Login</Link>
           </div>
 
           {/* Mobile Menu Button */}

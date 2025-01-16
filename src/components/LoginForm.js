@@ -76,7 +76,7 @@ const LoginForm = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Email
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -100,7 +100,7 @@ const LoginForm = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Password
+                Password <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
@@ -138,7 +138,7 @@ const LoginForm = () => {
 
           <p className="text-center mt-2">
             Don't have an account?
-            <br />
+         &nbsp;
             <Link to="/register" className="text-blue-600">
               Sign Up
             </Link>
@@ -146,7 +146,7 @@ const LoginForm = () => {
           <p className="text-center mt-2">
             Go to Dashboard
             <br />
-            <Link to="/user/bashboard" className="text-blue-600">
+            <Link to="/user/dashboard" className="text-blue-600">
               Dashboard
             </Link>
           </p>

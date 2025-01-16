@@ -80,36 +80,35 @@ const TestimonialsSection = () => {
                 >
                     {testimonialData.map((item) => (
                         <SwiperSlide key={item.id}>
-
-                            <div className="w-full h-auto p-6 space-y-10 group bg-neutral-800/10 rounded-xl border border-neutral-800/70">
-                                <p className=" text-base font-normal">
-                                    {item.desc}
+                        <div className="w-full h-[250px] p-6 space-y-10 group rounded-xl border border-neutral-800/70 transition-all duration-300 hover:border-blue-600">
+                          <p className="text-base font-normal h-[100px] overflow-hidden">
+                            {item.desc}
+                          </p>
+                      
+                          <div className="w-full flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <img src={item.img} alt={item.name} className="w-12 h-12 object-center object-cover rounded-full border" />
+                      
+                              <div className="space-y-1">
+                                <p className="text-base font-semibold">
+                                  {item.name}
                                 </p>
-
-                                <div className="w-full flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <img src={item.img} alt={item.name} className="w-12 h-12 object-center object-cover rounded-full border" />
-
-                                        <div className="space-y-1">
-                                            <p className=" text-base font-semibold">
-                                                {item.name}
-                                            </p>
-                                            <p className=" text-xs font-normal italic">
-                                                {item.role} of Company {item.company}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center gap-1 bg-yellow-500/5 rounded-full px-2 py-1">
-                                        <FaStar className='text-yellow-600 text-sm' />
-                                        <p className="text-xs text-yellow-600">
-                                            {item.rating}
-                                        </p>
-                                    </div>
-                                </div>
+                                <p className="text-xs font-normal italic">
+                                  {item.role} of Company {item.company}
+                                </p>
+                              </div>
                             </div>
-
-                        </SwiperSlide>
+                      
+                            <div className="flex items-center gap-1 bg-yellow-500/5 rounded-full px-2 py-1">
+                              <FaStar className='text-yellow-600 text-sm' />
+                              <p className="text-xs text-yellow-600">
+                                {item.rating}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                      
                     ))}
                 </Swiper>
             </div>

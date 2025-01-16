@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const countries = ["United States", "India", "Canada", "Australia", "United Kingdom"]; // Add more as needed
+const roles = ["Player", "Clubs", "Agent", "Coach"]; // Add more roles if needed
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const RegisterForm = () => {
     email: '',
     phone: '',
     country: '',
+    role: '',
     password: '',
     confirmPassword: '',
     acceptTerms: false,
@@ -45,6 +47,11 @@ const RegisterForm = () => {
       newErrors.country = 'Please select a country.';
     }
 
+    // Role validation
+    if (!formData.role) {
+      newErrors.role = 'Please select a role.';
+    }
+
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required.';
@@ -66,7 +73,7 @@ const RegisterForm = () => {
 
     // acceptTerms validation
     if (!formData.acceptTerms) {
-      newErrors.acceptTerms = 'Please select a Accept Terms.';
+      newErrors.acceptTerms = 'Please accept the terms and conditions.';
     }
 
     setErrors(newErrors);
@@ -90,8 +97,10 @@ const RegisterForm = () => {
         email: '',
         phone: '',
         country: '',
+        role: '',
         password: '',
         confirmPassword: '',
+        acceptTerms: false,
       });
       setErrors({});
     }
@@ -120,7 +129,7 @@ const RegisterForm = () => {
             {/* Name Field */}
             <div className="mb-4">
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Name
+                Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -128,9 +137,7 @@ const RegisterForm = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.name ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Enter your name"
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -139,7 +146,7 @@ const RegisterForm = () => {
             {/* Email Field */}
             <div className="mb-4">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -147,9 +154,7 @@ const RegisterForm = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Enter your email"
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -158,7 +163,7 @@ const RegisterForm = () => {
             {/* Phone Field */}
             <div className="mb-4">
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                Phone
+                Phone <span className="text-red-500">*</span>
               </label>
               <input
                 type="tel"
@@ -166,9 +171,7 @@ const RegisterForm = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.phone ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${errors.phone ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Enter your phone number"
               />
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
@@ -177,16 +180,14 @@ const RegisterForm = () => {
             {/* Country Dropdown */}
             <div className="mb-4">
               <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-                Country
+                Country <span className="text-red-500">*</span>
               </label>
               <select
                 id="country"
                 name="country"
                 value={formData.country}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.country ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${errors.country ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
               >
                 <option value="">Select your country</option>
                 {countries.map((country, index) => (
@@ -198,10 +199,32 @@ const RegisterForm = () => {
               {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country}</p>}
             </div>
 
+            {/* Role Dropdown */}
+            <div className="mb-4">
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+                Role <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 border rounded-lg ${errors.role ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
+              >
+                <option value="">Select your role</option>
+                {roles.map((role, index) => (
+                  <option key={index} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
+              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
+            </div>
+
             {/* Password Field */}
             <div className="mb-4">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+                Password <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
@@ -209,9 +232,7 @@ const RegisterForm = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.password ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Enter your password"
               />
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
@@ -220,7 +241,7 @@ const RegisterForm = () => {
             {/* Confirm Password Field */}
             <div className="mb-6">
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password
+                Confirm Password <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
@@ -228,9 +249,7 @@ const RegisterForm = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Confirm your password"
               />
               {errors.confirmPassword && (

@@ -19,6 +19,7 @@ import Dashboard from './pages/user/Dashboard';
 import Settings from './pages/user/Settings';
 import UserSubscriptions from './pages/user/Subscriptions';
 import UserPosts from './pages/user/Posts';
+import UserLogout from './pages/user/Logout';
 
 const App = () => {
   return (
@@ -39,10 +40,10 @@ const App = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/faqs" element={<FAQ />} />
         <Route path="/user/dashboard" element={<Dashboard />} />
-        <Route path="/user/setting" element={<Settings />} />
+        <Route path="/user/settings" element={<Settings />} />
         <Route path="/user/subscriptions" element={<UserSubscriptions />} />
         <Route path="/user/posts" element={<UserPosts />} />
-
+        <Route path="/user/logout" element={<UserLogout />} />
       </Routes>
       </Layout>
       <Footer />
