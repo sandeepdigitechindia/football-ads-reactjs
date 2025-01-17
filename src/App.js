@@ -19,6 +19,8 @@ import Dashboard from './pages/user/Dashboard';
 import Settings from './pages/user/Settings';
 import UserSubscriptions from './pages/user/Subscriptions';
 import UserPosts from './pages/user/Posts';
+import UserPostForm from './pages/user/PostForm';
+import UserPostDetail from './pages/user/PostDetail';
 import UserLogout from './pages/user/Logout';
 
 const App = () => {
@@ -43,6 +45,8 @@ const App = () => {
         <Route path="/user/settings" element={<Settings />} />
         <Route path="/user/subscriptions" element={<UserSubscriptions />} />
         <Route path="/user/posts" element={<UserPosts />} />
+        <Route path="/user/post/create" element={<UserPostForm />} />
+        <Route path="/user/post/:id" element={<UserPostDetail />} />
         <Route path="/user/logout" element={<UserLogout />} />
       </Routes>
       </Layout>

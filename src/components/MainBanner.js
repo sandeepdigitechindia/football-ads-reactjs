@@ -13,7 +13,7 @@ const MainBanner = () => {
 
         {/* Welcome Text and CTA */}
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-10">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-shadow">Welcome to DB1</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-shadow">Welcome to DB10</h1>
           <p className="text-lg sm:text-2xl mb-8 text-shadow">Your favorite site for the best football ads!</p>
           <div className="flex justify-center gap-4">
             <Link to="/subscriptions" className="cta-btn px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300">Subscribe Now</Link>
