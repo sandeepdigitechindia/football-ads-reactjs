@@ -135,9 +135,9 @@ const Posts = () => {
           {/* Posts Header */}
           <header className="flex justify-between items-center flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-800">Posts</h1>
-            <Link to={'/user/post/create'} className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+            {/* <Link to={'/user/post/create'} className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
               Add New
-            </Link>
+            </Link> */}
           </header>
 
           {/* Search Input */}
