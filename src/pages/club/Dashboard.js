@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Sidebar from "../../components/user/Sidebar";
+import Sidebar from "../../components/club/Sidebar";
 import DataTable from "react-data-table-component";
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -109,7 +109,7 @@ const Dashboard = () => {
       cell: (row) => (
         <button
           className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow"
-          onClick={() => navigate(`/user/post/${row.id}`)}
+          onClick={() => navigate(`/club/post/${row.id}`)}
         >
           Apply
         </button>
@@ -241,7 +241,7 @@ const Dashboard = () => {
                 renewing on <strong>Feb 10, 2025</strong>.
               </p>
               <Link
-                to="/user/subscriptions" // Add the route to user subscription page
+                to="/club/subscriptions" // Add the route to user subscription page
                 className="mt-4 sm:mt-0 py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
               >
                 Manage Subscription

@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import Sidebar from "../../components/user/Sidebar";
+import Sidebar from "../../components/club/Sidebar";
 import { Link } from "react-router-dom";
 
 const PostDetail = () => {
@@ -37,7 +37,7 @@ const PostDetail = () => {
           <header className="flex justify-between items-center flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-800">Job Details</h1>
             <Link
-              to={"/user/posts"}
+              to={"/club/posts"}
               className="py-2 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
             >
               &#8592; Back

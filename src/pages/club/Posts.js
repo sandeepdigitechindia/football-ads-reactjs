@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../../components/user/Sidebar";
+import Sidebar from "../../components/club/Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 
@@ -109,7 +109,7 @@ const Posts = () => {
         cell: (row) => (
           <button
             className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow"
-            onClick={() => navigate(`/user/post/${row.id}`)}
+            onClick={() => navigate(`/club/post/${row.id}`)}
           >
             Apply
           </button>
@@ -185,7 +185,7 @@ const Posts = () => {
           {/* Posts Header */}
           <header className="flex justify-between items-center flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-800">All Posts</h1>
-            <Link to={'/user/post/create'} className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+            <Link to={'/club/post/create'} className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
               Add New &#43;
             </Link>
           </header>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Sidebar from "../../components/user/Sidebar";
+import Sidebar from "../../components/club/Sidebar";
 // Sample countries and roles
 const countries = [
   "United States",

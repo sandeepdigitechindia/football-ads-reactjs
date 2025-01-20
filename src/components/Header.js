@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogPanel,
@@ -39,6 +39,14 @@ const services = [
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Set to true to simulate login
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Handle logout logic
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
 
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
@@ -159,18 +167,61 @@ export default function Example() {
           <Link to="/about" className="text-sm/6 font-semibold text-white-900">
             About
           </Link>
-          <Link to="/contact" className="text-sm/6 font-semibold text-white-900">
+          <Link
+            to="/contact"
+            className="text-sm/6 font-semibold text-white-900"
+          >
             Contact
           </Link>
         </PopoverGroup>
+
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            to="/login"
-            className="px-8 py-2 border border-white rounded hover:bg-white hover:text-black transition duration-300"
-          >
-            Login
-          </Link>
+          {isLoggedIn ? (
+            <Popover className="relative">
+              <PopoverButton className="flex items-center gap-x-2">
+                <img
+                  src="/common/man.png"
+                  alt="User"
+                  className="h-8 w-8 rounded-full border-2 border-white"
+                />
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  className="h-5 w-5 text-white"
+                />
+              </PopoverButton>
+              <PopoverPanel className="absolute right-0 mt-2 w-48 bg-white shadow-lg ring-1 ring-gray-900/5 rounded-md">
+                <div className="py-2">
+                  <Link
+                    to="/user/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-900 hover:text-white"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/user/settings"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-900 hover:text-white"
+                  >
+                    Settings
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-900 hover:text-white"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </PopoverPanel>
+            </Popover>
+          ) : (
+            <Link
+              to="/login"
+              className="px-8 py-2 border border-white rounded hover:bg-white hover:text-black transition duration-300"
+            >
+              Login
+            </Link>
+          )}
         </div>
+
       </nav>
       <Dialog
         open={mobileMenuOpen}

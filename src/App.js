@@ -15,13 +15,21 @@ import Layout from './components/Layout';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import FAQ from './pages/FAQ';
-import Dashboard from './pages/user/Dashboard';
-import Settings from './pages/user/Settings';
+import UserDashboard from './pages/user/Dashboard';
+import UserSettings from './pages/user/Settings';
 import UserSubscriptions from './pages/user/Subscriptions';
 import UserPosts from './pages/user/Posts';
 import UserPostForm from './pages/user/PostForm';
 import UserPostDetail from './pages/user/PostDetail';
 import UserLogout from './pages/user/Logout';
+
+import ClubDashboard from './pages/club/Dashboard';
+import ClubSettings from './pages/club/Settings';
+import ClubSubscriptions from './pages/club/Subscriptions';
+import ClubPosts from './pages/club/Posts';
+import ClubPostForm from './pages/club/PostForm';
+import ClubPostDetail from './pages/club/PostDetail';
+import ClubLogout from './pages/club/Logout';
 
 const App = () => {
   return (
@@ -41,13 +49,24 @@ const App = () => {
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/faqs" element={<FAQ />} />
-        <Route path="/user/dashboard" element={<Dashboard />} />
-        <Route path="/user/settings" element={<Settings />} />
+
+        {/* user routes  */}
+        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/user/settings" element={<UserSettings />} />
         <Route path="/user/subscriptions" element={<UserSubscriptions />} />
         <Route path="/user/posts" element={<UserPosts />} />
         <Route path="/user/post/create" element={<UserPostForm />} />
         <Route path="/user/post/:id" element={<UserPostDetail />} />
         <Route path="/user/logout" element={<UserLogout />} />
+
+        {/* club routes  */}
+        <Route path="/club/dashboard" element={<ClubDashboard />} />
+        <Route path="/club/settings" element={<ClubSettings />} />
+        <Route path="/club/subscriptions" element={<ClubSubscriptions />} />
+        <Route path="/club/posts" element={<ClubPosts />} />
+        <Route path="/club/post/create" element={<ClubPostForm />} />
+        <Route path="/club/post/:id" element={<ClubPostDetail />} />
+        <Route path="/club/logout" element={<ClubLogout />} />
       </Routes>
       </Layout>
       <Footer />

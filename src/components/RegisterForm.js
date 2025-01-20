@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const countries = ["United States", "India", "Canada", "Australia", "United Kingdom"]; // Add more as needed
-const roles = ["Player", "Clubs", "Agent", "Coach"]; // Add more roles if needed
+const countries = ["United States", "India", "Canada", "Australia", "United Kingdom"]; 
+const roles = ["Player", "Coach","Agent", "Club"]; 
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
