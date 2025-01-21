@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 
 const PostDetail = () => {
   const { id } = useParams();
+  const [showMore, setShowMore] = React.useState(false);
 
   // Mock data; replace with actual API call if needed
-  const job = { 
+  const job = {
     id: id,
     title: "Software Engineer",
     image: "/post/post.jpg",
@@ -24,47 +25,57 @@ const PostDetail = () => {
       location: "San Francisco, CA, USA",
       subDescription:
         "Tech Innovators Inc. is a leading tech company that builds innovative solutions to solve real-world problems.",
+      fullDescription:
+        "Company ABC was founded in 2000 and has been at the forefront of the technology industry, providing cutting-edge solutions to clients across the globe. We specialize in AI, machine learning, and enterprise software solutions. With over 500 employees and a network of partners worldwide, we continue to push the boundaries of innovation and impact the future of technology.",
     },
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       <div className="flex flex-col lg:flex-row">
         <Sidebar />
 
-        <main className="flex-1 p-6 space-y-6">
+        <main className="flex-1 p-8 space-y-8">
           {/* Header */}
           <header className="flex justify-between items-center flex-wrap gap-4">
-            <h1 className="text-3xl font-bold text-gray-800">Job Details</h1>
-            <Link
-              to={"/user/posts"}
-              className="py-2 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+            <h1 className="text-4xl font-extrabold text-gray-900">
+              Job Details
+            </h1>
+            <button
+              onClick={() => alert(`You applied for ${job.title}`)}
+              className="py-3 px-10 bg-blue-600 text-white text-lg font-semibold rounded hover:bg-blue-700 transition shadow-lg"
             >
-              &#8592; Back
-            </Link>
+              Apply Now
+            </button>
           </header>
 
           {/* Job Details Section */}
-          <section className="bg-white p-6 rounded-lg shadow-md space-y-6">
+          <section className="bg-white p-8 rounded-xl shadow-lg space-y-8">
             {/* Job Title and Image */}
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col md:flex-row gap-8">
               <img
                 src={job.image}
                 alt="Job"
-                className="w-full md:w-1/3 h-60 object-cover rounded-lg shadow"
+                className="w-full md:w-1/3 h-60 object-cover rounded-xl shadow-md"
               />
-              <div className="flex-1 space-y-4">
-                <h1 className="text-3xl font-bold text-gray-800">{job.title}</h1>
-                <p className="text-gray-600">{job.description}</p>
-                <div className="flex flex-wrap gap-4">
-                  <p className="text-gray-700 font-medium">
-                    <strong>Position:</strong> {job.position}
+              <div className="flex-1 space-y-6">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {job.title}
+                </h1>
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  {job.description}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <p className="text-gray-800 font-medium">
+                    <strong className="font-bold">Position:</strong>{" "}
+                    {job.position}
                   </p>
-                  <p className="text-gray-700 font-medium">
-                    <strong>Salary:</strong> {job.salary}
+                  <p className="text-gray-800 font-medium">
+                    <strong className="font-bold">Salary:</strong> {job.salary}
                   </p>
-                  <p className="text-gray-700 font-medium">
-                    <strong>Location:</strong> {job.location}
+                  <p className="text-gray-800 font-medium">
+                    <strong className="font-bold">Location:</strong>{" "}
+                    {job.location}
                   </p>
                 </div>
               </div>
@@ -72,11 +83,11 @@ const PostDetail = () => {
 
             {/* Job Status and Date */}
             <div className="flex flex-wrap justify-between items-center">
-              <p className="text-gray-500">
-                <strong>Posted on:</strong> {job.date}
+              <p className="text-gray-600 text-sm">
+                <strong className="font-semibold">Posted on:</strong> {job.date}
               </p>
               <p
-                className={`font-semibold ${
+                className={`font-semibold text-lg ${
                   job.status === "Published"
                     ? "text-green-600"
                     : job.status === "Draft"
@@ -90,32 +101,49 @@ const PostDetail = () => {
           </section>
 
           {/* Company Details Section */}
-          <section className="bg-white p-6 rounded-lg shadow-md space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800">Company Details</h2>
+          <section className="bg-white p-8 rounded-xl shadow-lg space-y-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              Company Details
+            </h2>
             <div className="flex items-center gap-6">
               <img
                 src={job.company.logo}
                 alt="Company Logo"
-                className="w-20 h-20 rounded-lg shadow-md border"
+                className="w-24 h-24 rounded-lg shadow-md border"
               />
               <div className="space-y-2">
-                <h3 className="text-xl font-semibold text-gray-700">
+                <h3 className="text-xl font-semibold text-gray-800">
                   {job.company.name}
                 </h3>
-                <p className="text-gray-500">{job.company.location}</p>
-                <p className="text-gray-600">{job.company.subDescription}</p>
+                <p className="text-gray-600">{job.company.location}</p>
+
+                {/* Show the short description initially */}
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  {showMore
+                    ? job.company.fullDescription
+                    : job.company.subDescription.length > 100
+                    ? `${job.company.subDescription.slice(0, 100)}...`
+                    : job.company.subDescription}
+                </p>
+
+                {/* Read More Button */}
+                {job.company.subDescription.length > 100 && (
+                  <button
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-blue-500 font-medium hover:underline focus:outline-none mt-2"
+                  >
+                    {showMore ? "Read Less" : "Read More"}
+                  </button>
+                )}
+
+                {/* Expanded Content */}
+                {showMore && (
+                  <p className="text-gray-700 text-sm leading-relaxed mt-2">
+                    {job.company.fullDescription}
+                  </p>
+                )}
               </div>
             </div>
-          </section>
-
-          {/* Apply Now Button */}
-          <section className="text-center">
-            <button
-              onClick={() => alert(`You applied for ${job.title}`)}
-              className="py-3 px-8 bg-blue-500 text-white text-lg font-semibold rounded-lg hover:bg-blue-600 transition shadow-md"
-            >
-              Apply Now
-            </button>
           </section>
         </main>
       </div>

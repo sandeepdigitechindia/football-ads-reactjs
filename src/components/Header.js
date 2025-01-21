@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Dialog,
   DialogPanel,
@@ -14,6 +14,7 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
+  UserCircleIcon,
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
@@ -39,14 +40,45 @@ const services = [
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Set to true to simulate login
-  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleLogout = () => {
-    // Handle logout logic
-    setIsLoggedIn(false);
-    navigate("/login");
-  };
+  // Routes where the user profile button should appear
+  const userRoutes = [
+    "/user/dashboard",
+    "/user/settings",
+    "/user/subscriptions",
+    "/user/posts",
+    "/user/post/create",
+    "/user/post/:id",
+    "/user/logout",
+  ];
+
+  // Check if the current route matches any of the user-specific routes
+  const isUserRoute = userRoutes.some((route) => {
+    const regex = new RegExp(
+      `^${route.replace(":id", "[^/]+")}$` // Handle dynamic :id in route
+    );
+    return regex.test(location.pathname);
+  });
+
+  // Routes where the user profile button should appear
+  const clubRoutes = [
+    "/club/dashboard",
+    "/club/settings",
+    "/club/subscriptions",
+    "/club/posts",
+    "/club/post/create",
+    "/club/post/:id",
+    "/club/logout",
+  ];
+
+  // Check if the current route matches any of the user-specific routes
+  const isClubRoute = clubRoutes.some((route) => {
+    const regex = new RegExp(
+      `^${route.replace(":id", "[^/]+")}$` // Handle dynamic :id in route
+    );
+    return regex.test(location.pathname);
+  });
 
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
@@ -176,39 +208,49 @@ export default function Example() {
         </PopoverGroup>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          {isLoggedIn ? (
+          {isUserRoute ? (
             <Popover className="relative">
-              <PopoverButton className="flex items-center gap-x-2">
-                <img
-                  src="/common/man.png"
-                  alt="User"
-                  className="h-8 w-8 rounded-full border-2 border-white"
-                />
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="h-5 w-5 text-white"
-                />
+              <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
+                <UserCircleIcon className="h-6 w-6 text-white" />
+                <span>User Profile</span>
               </PopoverButton>
-              <PopoverPanel className="absolute right-0 mt-2 w-48 bg-white shadow-lg ring-1 ring-gray-900/5 rounded-md">
-                <div className="py-2">
-                  <Link
-                    to="/user/dashboard"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-900 hover:text-white"
-                  >
-                    Dashboard
-                  </Link>
+              <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
+                <div className="p-2">
                   <Link
                     to="/user/settings"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-900 hover:text-white"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Settings
                   </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-900 hover:text-white"
+                  <Link
+                    to="/user/logout"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Logout
-                  </button>
+                  </Link>
+                </div>
+              </PopoverPanel>
+            </Popover>
+          ) : isClubRoute ? (
+            <Popover className="relative">
+              <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
+                <UserCircleIcon className="h-6 w-6 text-white" />
+                <span>Club Profile</span>
+              </PopoverButton>
+              <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
+                <div className="p-2">
+                  <Link
+                    to="/club/settings"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Settings
+                  </Link>
+                  <Link
+                    to="/club/logout"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </Link>
                 </div>
               </PopoverPanel>
             </Popover>
@@ -221,7 +263,6 @@ export default function Example() {
             </Link>
           )}
         </div>
-
       </nav>
       <Dialog
         open={mobileMenuOpen}
@@ -253,12 +294,12 @@ export default function Example() {
               <div className="space-y-2 py-6">
                 <Link
                   to="/"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white-900 hover:bg-gray-50"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Home
                 </Link>
                 <Disclosure as="div" className="-mx-3">
-                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-white-900 hover:bg-gray-50">
+                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
                     Ads
                     <ChevronDownIcon
                       aria-hidden="true"
@@ -271,16 +312,15 @@ export default function Example() {
                         key={item.name}
                         as="a"
                         href={item.to}
-                        className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-white-900 hover:bg-gray-50"
+                        className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50"
                       >
                         {item.name}
                       </DisclosureButton>
                     ))}
                   </DisclosurePanel>
                 </Disclosure>
-
                 <Disclosure as="div" className="-mx-3">
-                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-white-900 hover:bg-gray-50">
+                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
                     Subscriptions
                     <ChevronDownIcon
                       aria-hidden="true"
@@ -293,7 +333,7 @@ export default function Example() {
                         key={item.name}
                         as="a"
                         href={item.to}
-                        className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-white-900 hover:bg-gray-50"
+                        className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50"
                       >
                         {item.name}
                       </DisclosureButton>
@@ -301,7 +341,7 @@ export default function Example() {
                   </DisclosurePanel>
                 </Disclosure>
                 <Disclosure as="div" className="-mx-3">
-                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-white-900 hover:bg-gray-50">
+                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
                     Services
                     <ChevronDownIcon
                       aria-hidden="true"
@@ -314,34 +354,71 @@ export default function Example() {
                         key={item.name}
                         as="a"
                         href={item.to}
-                        className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-white-900 hover:bg-gray-50"
+                        className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50"
                       >
                         {item.name}
                       </DisclosureButton>
                     ))}
                   </DisclosurePanel>
                 </Disclosure>
-
                 <Link
                   to="/about"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white-900 hover:bg-gray-50"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   About
                 </Link>
                 <Link
                   to="/contact"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white-900 hover:bg-gray-50"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Contact
                 </Link>
               </div>
               <div className="py-6">
-                <Link
-                  to="/login"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+                {isUserRoute ? (
+                  <div className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
+                    <span>User Profile</span>
+                    <div className="mt-2">
+                      <Link
+                        to="/user/settings"
+                        className="block text-sm hover:underline"
+                      >
+                        Settings
+                      </Link>
+                      <Link
+                        to="/user/logout"
+                        className="block text-sm hover:underline"
+                      >
+                        Logout
+                      </Link>
+                    </div>
+                  </div>
+                ) : isClubRoute ? (
+                  <div className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
+                    <span>Club Profile</span>
+                    <div className="mt-2">
+                      <Link
+                        to="/club/settings"
+                        className="block text-sm hover:underline"
+                      >
+                        Settings
+                      </Link>
+                      <Link
+                        to="/club/logout"
+                        className="block text-sm hover:underline"
+                      >
+                        Logout
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                )}
               </div>
             </div>
           </div>

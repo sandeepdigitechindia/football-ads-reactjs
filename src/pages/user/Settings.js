@@ -13,8 +13,6 @@ const roles = ["Player", "Coach", "Agent", "Club"];
 
 const Settings = () => {
   const [formData, setFormData] = useState({
-    club_name: "",
-    club_logo: null,
     name: "",
     email: "",
     phone: "",
@@ -32,12 +30,7 @@ const Settings = () => {
     const newErrors = {};
 
     // Validation similar to the registration form, adjust based on whether it's password change or profile update
-    if (!formData.club_name.trim()) {
-      newErrors.club_name = "Club Name is required.";
-    }
-    if (!formData.club_logo) {
-      newErrors.club_logo = "Club Logo is required.";
-    }
+
     if (!formData.name.trim()) {
       newErrors.name = "Name is required.";
     }
@@ -92,8 +85,7 @@ const Settings = () => {
       alert("Changes saved!");
       // Reset or update the form
       setFormData({
-        club_name: "",
-        club_logo: null,
+    
         name: "",
         email: "",
         phone: "",
@@ -130,53 +122,7 @@ const Settings = () => {
                 {/* Profile Update Fields */}
                 {!isPasswordChange && (
                   <>
-                    {/* Club Name Field */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="club_name"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Club Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="club_name"
-                        name="club_name"
-                        value={formData.club_name}
-                        onChange={handleChange}
-                        className={`w-full px-4 py-2 border rounded-lg ${
-                          errors.name ? "border-red-500" : "border-gray-300"
-                        } focus:outline-none focus:ring focus:ring-blue-300`}
-                        placeholder="Enter your Club Name"
-                      />
-                      {errors.club_name && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.club_name}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Club Logo */}
-                    <div className="mb-4">
-                      <label className="block text-gray-700 font-medium mb-2">
-                        Club Logo <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleSubmit}
-                        className={`w-full p-3 border ${
-                          errors.club_logo
-                            ? "border-red-500"
-                            : "border-gray-300"
-                        } rounded-lg`}
-                      />
-                      {errors.club_logo && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.club_logo}
-                        </p>
-                      )}
-                    </div>
+          
 
                     {/* Name Field */}
                     <div className="mb-4">

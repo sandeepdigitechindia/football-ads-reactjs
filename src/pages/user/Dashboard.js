@@ -58,34 +58,44 @@ const Dashboard = () => {
         />
       ),
       sortable: true,
+      center: true, // Center-align the column content
     },
     {
       name: "Club Name",
       selector: (row) => row.name,
       sortable: true,
       cell: (row) => (
-        <div className="font-semibold text-gray-700">{row.name}</div>
+        <div className="font-semibold text-gray-700 text-center">
+          {row.name}
+        </div>
       ),
+      center: true,
     },
     {
       name: "Job Title",
-      selector: (row) => 
-      row.title,
+      selector: (row) => row.title,
       sortable: true,
+      center: true,
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
       cell: (row) => (
-        <div className="text-sm text-gray-600">{row.description}</div>
+        <div className="text-sm text-gray-600 text-center">
+          {row.description}
+        </div>
       ),
+      center: true,
     },
     {
       name: "Date",
       selector: (row) => row.date,
       sortable: true,
-      cell: (row) => <div className="text-gray-500">{row.date}</div>,
+      cell: (row) => (
+        <div className="text-gray-500 text-center">{row.date}</div>
+      ),
+      center: true,
     },
     {
       name: "Status",
@@ -97,23 +107,27 @@ const Dashboard = () => {
               : row.status === "Close"
               ? "bg-yellow-100 text-yellow-700"
               : "bg-red-100 text-red-700"
-          }`}
+          } text-center`}
         >
           {row.status}
         </span>
       ),
       sortable: true,
+      center: true,
     },
     {
       name: "Action",
       cell: (row) => (
-        <button
-          className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow"
-          onClick={() => navigate(`/user/post/${row.id}`)}
-        >
-          Apply
-        </button>
+        <div className="text-center">
+          <button
+            className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow"
+            onClick={() => navigate(`/user/post/${row.id}`)}
+          >
+            Apply
+          </button>
+        </div>
       ),
+      center: true,
     },
   ];
 
@@ -125,6 +139,7 @@ const Dashboard = () => {
         fontWeight: "bold",
         fontSize: "16px",
         color: "#374151",
+        textAlign: "center",
       },
     },
     headRow: {
@@ -133,6 +148,7 @@ const Dashboard = () => {
         fontWeight: "bold",
         fontSize: "14px",
         color: "#4b5563",
+        textAlign: "center",
       },
     },
     rows: {
@@ -144,6 +160,7 @@ const Dashboard = () => {
         marginBottom: "10px",
         paddingTop: "10px",
         paddingBottom: "10px",
+        textAlign: "center", // Center-align the rows
         "&:hover": {
           backgroundColor: "#f3f4f6",
           borderRadius: "10px",
@@ -187,39 +204,84 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
           </header>
           {/* Cards Section */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { title: "Total Applied Posts", count: 120, color: "blue" },
-              { title: "Active Subscriptions", count: 8, color: "green" },
-              { title: "Job Reply Messages", count: 3, color: "red" },
+              {
+                title: "Total Applied Posts",
+                count: 120,
+                icon: "📝",
+                gradient: "from-blue-500 via-indigo-500 to-purple-500",
+                shadow: "shadow-blue-500/50",
+              },
+              {
+                title: "Active Subscriptions",
+                count: 8,
+                icon: "📦",
+                gradient: "from-green-500 via-teal-500 to-emerald-500",
+                shadow: "shadow-green-500/50",
+              },
+              {
+                title: "Job Reply Messages",
+                count: 3,
+                icon: "💌",
+                gradient: "from-red-500 via-pink-500 to-rose-500",
+                shadow: "shadow-red-500/50",
+              },
             ].map((card, index) => (
               <div
                 key={index}
-                className={`bg-white p-6 rounded-lg shadow-md text-center border-t-4 border-${card.color}-500`}
+                className={`relative bg-gradient-to-r ${card.gradient} p-6 rounded-2xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}
               >
-                <h3 className="text-lg font-medium text-gray-700 mb-2">
+                {/* Floating Icon */}
+                <div
+                  className={`absolute top-0 right-0 transform translate-x-6 -translate-y-6 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md text-4xl text-gray-800`}
+                >
+                  {card.icon}
+                </div>
+                {/* Card Content */}
+                <h3 className="text-lg font-semibold mb-2 tracking-wide">
                   {card.title}
                 </h3>
-                <p className={`text-4xl font-bold text-${card.color}-600`}>
-                  {card.count}
-                </p>
+                <p className="text-5xl font-extrabold mb-4">{card.count}</p>
+                <button className="bg-white text-gray-800 py-2 px-6 rounded-lg shadow hover:bg-gray-100 transition">
+                  View Details
+                </button>
               </div>
             ))}
           </section>
-          <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-            <input
-              type="text"
-              placeholder="Search by title..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-medium text-gray-800 mb-4">
-              Recent Applied Posts
-            </h2>
+            {/* Header with Search Input */}
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+              <h2 className="text-xl font-medium text-gray-800">
+                Recent Applied Posts
+              </h2>
+              <div className="relative mt-2 sm:mt-0 w-full sm:w-auto">
+                <input
+                  type="text"
+                  placeholder="Search by title..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-4.35-4.35M16.5 10.5a6 6 0 11-12 0 6 6 0 0112 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Data Table */}
             <DataTable
               columns={columns}
               data={data}
@@ -230,6 +292,7 @@ const Dashboard = () => {
               customStyles={customStyles}
             />
           </div>
+
           {/* Active Subscription */}
           <section className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-medium text-gray-800 mb-4">

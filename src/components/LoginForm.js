@@ -137,17 +137,22 @@ const LoginForm = () => {
           </form>
 
           <p className="text-center mt-2">
-            Don't have an account?
-         &nbsp;
+            Don't have an account? &nbsp;
             <Link to="/register" className="text-blue-600">
               Sign Up
             </Link>
           </p>
           <p className="text-center mt-2">
-            Go to Dashboard
-            <br />
+            Go to &nbsp;
             <Link to="/user/dashboard" className="text-blue-600">
-              Dashboard
+              User Dashboard
+            </Link>
+          </p>
+          <br />
+          <p className="text-center mt-2">
+            Go to &nbsp;
+            <Link to="/club/dashboard" className="text-blue-600">
+              Club Dashboard
             </Link>
           </p>
         </div>
