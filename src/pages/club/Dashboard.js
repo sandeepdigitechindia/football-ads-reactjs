@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/club/Sidebar";
 import DataTable from "react-data-table-component";
 const Dashboard = () => {
   const navigate = useNavigate();
-  // Data for the table
   const initialData = [
     {
       id: 1,
       image: "/common/club.png",
       name: "Club 1",
       title: "Post Title 1",
-      description: "Description for Post Title 1.",
+      applicantsCount: 5,
       date: "Jan 10, 2025",
       status: "Open",
     },
@@ -20,7 +19,7 @@ const Dashboard = () => {
       image: "/common/club.png",
       name: "Club 2",
       title: "Post Title 2",
-      description: "Description for Post Title 2.",
+      applicantsCount: 2,
       date: "Jan 9, 2025",
       status: "Close",
     },
@@ -29,7 +28,7 @@ const Dashboard = () => {
       image: "/common/club.png",
       name: "Club 3",
       title: "Post Title 3",
-      description: "Description for Post Title 3.",
+      applicantsCount: 8,
       date: "Jan 8, 2025",
       status: "Archived",
     },
@@ -38,7 +37,7 @@ const Dashboard = () => {
       image: "/common/club.png",
       name: "Club 4",
       title: "Another Post",
-      description: "Description for Another Post.",
+      applicantsCount: 3,
       date: "Jan 7, 2025",
       status: "Open",
     },
@@ -46,6 +45,10 @@ const Dashboard = () => {
 
   const [data, setData] = useState(initialData);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // State to manage dropdown visibility
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const dropdownRef = useRef(null);
 
   const columns = [
     {
@@ -58,34 +61,51 @@ const Dashboard = () => {
         />
       ),
       sortable: true,
+      center: true,
     },
     {
       name: "Club Name",
       selector: (row) => row.name,
       sortable: true,
       cell: (row) => (
-        <div className="font-semibold text-gray-700">{row.name}</div>
+        <div className="font-semibold text-gray-700 text-center">
+          {row.name}
+        </div>
       ),
+      center: true,
     },
     {
       name: "Job Title",
-      selector: (row) => 
-      row.title,
+      selector: (row) => row.title,
       sortable: true,
+      center: true,
     },
     {
-      name: "Description",
-      selector: (row) => row.description,
+      name: "Applicants with Counts",
+      selector: (row) => row.applicantsCount,
       sortable: true,
       cell: (row) => (
-        <div className="text-sm text-gray-600">{row.description}</div>
+        <div className="text-sm text-gray-600 text-center">
+          {/* Circle with applicant count and onClick event */}
+          <div
+            className="inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
+            onClick={() => navigate(`/club/post/applicants/${row.id}`)} // Navigate to applicants page
+          >
+            {row.applicantsCount}
+          </div>{" "}
+          Applicants
+        </div>
       ),
+      center: true,
     },
     {
       name: "Date",
       selector: (row) => row.date,
       sortable: true,
-      cell: (row) => <div className="text-gray-500">{row.date}</div>,
+      cell: (row) => (
+        <div className="text-gray-500 text-center">{row.date}</div>
+      ),
+      center: true,
     },
     {
       name: "Status",
@@ -97,23 +117,86 @@ const Dashboard = () => {
               : row.status === "Close"
               ? "bg-yellow-100 text-yellow-700"
               : "bg-red-100 text-red-700"
-          }`}
+          } text-center`}
         >
           {row.status}
         </span>
       ),
       sortable: true,
+      center: true,
     },
     {
       name: "Action",
       cell: (row) => (
-        <button
-          className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow"
-          onClick={() => navigate(`/club/post/${row.id}`)}
-        >
-          Apply
-        </button>
+        <div className="text-center relative">
+          {/* Action Button */}
+          <button
+            className="py-2 px-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center gap-2"
+            onClick={() =>
+              setDropdownOpen(dropdownOpen === row.id ? null : row.id)
+            } // Toggle dropdown
+          >
+            <span>Action</span>
+            {/* Add a dropdown arrow icon */}
+            <i
+              className={`fas fa-chevron-down ${
+                dropdownOpen === row.id ? "transform rotate-180" : ""
+              }`}
+            ></i>
+          </button>
+
+          {/* Dropdown Menu */}
+          {dropdownOpen === row.id && (
+            <div
+              ref={dropdownRef}
+              className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-100 pointer-events-auto z-50"
+            >
+              <ul className="list-none p-0 m-0">
+                {/* View Post Option */}
+                <li>
+                  <button
+                    onClick={() => navigate(`/club/post/view/${row.id}`)}
+                    className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300"
+                  >
+                    <i className="fas fa-eye mr-2"></i> View Post
+                  </button>
+                </li>
+
+                {/* Edit Post Option */}
+                <li>
+                  <button
+                    onClick={() => navigate(`/club/post/edit/${row.id}`)}
+                    className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300"
+                  >
+                    <i className="fas fa-edit mr-2"></i> Edit Post
+                  </button>
+                </li>
+
+                {/* Delete Post Option */}
+                <li>
+                  <button
+                    onClick={() => handleDeletePost(row.id)}
+                    className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300 text-red-500"
+                  >
+                    <i className="fas fa-trash-alt mr-2"></i> Delete Post
+                  </button>
+                </li>
+
+                {/* Applicants Option */}
+                {/* <li>
+                    <button
+                      onClick={() => navigate(`/club/post/applicants/${row.id}`)}
+                      className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300"
+                    >
+                      <i className="fas fa-users mr-2"></i> Applicants
+                    </button>
+                  </li> */}
+              </ul>
+            </div>
+          )}
+        </div>
       ),
+      center: true,
     },
   ];
 
@@ -125,6 +208,7 @@ const Dashboard = () => {
         fontWeight: "bold",
         fontSize: "16px",
         color: "#374151",
+        textAlign: "center",
       },
     },
     headRow: {
@@ -133,6 +217,7 @@ const Dashboard = () => {
         fontWeight: "bold",
         fontSize: "14px",
         color: "#4b5563",
+        textAlign: "center",
       },
     },
     rows: {
@@ -144,6 +229,7 @@ const Dashboard = () => {
         marginBottom: "10px",
         paddingTop: "10px",
         paddingBottom: "10px",
+        textAlign: "center",
         "&:hover": {
           backgroundColor: "#f3f4f6",
           borderRadius: "10px",
@@ -174,6 +260,17 @@ const Dashboard = () => {
     setData(filtered);
   };
 
+  // Handle Delete Post (e.g., delete from API or state)
+  const handleDeletePost = (postId) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (isConfirmed) {
+      setData(data.filter((post) => post.id !== postId));
+      alert("Post deleted successfully!");
+    }
+  };
+
   return (
     <div className="bg-gray-100">
       {/* Wrapper for Sidebar and Main Content */}
@@ -189,37 +286,71 @@ const Dashboard = () => {
           {/* Cards Section */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { title: "Total Applied Posts", count: 120, color: "blue" },
-              { title: "Active Subscriptions", count: 8, color: "green" },
-              { title: "Job Reply Messages", count: 3, color: "red" },
+              {
+                title: "Total Added Posts",
+                count: 120,
+                gradient: "from-blue-500 via-indigo-500 to-purple-500",
+                shadow: "shadow-blue-500/50",
+              },
+              {
+                title: "Active Subscriptions",
+                count: 2,
+                gradient: "from-green-500 via-teal-500 to-emerald-500",
+                shadow: "shadow-green-500/50",
+              },
+              {
+                title: "Job Reply Messages",
+                count: 3,
+                gradient: "from-red-500 via-pink-500 to-rose-500",
+                shadow: "shadow-red-500/50",
+              },
             ].map((card, index) => (
               <div
                 key={index}
-                className={`bg-white p-6 rounded-lg shadow-md text-center border-t-4 border-${card.color}-500`}
+                className={`relative bg-gradient-to-r ${card.gradient} p-4 rounded-xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}
               >
-                <h3 className="text-lg font-medium text-gray-700 mb-2">
-                  {card.title}
-                </h3>
-                <p className={`text-4xl font-bold text-${card.color}-600`}>
-                  {card.count}
-                </p>
+                {/* Card Content */}
+                <h3 className="text-md font-semibold mb-2">{card.title}</h3>
+                <p className="text-3xl font-extrabold mb-3">{card.count}</p>
+                <button className="bg-white text-gray-800 py-1 px-4 rounded-lg shadow hover:bg-gray-100 transition">
+                  View Details
+                </button>
               </div>
             ))}
           </section>
-          <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-            <input
-              type="text"
-              placeholder="Search by title..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-medium text-gray-800 mb-4">
-              Recent Applied Posts
-            </h2>
+            {/* Header with Search Input */}
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+              <h2 className="text-xl font-medium text-gray-800">
+                Recent Added Posts
+              </h2>
+              <div className="relative mt-2 sm:mt-0 w-full sm:w-auto">
+                <input
+                  type="text"
+                  placeholder="Search by title..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-4.35-4.35M16.5 10.5a6 6 0 11-12 0 6 6 0 0112 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Data Table */}
             <DataTable
               columns={columns}
               data={data}
@@ -230,6 +361,7 @@ const Dashboard = () => {
               customStyles={customStyles}
             />
           </div>
+
           {/* Active Subscription */}
           <section className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-medium text-gray-800 mb-4">
@@ -241,7 +373,7 @@ const Dashboard = () => {
                 renewing on <strong>Feb 10, 2025</strong>.
               </p>
               <Link
-                to="/club/subscriptions" // Add the route to user subscription page
+                to="/club/subscriptions" // Add the route to club subscription page
                 className="mt-4 sm:mt-0 py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
               >
                 Manage Subscription

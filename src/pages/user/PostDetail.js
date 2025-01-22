@@ -126,21 +126,29 @@ const PostDetail = () => {
                     : job.company.subDescription}
                 </p>
 
-                {/* Read More Button */}
-                {job.company.subDescription.length > 100 && (
-                  <button
-                    onClick={() => setShowMore(!showMore)}
-                    className="text-blue-500 font-medium hover:underline focus:outline-none mt-2"
-                  >
-                    {showMore ? "Read Less" : "Read More"}
-                  </button>
-                )}
-
                 {/* Expanded Content */}
                 {showMore && (
-                  <p className="text-gray-700 text-sm leading-relaxed mt-2">
-                    {job.company.fullDescription}
-                  </p>
+                  <div>
+                    <p className="text-gray-700 text-sm leading-relaxed mt-2">
+                      {job.company.fullDescription}
+                    </p>
+                    <button
+                      onClick={() => setShowMore(false)}
+                      className="text-blue-500 font-medium hover:underline focus:outline-none mt-2"
+                    >
+                      Read Less
+                    </button>
+                  </div>
+                )}
+
+                {/* Read More Button */}
+                {!showMore && job.company.subDescription.length > 100 && (
+                  <button
+                    onClick={() => setShowMore(true)}
+                    className="text-blue-500 font-medium hover:underline focus:outline-none mt-2"
+                  >
+                    Read More
+                  </button>
                 )}
               </div>
             </div>

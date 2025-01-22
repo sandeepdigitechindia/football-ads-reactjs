@@ -136,6 +136,21 @@ const LoginForm = () => {
             </div>
           </form>
 
+          <div className="mt-4 text-center">
+            <p>Or login with:</p>
+            <div className="flex justify-center space-x-4 mt-4">
+              {/* Google Login Button */}
+              <button className="flex items-center justify-center bg-red-600 text-white py-2 px-4 rounded-lg w-full max-w-xs hover:bg-red-700 transition duration-300">
+                <i className="fab fa-google mr-2"></i> Google
+              </button>
+
+              {/* Facebook Login Button */}
+              <button className="flex items-center justify-center bg-blue-700 text-white py-2 px-4 rounded-lg w-full max-w-xs hover:bg-blue-800 transition duration-300">
+                <i className="fab fa-facebook-f mr-2"></i> Facebook
+              </button>
+            </div>
+          </div>
+
           <p className="text-center mt-2">
             Don't have an account? &nbsp;
             <Link to="/register" className="text-blue-600">

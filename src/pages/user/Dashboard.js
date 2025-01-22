@@ -209,21 +209,18 @@ const Dashboard = () => {
               {
                 title: "Total Applied Posts",
                 count: 120,
-                icon: "📝",
                 gradient: "from-blue-500 via-indigo-500 to-purple-500",
                 shadow: "shadow-blue-500/50",
               },
               {
                 title: "Active Subscriptions",
-                count: 8,
-                icon: "📦",
+                count: 2,
                 gradient: "from-green-500 via-teal-500 to-emerald-500",
                 shadow: "shadow-green-500/50",
               },
               {
                 title: "Job Reply Messages",
                 count: 3,
-                icon: "💌",
                 gradient: "from-red-500 via-pink-500 to-rose-500",
                 shadow: "shadow-red-500/50",
               },
@@ -232,12 +229,6 @@ const Dashboard = () => {
                 key={index}
                 className={`relative bg-gradient-to-r ${card.gradient} p-6 rounded-2xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}
               >
-                {/* Floating Icon */}
-                <div
-                  className={`absolute top-0 right-0 transform translate-x-6 -translate-y-6 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md text-4xl text-gray-800`}
-                >
-                  {card.icon}
-                </div>
                 {/* Card Content */}
                 <h3 className="text-lg font-semibold mb-2 tracking-wide">
                   {card.title}

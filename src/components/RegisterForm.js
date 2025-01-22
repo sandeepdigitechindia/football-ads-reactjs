@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const countries = ["United States", "India", "Canada", "Australia", "United Kingdom"]; 
-const roles = ["Player", "Coach","Agent", "Club"]; 
+const countries = [
+  "United States",
+  "India",
+  "Canada",
+  "Australia",
+  "United Kingdom",
+];
+const roles = ["Player", "Coach", "Agent", "Club"];
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    country: '',
-    role: '',
-    password: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    country: "",
+    role: "",
+    password: "",
+    confirmPassword: "",
     acceptTerms: false,
   });
 
@@ -21,59 +28,66 @@ const RegisterForm = () => {
   const validate = () => {
     const newErrors = {};
 
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required.';
-    } else if (formData.name.length < 3) {
-      newErrors.name = 'Name must be at least 3 characters.';
+    // first Name validation
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First Name is required.";
+    } else if (formData.firstName.length < 3) {
+      newErrors.firstName = "First Name must be at least 3 characters.";
+    }
+
+    // Last Name validation
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last Name is required.";
+    } else if (formData.lastName.length < 3) {
+      newErrors.lastName = "Last Name must be at least 3 characters.";
     }
 
     // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required.';
+      newErrors.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Enter a valid email.';
+      newErrors.email = "Enter a valid email.";
     }
 
     // Phone validation
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required.';
+      newErrors.phone = "Phone number is required.";
     } else if (!/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = 'Phone number must be 10 digits.';
+      newErrors.phone = "Phone number must be 10 digits.";
     }
 
     // Country validation
     if (!formData.country) {
-      newErrors.country = 'Please select a country.';
+      newErrors.country = "Please select a country.";
     }
 
     // Role validation
     if (!formData.role) {
-      newErrors.role = 'Please select a role.';
+      newErrors.role = "Please select a role.";
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required.';
+      newErrors.password = "Password is required.";
     } else if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
         formData.password
       )
     ) {
       newErrors.password =
-        'Password must be at least 8 characters, include uppercase, lowercase, number, and special character.';
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.";
     }
 
     // Confirm Password validation
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password.';
+      newErrors.confirmPassword = "Please confirm your password.";
     } else if (formData.confirmPassword !== formData.password) {
-      newErrors.confirmPassword = 'Passwords do not match.';
+      newErrors.confirmPassword = "Passwords do not match.";
     }
 
     // acceptTerms validation
     if (!formData.acceptTerms) {
-      newErrors.acceptTerms = 'Please accept the terms and conditions.';
+      newErrors.acceptTerms = "Please accept the terms and conditions.";
     }
 
     setErrors(newErrors);
@@ -90,16 +104,17 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log('Form Submitted:', formData);
-      alert('Registration successful!');
+      console.log("Form Submitted:", formData);
+      alert("Registration successful!");
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        country: '',
-        role: '',
-        password: '',
-        confirmPassword: '',
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        country: "",
+        role: "",
+        password: "",
+        confirmPassword: "",
         acceptTerms: false,
       });
       setErrors({});
@@ -113,7 +128,8 @@ const RegisterForm = () => {
         <div className="w-full lg:w-1/2 bg-blue-600 text-white p-8 flex flex-col justify-center">
           <h2 className="text-3xl font-bold mb-4">Join Us Today!</h2>
           <p className="text-lg mb-6">
-            Create your account to access exclusive features, manage your profile, and more!
+            Create your account to access exclusive features, manage your
+            profile, and more!
           </p>
           <img
             src="/about/register.jpg" // Replace with your image path
@@ -124,28 +140,69 @@ const RegisterForm = () => {
 
         {/* Right Side - Register Form */}
         <div className="w-full lg:w-1/2 p-8">
-          <h2 className="text-2xl font-bold text-blue-600 text-center mb-6">Register</h2>
+          <h2 className="text-2xl font-bold text-blue-600 text-center mb-6">
+            Register
+          </h2>
           <form onSubmit={handleSubmit} noValidate>
-            {/* Name Field */}
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
-                placeholder="Enter your name"
-              />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+            {/* Name Fields (First Name and Last Name) */}
+            <div className="flex space-x-4 mb-4">
+              {/* First Name Field */}
+              <div className="w-1/2">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  First Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 border rounded-lg ${
+                    errors.firstName ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:ring focus:ring-blue-300`}
+                  placeholder="Enter your first name"
+                />
+                {errors.firstName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.firstName}
+                  </p>
+                )}
+              </div>
+
+              {/* Last Name Field */}
+              <div className="w-1/2">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Last Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 border rounded-lg ${
+                    errors.lastName ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:ring focus:ring-blue-300`}
+                  placeholder="Enter your last name"
+                />
+                {errors.lastName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                )}
+              </div>
             </div>
 
             {/* Email Field */}
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -154,15 +211,22 @@ const RegisterForm = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Enter your email"
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             {/* Phone Field */}
             <div className="mb-4">
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Phone <span className="text-red-500">*</span>
               </label>
               <input
@@ -171,15 +235,22 @@ const RegisterForm = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.phone ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.phone ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Enter your phone number"
               />
-              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+              )}
             </div>
 
             {/* Country Dropdown */}
             <div className="mb-4">
-              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Country <span className="text-red-500">*</span>
               </label>
               <select
@@ -187,7 +258,9 @@ const RegisterForm = () => {
                 name="country"
                 value={formData.country}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.country ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.country ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
               >
                 <option value="">Select your country</option>
                 {countries.map((country, index) => (
@@ -196,12 +269,17 @@ const RegisterForm = () => {
                   </option>
                 ))}
               </select>
-              {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country}</p>}
+              {errors.country && (
+                <p className="text-red-500 text-sm mt-1">{errors.country}</p>
+              )}
             </div>
 
             {/* Role Dropdown */}
             <div className="mb-4">
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="role"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Role <span className="text-red-500">*</span>
               </label>
               <select
@@ -209,7 +287,9 @@ const RegisterForm = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.role ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.role ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
               >
                 <option value="">Select your role</option>
                 {roles.map((role, index) => (
@@ -218,12 +298,17 @@ const RegisterForm = () => {
                   </option>
                 ))}
               </select>
-              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
+              {errors.role && (
+                <p className="text-red-500 text-sm mt-1">{errors.role}</p>
+              )}
             </div>
 
             {/* Password Field */}
             <div className="mb-4">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Password <span className="text-red-500">*</span>
               </label>
               <input
@@ -232,15 +317,22 @@ const RegisterForm = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Enter your password"
               />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
 
             {/* Confirm Password Field */}
             <div className="mb-6">
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Confirm Password <span className="text-red-500">*</span>
               </label>
               <input
@@ -249,11 +341,15 @@ const RegisterForm = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring focus:ring-blue-300`}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
                 placeholder="Confirm your password"
               />
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
 
@@ -267,10 +363,14 @@ const RegisterForm = () => {
                   onChange={handleChange}
                   className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <span className="text-sm text-gray-700">I accept the terms and conditions</span>
+                <span className="text-sm text-gray-700">
+                  I accept the terms and conditions
+                </span>
               </label>
               {errors.acceptTerms && (
-                <p className="text-red-500 text-sm mt-1">{errors.acceptTerms}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.acceptTerms}
+                </p>
               )}
             </div>
 
@@ -285,7 +385,8 @@ const RegisterForm = () => {
             </div>
           </form>
           <p className="text-center mt-2">
-            Have an account?<br />
+            Have an account?
+            <br />
             <Link to="/login" className="text-blue-600">
               Login now!
             </Link>
