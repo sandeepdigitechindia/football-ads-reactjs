@@ -16,6 +16,7 @@ const RegisterForm = () => {
     lastName: "",
     email: "",
     phone: "",
+    dob: "",
     country: "",
     role: "",
     password: "",
@@ -55,6 +56,11 @@ const RegisterForm = () => {
     } else if (!/^\d{10}$/.test(formData.phone)) {
       newErrors.phone = "Phone number must be 10 digits.";
     }
+
+    // DOB validation
+    if (!formData.dob.trim()) {
+      newErrors.dob = "DOB number is required.";
+    } 
 
     // Country validation
     if (!formData.country) {
@@ -111,6 +117,7 @@ const RegisterForm = () => {
         lastName: "",
         email: "",
         phone: "",
+        dob: "",
         country: "",
         role: "",
         password: "",
@@ -242,6 +249,30 @@ const RegisterForm = () => {
               />
               {errors.phone && (
                 <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+              )}
+            </div>
+
+            {/* dob Field */}
+            <div className="mb-4">
+              <label
+                htmlFor="dob"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                DOB <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 border rounded-lg ${
+                  errors.dob ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring focus:ring-blue-300`}
+                placeholder="Enter your dob number"
+              />
+              {errors.dob && (
+                <p className="text-red-500 text-sm mt-1">{errors.dob}</p>
               )}
             </div>
 

@@ -14,9 +14,11 @@ const countries = [
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
+    dob: "",
     country: "",
     password: "",
     confirmPassword: "",
@@ -36,14 +38,20 @@ const Settings = () => {
 
     // Validation similar to the registration form, adjust based on whether it's password change or profile update
     if (activeTab === "profile") {
-      if (!formData.name.trim()) {
-        newErrors.name = "Name is required.";
+      if (!formData.firstName.trim()) {
+        newErrors.firstName = "First Name is required.";
+      }
+      if (!formData.lastName.trim()) {
+        newErrors.lastName = "Last Name is required.";
       }
       if (!formData.email.trim()) {
         newErrors.email = "Email is required.";
       }
       if (!formData.phone.trim()) {
         newErrors.phone = "Phone number is required.";
+      }
+      if (!formData.dob.trim()) {
+        newErrors.dob = "DOB number is required.";
       }
       if (!formData.country) {
         newErrors.country = "Please select a country.";
@@ -96,9 +104,11 @@ const Settings = () => {
       alert("Changes saved!");
       // Reset or update the form
       setFormData({
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         phone: "",
+        dob: "",
         country: "",
         password: "",
         confirmPassword: "",
@@ -181,28 +191,59 @@ const Settings = () => {
                   </p>
                 </div>
 
-                {/* Name Field */}
-                <div className="mb-4">
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-lg ${
-                      errors.name ? "border-red-500" : "border-gray-300"
-                    } focus:outline-none focus:ring focus:ring-blue-300`}
-                    placeholder="Enter your name"
-                  />
-                  {errors.name && (
-                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-                  )}
+                {/* Name Fields (First Name and Last Name) */}
+                <div className="flex space-x-4 mb-4">
+                  {/* First Name Field */}
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="firstName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      First Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-2 border rounded-lg ${
+                        errors.firstName ? "border-red-500" : "border-gray-300"
+                      } focus:outline-none focus:ring focus:ring-blue-300`}
+                      placeholder="Enter your first name"
+                    />
+                    {errors.firstName && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.firstName}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Last Name Field */}
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="lastName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Last Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-2 border rounded-lg ${
+                        errors.lastName ? "border-red-500" : "border-gray-300"
+                      } focus:outline-none focus:ring focus:ring-blue-300`}
+                      placeholder="Enter your last name"
+                    />
+                    {errors.lastName && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.lastName}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Email Field */}
@@ -253,6 +294,30 @@ const Settings = () => {
                   )}
                 </div>
 
+                {/* dob Field */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="dob"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    DOB <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    id="dob"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 border rounded-lg ${
+                      errors.dob ? "border-red-500" : "border-gray-300"
+                    } focus:outline-none focus:ring focus:ring-blue-300`}
+                    placeholder="Enter your dob number"
+                  />
+                  {errors.dob && (
+                    <p className="text-red-500 text-sm mt-1">{errors.dob}</p>
+                  )}
+                </div>
+
                 {/* Country Dropdown */}
                 <div className="mb-4">
                   <label
@@ -285,22 +350,24 @@ const Settings = () => {
                 </div>
 
                 {/* Upload Cv */}
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">
-                  Upload Cv <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="file"
-                  // accept="image/*"
-                  onChange={handleFileChange}
-                  className={`w-full p-3 border ${
-                    errors.upload_cv ? "border-red-500" : "border-gray-300"
-                  } rounded-lg`}
-                />
-                {errors.upload_cv && (
-                  <p className="text-red-500 text-sm mt-1">{errors.upload_cv}</p>
-                )}
-              </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Upload Cv <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    // accept="image/*"
+                    onChange={handleFileChange}
+                    className={`w-full p-3 border ${
+                      errors.upload_cv ? "border-red-500" : "border-gray-300"
+                    } rounded-lg`}
+                  />
+                  {errors.upload_cv && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.upload_cv}
+                    </p>
+                  )}
+                </div>
                 <button
                   type="submit"
                   className="bg-blue-600 text-white py-2 px-4 rounded-lg"

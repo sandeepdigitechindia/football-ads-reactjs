@@ -120,7 +120,7 @@ const Dashboard = () => {
       cell: (row) => (
         <div className="text-center">
           <button
-            className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow"
+            className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition shadow"
             onClick={() => navigate(`/user/post/${row.id}`)}
           >
             Apply
@@ -227,21 +227,23 @@ const Dashboard = () => {
             ].map((card, index) => (
               <div
                 key={index}
-                className={`relative bg-gradient-to-r ${card.gradient} p-6 rounded-2xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}
+                className={`relative bg-gradient-to-r ${card.gradient} p-4 rounded-xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}
               >
                 {/* Card Content */}
-                <h3 className="text-lg font-semibold mb-2 tracking-wide">
-                  {card.title}
-                </h3>
-                <p className="text-5xl font-extrabold mb-4">{card.count}</p>
-                <button className="bg-white text-gray-800 py-2 px-6 rounded-lg shadow hover:bg-gray-100 transition">
-                  View Details
-                </button>
+                <h3 className="text-md font-semibold mb-2">{card.title}</h3>
+                <p className="text-3xl font-extrabold mb-3">{card.count}</p>
+
+                {/* Align button to bottom-right */}
+                <div className="absolute bottom-4 right-4">
+                  <button className="bg-white text-gray-800 py-2 px-4 rounded shadow hover:bg-gray-100 transition">
+                    View Details
+                  </button>
+                </div>
               </div>
             ))}
           </section>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded shadow-md">
             {/* Header with Search Input */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <h2 className="text-xl font-medium text-gray-800">
@@ -253,7 +255,7 @@ const Dashboard = () => {
                   placeholder="Search by title..."
                   value={searchTerm}
                   onChange={handleSearch}
-                  className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -285,7 +287,7 @@ const Dashboard = () => {
           </div>
 
           {/* Active Subscription */}
-          <section className="bg-white p-6 rounded-lg shadow-md">
+          <section className="bg-white p-6 rounded shadow-md">
             <h2 className="text-xl font-medium text-gray-800 mb-4">
               Active Subscription
             </h2>
@@ -296,7 +298,7 @@ const Dashboard = () => {
               </p>
               <Link
                 to="/user/subscriptions" // Add the route to user subscription page
-                className="mt-4 sm:mt-0 py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                className="mt-4 sm:mt-0 py-2 px-6 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
               >
                 Manage Subscription
               </Link>

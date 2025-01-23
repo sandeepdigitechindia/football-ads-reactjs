@@ -80,24 +80,7 @@ const Dashboard = () => {
       sortable: true,
       center: true,
     },
-    {
-      name: "Applicants with Counts",
-      selector: (row) => row.applicantsCount,
-      sortable: true,
-      cell: (row) => (
-        <div className="text-sm text-gray-600 text-center">
-          {/* Circle with applicant count and onClick event */}
-          <div
-            className="inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
-            onClick={() => navigate(`/club/post/applicants/${row.id}`)} // Navigate to applicants page
-          >
-            {row.applicantsCount}
-          </div>{" "}
-          Applicants
-        </div>
-      ),
-      center: true,
-    },
+
     {
       name: "Date",
       selector: (row) => row.date,
@@ -126,12 +109,30 @@ const Dashboard = () => {
       center: true,
     },
     {
+      name: "Applicants with Counts",
+      selector: (row) => row.applicantsCount,
+      sortable: true,
+      cell: (row) => (
+        <div className="text-sm text-gray-600 text-center">
+          {/* Circle with applicant count and onClick event */}
+          <div
+            className="inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
+            onClick={() => navigate(`/club/post/applicants/${row.id}`)} // Navigate to applicants page
+          >
+            {row.applicantsCount}
+          </div>{" "}
+          Applicants
+        </div>
+      ),
+      center: true,
+    },
+    {
       name: "Action",
       cell: (row) => (
         <div className="text-center relative">
           {/* Action Button */}
           <button
-            className="py-2 px-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center gap-2"
+            className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition flex items-center gap-2"
             onClick={() =>
               setDropdownOpen(dropdownOpen === row.id ? null : row.id)
             } // Toggle dropdown
@@ -149,7 +150,7 @@ const Dashboard = () => {
           {dropdownOpen === row.id && (
             <div
               ref={dropdownRef}
-              className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-100 pointer-events-auto z-50"
+              className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg opacity-100 pointer-events-auto z-50"
             >
               <ul className="list-none p-0 m-0">
                 {/* View Post Option */}
@@ -312,14 +313,18 @@ const Dashboard = () => {
                 {/* Card Content */}
                 <h3 className="text-md font-semibold mb-2">{card.title}</h3>
                 <p className="text-3xl font-extrabold mb-3">{card.count}</p>
-                <button className="bg-white text-gray-800 py-1 px-4 rounded-lg shadow hover:bg-gray-100 transition">
-                  View Details
-                </button>
+
+                {/* Align button to bottom-right */}
+                <div className="absolute bottom-4 right-4">
+                  <button className="bg-white text-gray-800 py-2 px-4 rounded shadow hover:bg-gray-100 transition">
+                    View Details
+                  </button>
+                </div>
               </div>
             ))}
           </section>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded shadow-md">
             {/* Header with Search Input */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <h2 className="text-xl font-medium text-gray-800">
@@ -331,7 +336,7 @@ const Dashboard = () => {
                   placeholder="Search by title..."
                   value={searchTerm}
                   onChange={handleSearch}
-                  className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +368,7 @@ const Dashboard = () => {
           </div>
 
           {/* Active Subscription */}
-          <section className="bg-white p-6 rounded-lg shadow-md">
+          <section className="bg-white p-6 rounded shadow-md">
             <h2 className="text-xl font-medium text-gray-800 mb-4">
               Active Subscription
             </h2>

@@ -36,6 +36,7 @@ import ClubPostForm from './pages/club/PostForm';
 import ClubPostEditForm from './pages/club/PostEditForm';
 import ClubPostDetail from './pages/club/PostDetail';
 import ClubPostApplicant from './pages/club/ClubPostApplicant';
+import ClubPostApplicantView from './pages/club/ClubPostApplicantView';
 
 
 import ClubLogout from './pages/club/Logout';
@@ -110,6 +111,7 @@ const App = () => {
           <Route path="/club/post/view/:id" element={<ClubPostDetail />} />
           <Route path="/club/post/edit/:id" element={<ClubPostEditForm />} />
           <Route path="/club/post/applicants/:id" element={<ClubPostApplicant />} />
+          <Route path="/club/post/applicant/view/:id" element={<ClubPostApplicantView />} />
           <Route path="/club/logout" element={<ClubLogout />} />
         </Routes>
       </DynamicWrapper>

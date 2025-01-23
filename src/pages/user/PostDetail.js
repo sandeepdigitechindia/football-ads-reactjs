@@ -43,7 +43,7 @@ const PostDetail = () => {
             </h1>
             <button
               onClick={() => alert(`You applied for ${job.title}`)}
-              className="py-3 px-10 bg-blue-600 text-white text-lg font-semibold rounded hover:bg-blue-700 transition shadow-lg"
+              className="py-2 px-6 bg-blue-600 text-white text-lg rounded hover:bg-blue-700 transition shadow-lg"
             >
               Apply Now
             </button>

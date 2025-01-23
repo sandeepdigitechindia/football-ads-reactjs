@@ -120,7 +120,7 @@ const Posts = () => {
       cell: (row) => (
         <div className="text-center">
           <button
-            className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow"
+            className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition shadow"
             onClick={() => navigate(`/user/post/${row.id}`)}
           >
             Apply
@@ -207,7 +207,7 @@ const Posts = () => {
             </Link> */}
           </header>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded shadow-md">
             {/* Header with Search Input */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <h2 className="text-xl font-medium text-gray-800">All Posts</h2>
@@ -217,7 +217,7 @@ const Posts = () => {
                   placeholder="Search by title..."
                   value={searchTerm}
                   onChange={handleSearch}
-                  className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

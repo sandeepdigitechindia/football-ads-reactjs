@@ -81,25 +81,7 @@ const Posts = () => {
       sortable: true,
       center: true,
     },
-    {
-      name: "Applicants with Counts",
-      selector: (row) => row.applicantsCount,
-      sortable: true,
-      cell: (row) => (
-        <div className="text-sm text-gray-600 text-center">
-          {/* Circle with applicant count and onClick event */}
-          <div
-            className="inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
-            onClick={() => navigate(`/club/post/applicants/${row.id}`)} // Navigate to applicants page
-          >
-            {row.applicantsCount}
-          </div>
-          {" "}Applicants
-        </div>
-      ),
-      center: true,
-    }    
-,    
+
     {
       name: "Date",
       selector: (row) => row.date,
@@ -128,12 +110,30 @@ const Posts = () => {
       center: true,
     },
     {
+      name: "Applicants with Counts",
+      selector: (row) => row.applicantsCount,
+      sortable: true,
+      cell: (row) => (
+        <div className="text-sm text-gray-600 text-center">
+          {/* Circle with applicant count and onClick event */}
+          <div
+            className="inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
+            onClick={() => navigate(`/club/post/applicants/${row.id}`)} // Navigate to applicants page
+          >
+            {row.applicantsCount}
+          </div>{" "}
+          Applicants
+        </div>
+      ),
+      center: true,
+    },
+    {
       name: "Action",
       cell: (row) => (
         <div className="text-center relative">
           {/* Action Button */}
           <button
-            className="py-2 px-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center gap-2"
+            className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition flex items-center gap-2"
             onClick={() =>
               setDropdownOpen(dropdownOpen === row.id ? null : row.id)
             } // Toggle dropdown
@@ -151,7 +151,7 @@ const Posts = () => {
           {dropdownOpen === row.id && (
             <div
               ref={dropdownRef}
-              className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-100 pointer-events-auto z-50"
+              className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg opacity-100 pointer-events-auto z-50"
             >
               <ul className="list-none p-0 m-0">
                 {/* View Post Option */}
@@ -286,13 +286,13 @@ const Posts = () => {
             <h1 className="text-3xl font-bold text-gray-800">All Posts</h1>
             <Link
               to={"/club/post/create"}
-              className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              className="py-2 px-6 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
             >
               Add New &#43;
             </Link>
           </header>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded shadow-md">
             {/* Header with Search Input */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <h2 className="text-xl font-medium text-gray-800">All Posts</h2>
@@ -302,7 +302,7 @@ const Posts = () => {
                   placeholder="Search by title..."
                   value={searchTerm}
                   onChange={handleSearch}
-                  className="w-full p-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
