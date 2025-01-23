@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Sidebar from "../../components/club/Sidebar";
 // Sample countries and roles
 const countries = [
@@ -9,7 +8,6 @@ const countries = [
   "Australia",
   "United Kingdom",
 ];
-const roles = ["Player", "Coach", "Agent", "Club"];
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -30,8 +28,6 @@ const Settings = () => {
   const [errors, setErrors] = useState({});
   const handleTabChange = (tab) => setActiveTab(tab);
   const [preview, setPreview] = useState(null); // For profile picture preview
-
-  const [isPasswordChange, setIsPasswordChange] = useState(false); // Toggle for password change
 
   const validate = () => {
     const newErrors = {};

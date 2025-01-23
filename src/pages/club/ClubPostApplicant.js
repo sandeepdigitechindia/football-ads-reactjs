@@ -38,7 +38,6 @@ const initialApplicants = [
 ];
 
 const ClubPostApplicant = () => {
-  const { postId } = useParams(); // Get post ID from URL
   const navigate = useNavigate();
   const [applicants, setApplicants] = useState(initialApplicants);
   const [searchTerm, setSearchTerm] = useState("");

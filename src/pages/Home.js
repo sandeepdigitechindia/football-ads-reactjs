@@ -5,7 +5,6 @@ import SubscriptionsSection from '../components/SubscriptionsSection';
 import AdditionalServicesSection from '../components/AdditionalServicesSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import SecondaryCTASection from '../components/SecondaryCTASection';
-import { Link } from 'react-router-dom';
 import WhyChooseUs from '../components/WhyChooseUs';
 
 const Home = () => {
