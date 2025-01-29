@@ -124,6 +124,12 @@ const Posts = () => {
             onClick={() => navigate(`/user/post/${row.id}`)}
           >
             Apply
+          </button><br></br><br></br>
+          <button
+            className="py-2 px-5 bg-gray-500 text-white rounded hover:bg-blue-600 transition shadow"
+            onClick={() => navigate(`/user/post/${row.id}`)}
+          >
+            View
           </button>
         </div>
       ),
@@ -207,13 +213,13 @@ const Posts = () => {
             </Link> */}
           </header>
 
-          <div className="bg-white p-6 rounded shadow-md">
+          <div className="bg-white p-6 rounded shadow">
             {/* Header with Search Input */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <h2 className="text-xl font-medium text-gray-800">All Posts</h2>
               <div className="relative mt-2 sm:mt-0 w-full sm:w-auto">
                 <input
-                  type="text"
+                  type="text" 
                   placeholder="Search by title..."
                   value={searchTerm}
                   onChange={handleSearch}

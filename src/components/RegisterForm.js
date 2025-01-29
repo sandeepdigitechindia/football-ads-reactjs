@@ -415,6 +415,28 @@ const RegisterForm = () => {
               </button>
             </div>
           </form>
+
+          <div className="mt-4 text-center">
+            <p>Or Register with:</p>
+            <div className="flex justify-center space-x-4 mt-4">
+              
+              {/* Facebook Login Button */}
+              <button className="flex items-center justify-center bg-blue-700 text-white py-2 px-4 rounded-lg w-full max-w-xs hover:bg-blue-800 transition duration-300">
+                <i className="fab fa-facebook-f mr-2"></i> Facebook
+              </button>
+
+              {/* X (Twitter) Login Button */}
+              <button className="flex items-center justify-center bg-black text-white py-2 px-4 rounded-lg w-full max-w-xs hover:bg-gray-900 transition duration-300">
+                <i className="fab fa-x-twitter mr-2"></i> X
+              </button>
+
+              {/* Instagram Login Button */}
+              <button className="flex items-center justify-center bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 rounded-lg w-full max-w-xs hover:opacity-90 transition duration-300">
+                <i className="fab fa-instagram mr-2"></i> Instagram
+              </button>
+            </div>
+          </div>
+
           <p className="text-center mt-2">
             Have an account?
             <br />

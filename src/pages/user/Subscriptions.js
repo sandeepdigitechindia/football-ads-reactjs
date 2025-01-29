@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/user/Sidebar";
-
+import SubscriptionsSection from "../../components/SubscriptionsSection";
 const Subscriptions = () => {
   // Sample subscription data
   const subscriptions = [
@@ -30,7 +30,12 @@ const Subscriptions = () => {
       endDate: "Sept 12, 2025",
       status: "Active",
       renewalStatus: "Auto Renew",
-      benefits: ["Full Access", "Priority Support", "Exclusive Content", "Beta Features"],
+      benefits: [
+        "Full Access",
+        "Priority Support",
+        "Exclusive Content",
+        "Beta Features",
+      ],
       description:
         "The Pro Plan is perfect for professionals who want to access all features and get priority support.",
     },
@@ -45,12 +50,12 @@ const Subscriptions = () => {
         {/* Main Content */}
         <main className="flex-1 p-6 space-y-6">
           {/* Subscriptions Header */}
-          <header className="flex justify-between items-center flex-wrap gap-4">
+          {/* <header className="flex justify-between items-center flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-800">Subscriptions</h1>
-            {/* <button className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-              Add New Subscription
-            </button> */}
-          </header>
+            
+          </header> */}
+
+          <SubscriptionsSection />
 
           {/* Active Subscriptions */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -59,59 +64,59 @@ const Subscriptions = () => {
               sub.status === "Active" ? (
                 <div
                   key={index}
-                  className="bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-6"
+                  className="bg-white p-6 rounded-xl shadow-lg flex flex-col space-y-6 border border-gray-200 transform transition duration-300 hover:shadow-xl"
                 >
-                  <h3 className="text-xl font-semibold text-gray-800">{sub.plan}</h3>
-                  <p className="text-gray-600">Start Date: {sub.startDate}</p>
-                  <p className="text-gray-600">End Date: {sub.endDate}</p>
-                  <span className="px-4 py-1 rounded-full bg-green-100 text-green-600 text-sm font-semibold">
-                    {sub.status}
-                  </span>
-
-                  <h4 className="text-lg font-medium text-gray-800">Plan Benefits</h4>
-                  <ul className="space-y-2">
-                    {sub.benefits.map((benefit, idx) => (
-                      <li key={idx} className="text-gray-600">{benefit}</li>
-                    ))}
-                  </ul>
-
-                  <p className="text-gray-600">{sub.description}</p>
-
-                  <div className="mt-4">
-                    <span className="font-semibold text-gray-800">Renewal Status:</span> {sub.renewalStatus}
+                  {/* Plan Title */}
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-3 rounded-lg shadow-md">
+                    <h3 className="text-xl font-semibold">{sub.plan}</h3>
                   </div>
-                </div>
-              ) : null
-            )}
-          </section>
 
-          {/* Expired Subscriptions */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Expired Subscription Card */}
-            {subscriptions.map((sub, index) =>
-              sub.status === "Expired" ? (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-6"
-                >
-                  <h3 className="text-xl font-semibold text-gray-800">{sub.plan}</h3>
-                  <p className="text-gray-600">Start Date: {sub.startDate}</p>
-                  <p className="text-gray-600">End Date: {sub.endDate}</p>
-                  <span className="px-4 py-1 rounded-full bg-red-100 text-red-600 text-sm font-semibold">
+                  {/* Subscription Details */}
+                  <div className="flex flex-col space-y-2">
+                    <p className="text-gray-600 flex items-center gap-2">
+                      <i className="fas fa-calendar-alt text-blue-500"></i>
+                      <span>
+                        <strong>Start Date:</strong> {sub.startDate}
+                      </span>
+                    </p>
+                    <p className="text-gray-600 flex items-center gap-2">
+                      <i className="fas fa-calendar-check text-green-500"></i>
+                      <span>
+                        <strong>End Date:</strong> {sub.endDate}
+                      </span>
+                    </p>
+                  </div>
+
+                  {/* Status Badge */}
+                  <span className="px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold self-start shadow-md">
                     {sub.status}
                   </span>
 
-                  <h4 className="text-lg font-medium text-gray-800">Plan Benefits</h4>
-                  <ul className="space-y-2">
-                    {sub.benefits.map((benefit, idx) => (
-                      <li key={idx} className="text-gray-600">{benefit}</li>
-                    ))}
-                  </ul>
+                  {/* Plan Benefits */}
+                  <div>
+                    <h4 className="text-lg font-medium text-gray-800 mb-2">
+                      Plan Benefits
+                    </h4>
+                    <ul className="space-y-2">
+                      {sub.benefits.map((benefit, idx) => (
+                        <li
+                          key={idx}
+                          className="text-gray-600 flex items-center gap-2"
+                        >
+                          <i className="fas fa-check-circle text-green-500"></i>{" "}
+                          {benefit}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                  <p className="text-gray-600">{sub.description}</p>
+                  {/* Description */}
+                  <p className="text-gray-600 italic">{sub.description}</p>
 
-                  <div className="mt-4">
-                    <span className="font-semibold text-gray-800">Renewal Status:</span> {sub.renewalStatus}
+                  {/* Renewal Status */}
+                  <div className="mt-4 text-gray-700 font-semibold flex items-center gap-2">
+                    <i className="fas fa-sync-alt text-blue-500"></i>
+                    <span>Renewal Status: {sub.renewalStatus}</span>
                   </div>
                 </div>
               ) : null

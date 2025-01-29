@@ -29,19 +29,7 @@ const SubscriptionPlans = () => {
       ],
       link: "/subscriptions/6-month",
     },
-    {
-      title: "9-Month Plan",
-      description: "Premium access and features for 9 months.",
-      price: "$49.99",
-      features: [
-        { title: "View ads", status: true },
-        { title: "Unlimited contact access", status: true },
-        { title: "Priority support", status: true },
-        { title: "Ad analytics", status: true },
-        { title: "Dedicated account manager", status: false },
-      ],
-      link: "/subscriptions/9-month",
-    },
+    
     {
       title: "1-Year Plan",
       description: "Get full access to all features for a year.",
@@ -64,7 +52,7 @@ const SubscriptionPlans = () => {
           Our Subscription Plans
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="flex justify-center gap-8">
           {plans.map((plan, index) => (
             <div
             key={index}
@@ -124,14 +112,14 @@ const SubscriptionPlans = () => {
         </div>
 
         {/* Full Access Link */}
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <Link
             to="/subscriptions"
             className="text-lg font-semibold text-green-600 hover:underline"
           >
             See All Plans - Subscribe Now
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -85,7 +85,7 @@ const TestimonialsSection = () => {
                             {item.desc}
                           </p>
                       
-                          <div className="w-full flex items-center justify-between">
+                          <div className="w-full flex items-center justify-between relative">
                             <div className="flex items-center gap-3">
                               <img src={item.img} alt={item.name} className="w-12 h-12 object-center object-cover rounded-full border" />
                       
@@ -99,7 +99,7 @@ const TestimonialsSection = () => {
                               </div>
                             </div>
                       
-                            <div className="flex items-center gap-1 bg-yellow-500/5 rounded-full px-2 py-1">
+                            <div className="flex items-center gap-1 bg-yellow-500/5 rounded-full px-2 py-1 absolute bottom-[-20px] right-0">
                               <FaStar className='text-yellow-600 text-sm' />
                               <p className="text-xs text-yellow-600">
                                 {item.rating}

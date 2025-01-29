@@ -1,5 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/club/Sidebar";
+import SubscriptionsSection from "../../components/SubscriptionsSection";
 
 const Subscriptions = () => {
   // Sample subscription data
@@ -45,78 +46,77 @@ const Subscriptions = () => {
         {/* Main Content */}
         <main className="flex-1 p-6 space-y-6">
           {/* Subscriptions Header */}
-          <header className="flex justify-between items-center flex-wrap gap-4">
+          {/* <header className="flex justify-between items-center flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-800">Subscriptions</h1>
-            {/* <button className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-              Add New Subscription
-            </button> */}
-          </header>
+          </header> */}
 
-          {/* Active Subscriptions */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Active Subscription Card */}
-            {subscriptions.map((sub, index) =>
-              sub.status === "Active" ? (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-6"
-                >
-                  <h3 className="text-xl font-semibold text-gray-800">{sub.plan}</h3>
-                  <p className="text-gray-600">Start Date: {sub.startDate}</p>
-                  <p className="text-gray-600">End Date: {sub.endDate}</p>
-                  <span className="px-4 py-1 rounded-full bg-green-100 text-green-600 text-sm font-semibold">
-                    {sub.status}
-                  </span>
+<SubscriptionsSection />
 
-                  <h4 className="text-lg font-medium text-gray-800">Plan Benefits</h4>
-                  <ul className="space-y-2">
-                    {sub.benefits.map((benefit, idx) => (
-                      <li key={idx} className="text-gray-600">{benefit}</li>
-                    ))}
-                  </ul>
+{/* Active Subscriptions */}
+<section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {/* Active Subscription Card */}
+  {subscriptions.map((sub, index) =>
+    sub.status === "Active" ? (
+      <div
+        key={index}
+        className="bg-white p-6 rounded-xl shadow-lg flex flex-col space-y-6 border border-gray-200 transform transition duration-300 hover:shadow-xl"
+      >
+        {/* Plan Title */}
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-3 rounded-lg shadow-md">
+          <h3 className="text-xl font-semibold">{sub.plan}</h3>
+        </div>
 
-                  <p className="text-gray-600">{sub.description}</p>
+        {/* Subscription Details */}
+        <div className="flex flex-col space-y-2">
+          <p className="text-gray-600 flex items-center gap-2">
+            <i className="fas fa-calendar-alt text-blue-500"></i>
+            <span>
+              <strong>Start Date:</strong> {sub.startDate}
+            </span>
+          </p>
+          <p className="text-gray-600 flex items-center gap-2">
+            <i className="fas fa-calendar-check text-green-500"></i>
+            <span>
+              <strong>End Date:</strong> {sub.endDate}
+            </span>
+          </p>
+        </div>
 
-                  <div className="mt-4">
-                    <span className="font-semibold text-gray-800">Renewal Status:</span> {sub.renewalStatus}
-                  </div>
-                </div>
-              ) : null
-            )}
-          </section>
+        {/* Status Badge */}
+        <span className="px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold self-start shadow-md">
+          {sub.status}
+        </span>
 
-          {/* Expired Subscriptions */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Expired Subscription Card */}
-            {subscriptions.map((sub, index) =>
-              sub.status === "Expired" ? (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-6"
-                >
-                  <h3 className="text-xl font-semibold text-gray-800">{sub.plan}</h3>
-                  <p className="text-gray-600">Start Date: {sub.startDate}</p>
-                  <p className="text-gray-600">End Date: {sub.endDate}</p>
-                  <span className="px-4 py-1 rounded-full bg-red-100 text-red-600 text-sm font-semibold">
-                    {sub.status}
-                  </span>
+        {/* Plan Benefits */}
+        <div>
+          <h4 className="text-lg font-medium text-gray-800 mb-2">
+            Plan Benefits
+          </h4>
+          <ul className="space-y-2">
+            {sub.benefits.map((benefit, idx) => (
+              <li
+                key={idx}
+                className="text-gray-600 flex items-center gap-2"
+              >
+                <i className="fas fa-check-circle text-green-500"></i>{" "}
+                {benefit}
+              </li>
+            ))}
+          </ul>
+        </div>
 
-                  <h4 className="text-lg font-medium text-gray-800">Plan Benefits</h4>
-                  <ul className="space-y-2">
-                    {sub.benefits.map((benefit, idx) => (
-                      <li key={idx} className="text-gray-600">{benefit}</li>
-                    ))}
-                  </ul>
+        {/* Description */}
+        <p className="text-gray-600 italic">{sub.description}</p>
 
-                  <p className="text-gray-600">{sub.description}</p>
-
-                  <div className="mt-4">
-                    <span className="font-semibold text-gray-800">Renewal Status:</span> {sub.renewalStatus}
-                  </div>
-                </div>
-              ) : null
-            )}
-          </section>
+        {/* Renewal Status */}
+        <div className="mt-4 text-gray-700 font-semibold flex items-center gap-2">
+          <i className="fas fa-sync-alt text-blue-500"></i>
+          <span>Renewal Status: {sub.renewalStatus}</span>
+        </div>
+      </div>
+    ) : null
+  )}
+</section>
         </main>
       </div>
     </div>

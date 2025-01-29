@@ -40,7 +40,7 @@ const Sidebar = () => {
       <aside
         className={`fixed inset-y-0 left-0 ${
           isOpen ? "z-50" : "z-40"
-        } transform lg:transform-none lg:relative lg:translate-x-0 w-64 bg-white shadow-md p-6 transition-transform duration-300 ease-in-out ${
+        } transform lg:transform-none lg:relative lg:translate-x-0 w-64 bg-white shadow p-6 transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:block lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 overflow-y-auto`}
       >

@@ -300,7 +300,7 @@ const Dashboard = () => {
                 shadow: "shadow-green-500/50",
               },
               {
-                title: "Job Reply Messages",
+                title: "Downloaded Resume",
                 count: 3,
                 gradient: "from-red-500 via-pink-500 to-rose-500",
                 shadow: "shadow-red-500/50",
@@ -316,7 +316,7 @@ const Dashboard = () => {
 
                 {/* Align button to bottom-right */}
                 <div className="absolute bottom-4 right-4">
-                  <button className="bg-white text-gray-800 py-2 px-4 rounded shadow hover:bg-gray-100 transition">
+                <button className="bg-white text-gray-800 py-1 px-2 text-sm rounded shadow hover:bg-gray-100 transition">
                     View Details
                   </button>
                 </div>
@@ -324,7 +324,7 @@ const Dashboard = () => {
             ))}
           </section>
 
-          <div className="bg-white p-6 rounded shadow-md">
+          <div className="bg-white p-6 rounded shadow">
             {/* Header with Search Input */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <h2 className="text-xl font-medium text-gray-800">
@@ -367,24 +367,6 @@ const Dashboard = () => {
             />
           </div>
 
-          {/* Active Subscription */}
-          <section className="bg-white p-6 rounded shadow-md">
-            <h2 className="text-xl font-medium text-gray-800 mb-4">
-              Active Subscription
-            </h2>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <p className="text-gray-700">
-                You are currently subscribed to the <strong>Pro Plan</strong>,
-                renewing on <strong>Feb 10, 2025</strong>.
-              </p>
-              <Link
-                to="/club/subscriptions" // Add the route to club subscription page
-                className="mt-4 sm:mt-0 py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-              >
-                Manage Subscription
-              </Link>
-            </div>
-          </section>
         </main>
       </div>
     </div>

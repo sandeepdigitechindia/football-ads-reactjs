@@ -105,7 +105,7 @@ export default function Example() {
             Home
           </Link>
           <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900">
+            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900 border-none outline-none">
               Ads
               <ChevronDownIcon
                 aria-hidden="true"
@@ -135,7 +135,7 @@ export default function Example() {
           </Popover>
 
           <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900">
+            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900 border-none outline-none">
               Subscriptions
               <ChevronDownIcon
                 aria-hidden="true"
@@ -165,7 +165,7 @@ export default function Example() {
           </Popover>
 
           <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900">
+            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900 border-none outline-none">
               Services for Clubs
               <ChevronDownIcon
                 aria-hidden="true"
