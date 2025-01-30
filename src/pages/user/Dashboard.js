@@ -13,7 +13,7 @@ const Dashboard = () => {
       title: "Post Title 1",
       description: "Description for Post Title 1.",
       date: "Jan 10, 2025",
-      status: "Open",
+      status: "Applied",
     },
     {
       id: 2,
@@ -102,7 +102,7 @@ const Dashboard = () => {
       selector: (row) => (
         <span
           className={`px-3 py-1 rounded-full text-sm font-medium ${
-            row.status === "Open"
+            row.status === "Open" || row.status === "Applied"
               ? "bg-green-100 text-green-700"
               : row.status === "Close"
               ? "bg-yellow-100 text-yellow-700"

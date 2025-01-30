@@ -9,6 +9,7 @@ const MainBanner = () => {
             <source src="/promo-video.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+          {/* <img src="/common/main.png" alt="main banner" className="w-full h-full object-cover" /> */}
         </div>
 
         {/* Welcome Text and CTA */}
