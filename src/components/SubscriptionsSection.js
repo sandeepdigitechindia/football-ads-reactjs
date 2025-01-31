@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 const SubscriptionPlans = () => {
   const plans = [
     {
-      title: "3-Month Plan",
+      title: "Basic Plan",
       description: "Access basic features for 3 months.",
       price: "$19.99",
+      duration: "3",
       features: [
         { title: "View ads", status: true },
         { title: "Unlimited contact access", status: true },
@@ -17,9 +18,10 @@ const SubscriptionPlans = () => {
       link: "/subscriptions/3-month",
     },
     {
-      title: "6-Month Plan",
+      title: "Standard Plan",
       description: "Unlock additional features for 6 months.",
       price: "$34.99",
+      duration: "6",
       features: [
         { title: "View ads", status: true },
         { title: "Unlimited contact access", status: true },
@@ -31,9 +33,10 @@ const SubscriptionPlans = () => {
     },
     
     {
-      title: "1-Year Plan",
+      title: "Premium",
       description: "Get full access to all features for a year.",
       price: "$59.99",
+      duration: "12",
       features: [
         { title: "View ads", status: true },
         { title: "Unlimited contact access", status: true },
@@ -52,7 +55,7 @@ const SubscriptionPlans = () => {
           Our Subscription Plans
         </h2>
 
-        <div className="flex justify-center gap-8">
+        <div className="flex justify-center gap-8 w-[80%] mx-auto">
           {plans.map((plan, index) => (
             <div
             key={index}
@@ -73,7 +76,7 @@ const SubscriptionPlans = () => {
               text-gray-800 group-hover:text-blue-600"
             >
               {plan.price}
-              <span className="text-sm text-gray-500 ml-2">/ month</span>
+              <span className="text-sm text-gray-500 ml-2">/{plan.duration} month</span>
             </div>
           
             {/* Features List */}
