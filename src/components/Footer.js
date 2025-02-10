@@ -1,13 +1,36 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+// Animation Variants
+const fadeInVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2, // Delay between each child animation
+    },
+  },
+};
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-900 text-white py-[100px]">
+    <motion.footer
+      className="bg-blue-900 text-white py-[100px]"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={staggerContainer}
+    >
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" variants={staggerContainer}>
           {/* Quick Links */}
-          <div>
+          <motion.div variants={fadeInVariant}>
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
@@ -26,57 +49,59 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </div>
+          </motion.div>
 
           {/* Contact Information */}
-          <div>
+          <motion.div variants={fadeInVariant}>
             <h3 className="text-lg font-bold mb-4">Contact</h3>
-            <p>Email: <a href="mailto:info@footballads.com" className="hover:underline">info@footballads.com</a></p>
-            <p>Phone: <a href="tel:+1234567890" className="hover:underline">+1 234 567 890</a></p>
+            <p>
+              Email:{" "}
+              <a href="mailto:info@footballads.com" className="hover:underline">
+                info@footballads.com
+              </a>
+            </p>
+            <p>
+              Phone:{" "}
+              <a href="tel:+1234567890" className="hover:underline">
+                +1 234 567 890
+              </a>
+            </p>
             <p>Address: 123 Football Lane, Soccer City, SC 12345</p>
-          </div>
+          </motion.div>
 
-          {/* Copyright */}
-          <div className="text-center md:text-right">
+          {/* Copyright & Social Links */}
+          <motion.div className="text-center md:text-right" variants={fadeInVariant}>
             <p>&copy; {new Date().getFullYear()} Football Ads. All rights reserved.</p>
             <p className="text-sm">Built with passion for football enthusiasts.</p>
 
-{/* Social Media Links */}
-<div className="flex justify-center mt-5 gap-6">
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/facebook.png"
-              alt="Facebook"
-              className="w-8 h-8 hover:text-blue-600 transition-colors"
-            />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/twitter.png"
-              alt="Twitter"
-              className="w-8 h-8 hover:text-blue-400 transition-colors"
-            />
-          </a>
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/instagram.png"
-              alt="Instagram"
-              className="w-8 h-8 hover:text-pink-600 transition-colors"
-            />
-          </a>
-          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/linkedin.png"
-              alt="LinkedIn"
-              className="w-8 h-8 hover:text-blue-700 transition-colors"
-            />
-          </a>
-        </div>
-
-          </div>
-        </div>
+            {/* Social Media Links */}
+            <div className="flex justify-center mt-5 gap-6">
+              {[
+                { name: "Facebook", url: "https://www.facebook.com", icon: "/social/facebook.png" },
+                { name: "Twitter", url: "https://twitter.com", icon: "/social/twitter.png" },
+                { name: "Instagram", url: "https://www.instagram.com", icon: "/social/instagram.png" },
+                { name: "LinkedIn", url: "https://www.linkedin.com", icon: "/social/linkedin.png" },
+              ].map((social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <img
+                    src={social.icon}
+                    alt={social.name}
+                    className="w-8 h-8 transition-transform"
+                  />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 

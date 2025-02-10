@@ -26,8 +26,7 @@ const ads = [
 const subscriptions = [
   { name: "3-Month Plan", to: "subscriptions" },
   { name: "6-Month Plan", to: "subscriptions" },
-  { name: "9-Month Plan", to: "subscriptions" },
-  { name: "1-Year Plan", to: "subscriptions" },
+  { name: "12-Month Plan", to: "subscriptions" }
 ];
 
 const services = [

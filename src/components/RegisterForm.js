@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const countries = [
   "United States",
@@ -60,7 +61,7 @@ const RegisterForm = () => {
     // DOB validation
     if (!formData.dob.trim()) {
       newErrors.dob = "DOB number is required.";
-    } 
+    }
 
     // Country validation
     if (!formData.country) {
@@ -417,23 +418,40 @@ const RegisterForm = () => {
           </form>
 
           <div className="mt-4 text-center">
-            <p>Or Register with:</p>
-            <div className="flex justify-center space-x-4 mt-4">
+            <p>Or login with:</p>
+            <motion.div
+              className="flex justify-center space-x-4 mt-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
               {/* Facebook Login Button */}
-              <button className="flex items-center justify-center bg-blue-700 text-white py-1 px-2 rounded w-20 h-10 hover:bg-blue-800 transition duration-300">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="flex items-center justify-center bg-blue-700 text-white py-1 px-2 rounded w-20 h-10 hover:bg-blue-800 transition duration-300"
+              >
                 <i className="fab fa-facebook-f text-xl"></i>
-              </button>
+              </motion.button>
 
               {/* X (Twitter) Login Button */}
-              <button className="flex items-center justify-center bg-black text-white py-1 px-2 rounded w-20 h-10 hover:bg-gray-900 transition duration-300">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="flex items-center justify-center bg-black text-white py-1 px-2 rounded w-20 h-10 hover:bg-gray-900 transition duration-300"
+              >
                 <i className="fab fa-x-twitter text-xl"></i>
-              </button>
+              </motion.button>
 
               {/* Instagram Login Button */}
-              <button className="flex items-center justify-center bg-gradient-to-r from-pink-500 to-purple-600 text-white py-1 px-2 rounded w-20 h-10 hover:opacity-90 transition duration-300">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="flex items-center justify-center bg-gradient-to-r from-pink-500 to-purple-600 text-white py-1 px-2 rounded w-20 h-10 hover:opacity-90 transition duration-300"
+              >
                 <i className="fab fa-instagram text-xl"></i>
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           </div>
 
           <p className="text-center mt-2">
