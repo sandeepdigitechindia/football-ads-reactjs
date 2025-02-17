@@ -1,51 +1,21 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const serviceVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, staggerChildren: 0.2 } },
-};
 
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
-  hover: { scale: 1.05, transition: { duration: 0.3 } },
-};
+const AdditionalServicesSection = ({ services }) => {
 
-const AdditionalServicesSection = () => {
-  const services = [
-    {
-      title: "Scouting Organization",
-      description: "We help clubs and agents find the best talents by organizing scouting events and trials.",
-      video: "https://www.youtube.com/embed/1CB_xGYibQU?si=TlSBnhsCHVK5yDEb",
-    },
-    {
-      title: "Tournament Organization",
-      description: "We assist in organizing football tournaments, from planning to execution, for all levels.",
-      video: "https://www.youtube.com/embed/co3pn3eL5-Y?si=Dz05U_bHfSncfQV_",
-    },
-    {
-      title: "Custom Services",
-      description: "We provide tailored services based on specific needs. Let us know how we can help you!",
-      video: "https://www.youtube.com/embed/t_v9-LtDbaw?si=Z_2aDbZp4uUNhpWE",
-    },
-    {
-      title: "Scouting Organization",
-      description: "We help clubs and agents find the best talents by organizing scouting events and trials.",
-      video: "https://www.youtube.com/embed/KWKBch5hC5E?si=OYZD3fMrn5DCsggp",
-    },
-    {
-      title: "Tournament Organization",
-      description: "We assist in organizing football tournaments, from planning to execution, for all levels.",
-      video: "https://www.youtube.com/embed/co3pn3eL5-Y?si=Dz05U_bHfSncfQV_",
-    },
-    {
-      title: "Custom Services",
-      description: "We provide tailored services based on specific needs. Let us know how we can help you!",
-      video: "https://www.youtube.com/embed/Rm2YVbN7Zsw?si=cMB2nPc2LUF5XsoP",
-    },
-  ];
+  const serviceVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, staggerChildren: 0.2 } },
+  };
+  
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    hover: { scale: 1.05, transition: { duration: 0.3 } },
+  };
 
+  if (!services || services.length === 0) return <div>No Ads Available</div>;
   return (
     <motion.section
       className="py-16 px-4 bg-gray-50"
@@ -87,7 +57,7 @@ const AdditionalServicesSection = () => {
               <p className="text-gray-700 mb-4">{service.description}</p>
               <div className="aspect-w-16 aspect-h-9 mb-4">
                 <iframe
-                  src={service.video}
+                  src={service.video_link}
                   title={service.title}
                   className="w-full h-full rounded-lg"
                   frameBorder="0"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import MainBanner from "../components/MainBanner";
 import AdsSection from "../components/AdsSection";
@@ -7,18 +7,46 @@ import AdditionalServicesSection from "../components/AdditionalServicesSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import SecondaryCTASection from "../components/SecondaryCTASection";
 import WhyChooseUs from "../components/WhyChooseUs";
-
+import API from "../api";
 const sectionVariants = {
-  hidden: { opacity: 0, y: 50 }, // Start position
-  visible: { opacity: 1, y: 0, transition: { duration: 1 } }, // Animation effect
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 1 } },
 };
 
 const Home = () => {
+  const [homeData, setHomeData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHomeData = async () => {
+      try {
+        const response = await API.get("/api/");
+        setHomeData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching home data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchHomeData();
+  }, []);
+  if (loading) {
+    return <div className="text-center text-lg font-bold">Loading...</div>;
+  }
+
+  if (!homeData) {
+    return (
+      <div className="text-center text-lg font-bold text-red-500">
+        Error loading data.
+      </div>
+    );
+  }
   return (
     <div className="home">
       {/* Main Banner Section (No animation, already full width) */}
-      <MainBanner />
 
+      <MainBanner mainBanner={homeData.main_banner} />
       {/* Ads Section */}
       <motion.div
         variants={sectionVariants}
@@ -26,7 +54,7 @@ const Home = () => {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <AdsSection />
+        <AdsSection ads={homeData.posts} />
       </motion.div>
 
       {/* Subscriptions Section */}
@@ -36,7 +64,7 @@ const Home = () => {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <SubscriptionsSection />
+        <SubscriptionsSection subscriptions={homeData.subscriptions} />
       </motion.div>
 
       {/* Additional Services Section */}
@@ -46,7 +74,7 @@ const Home = () => {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <AdditionalServicesSection />
+        <AdditionalServicesSection services={homeData.services} />
       </motion.div>
 
       {/* WhyChooseUs Section */}
@@ -66,7 +94,7 @@ const Home = () => {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <TestimonialsSection />
+        <TestimonialsSection testimonials={homeData.testimonials} />
       </motion.div>
 
       {/* Secondary Calls to Action Section */}

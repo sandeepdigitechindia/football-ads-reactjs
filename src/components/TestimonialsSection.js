@@ -9,11 +9,16 @@ import "swiper/css/navigation";
 // import required modules
 import { Navigation } from "swiper/modules";
 import { FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa6";
-import { testimonialData } from "../constants/Testimonial";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const TestimonialsSection = () => {
+const TestimonialsSection = ({ testimonials }) => {
+  // Hooks should always be called at the top level, before any return statements
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+
+  if (!testimonials || testimonials.length === 0) {
+    return <div className="text-center py-10">No Testimonials Available</div>;
+  }
 
   const breakpointsResponsive = {
     "@0.00": {
@@ -79,17 +84,17 @@ const TestimonialsSection = () => {
           modules={[Navigation]}
           className="mySwiper p-1 ![&_.swiper-wrapper]:!ease-in-out ![&_.swiper-wrapper]:!duration-300"
         >
-          {testimonialData.map((item) => (
-            <SwiperSlide key={item.id}>
+          {testimonials.map((item) => (
+            <SwiperSlide key={item._id}>
               <div className="w-full h-[250px] p-6 space-y-10 group rounded-xl border border-neutral-800/70 transition-all duration-300 hover:border-blue-600">
                 <p className="text-base font-normal h-[100px] overflow-hidden">
-                  {item.desc}
+                  {item.comment}
                 </p>
 
                 <div className="w-full flex items-center justify-between relative">
                   <div className="flex items-center gap-3">
                     <img
-                      src={item.img}
+                      src={BASE_URL+item.image}
                       alt={item.name}
                       className="w-12 h-12 object-center object-cover rounded-full border"
                     />
@@ -97,14 +102,14 @@ const TestimonialsSection = () => {
                     <div className="space-y-1">
                       <p className="text-base font-semibold">{item.name}</p>
                       <p className="text-xs font-normal italic">
-                        {item.role} of Company {item.company}
+                        {item.designation} 
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1 bg-yellow-500/5 rounded-full px-2 py-1 absolute bottom-[-20px] right-0">
                     <FaStar className="text-yellow-600 text-sm" />
-                    <p className="text-xs text-yellow-600">{item.rating}</p>
+                    <p className="text-xs text-yellow-600">{item.ratting}</p>
                   </div>
                 </div>
               </div>

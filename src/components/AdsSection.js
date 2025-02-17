@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-const AdsSection = () => {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const AdsSection = ({ ads }) => {
   // Animation Variants
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -15,50 +16,8 @@ const AdsSection = () => {
       transition: { duration: 0.6, delay: 0.3 },
     },
   };
-  const adsData = [
-    {
-      photo: "/ads/ads1.jpg",
-      title: "Top Football Club Seeking New Players",
-      description:
-        "Our club is looking for talented football players for the upcoming season. Apply today!",
-      link: "/ads/1",
-    },
-    {
-      photo: "/ads/ads2.jpg",
-      title: "Professional Coaches Available for Hire",
-      description:
-        "Experienced football coaches ready to take your game to the next level. Book now!",
-      link: "/ads/2",
-    },
-    {
-      photo: "/ads/ads3.jpg",
-      title: "Join the Best Football Agency",
-      description:
-        "Get represented by one of the top football agencies. Make your mark in the industry.",
-      link: "/ads/3",
-    },
-    {
-      photo: "/ads/ads1.jpg",
-      title: "Top Football Club Seeking New Players",
-      description:
-        "Our club is looking for talented football players for the upcoming season. Apply today!",
-      link: "/ads/4",
-    },
-    {
-      photo: "/ads/ads2.jpg",
-      title: "Professional Coaches Available for Hire",
-      description:
-        "Experienced football coaches ready to take your game to the next level. Book now!",
-      link: "/ads/5",
-    },
-    {
-      photo: "/ads/ads3.jpg",
-      title: "Join the Best Football Agency",
-      description:
-        "Get represented by one of the top football agencies. Make your mark in the industry.",
-      link: "/ads/6",
-    },
-  ];
+
+  if (!ads || ads.length === 0) return <div>No Ads Available</div>;
 
   return (
     <motion.section
@@ -82,7 +41,7 @@ const AdsSection = () => {
 
         {/* Ads Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-          {adsData.map((ad, index) => (
+          {ads.map((ad, index) => (
             <motion.div
               key={index}
               className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -94,7 +53,7 @@ const AdsSection = () => {
             >
               <div className="flex justify-center mb-4">
                 <motion.img
-                  src={ad.photo}
+                  src={BASE_URL + ad.image}
                   alt={ad.title}
                   className="object-cover h-36 sm:h-40 md:h-48 lg:h-56 w-full rounded-md"
                   whileHover={{ scale: 1.1 }}
@@ -108,7 +67,7 @@ const AdsSection = () => {
                 {ad.description}
               </p>
               <a
-                href={ad.link}
+                href={"ads/" + ad._id}
                 className="text-blue-600 hover:underline text-sm"
               >
                 See More
