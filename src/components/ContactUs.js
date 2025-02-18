@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaLinkedinIn,
+  FaInstagram,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import API from "../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Animation Variants
 const fadeInVariant = {
   hidden: { opacity: 0, y: 30 },
@@ -13,12 +22,14 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Delay between elements
+      staggerChildren: 0.2,
     },
   },
 };
 
-const ContactUs = () => {
+const ContactUs = ({ contact }) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,9 +42,50 @@ const ContactUs = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    
+    setLoading(true);
+
+    try {
+      const formDataToSend = {
+        name: formData.name,
+        email: formData.email,
+        number: formData.contact,
+        subject: formData.subject,
+        msg: formData.message,
+      };
+    
+      await API.post(`${BASE_URL}/api/contact`, formDataToSend, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      navigate("/");
+      toast.success("Contact Form Submitted Successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setFormData({
+        name: "",
+        email: "",
+        contact: "",
+        subject:"",
+        message:"",
+      });
+    
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Submit failed. Try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+    
   };
 
   return (
@@ -49,13 +101,16 @@ const ContactUs = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Left Section */}
           <motion.div className="p-8" variants={fadeInVariant}>
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">Contact Us</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
+              Contact Us
+            </h2>
             <p className="text-center text-gray-600 mb-6">
-              We’d love to hear from you! Get in touch with us using the form on the right or through the details below.
+              We’d love to hear from you! Get in touch with us using the form on
+              the right or through the details below.
             </p>
             <div className="mb-6">
               <motion.img
-                src="/contact/contact-us.jpg"
+                src={BASE_URL + contact.contact_page_banner}
                 alt="Contact Us"
                 className="w-full rounded-lg shadow-lg"
                 whileHover={{ scale: 1.05 }}
@@ -65,14 +120,20 @@ const ContactUs = () => {
               <h3 className="text-xl font-semibold mb-2">Our Contact Info</h3>
               <p className="text-gray-700">
                 <strong>Email:</strong>{" "}
-                <a href="mailto:contact@yourdomain.com" className="text-blue-600 hover:underline">
-                  contact@yourdomain.com
+                <a
+                  href={"mailto:" + contact.official_mail}
+                  className="text-blue-600 hover:underline"
+                >
+                  {contact.official_mail}
                 </a>
               </p>
               <p className="text-gray-700">
                 <strong>Phone:</strong>{" "}
-                <a href="tel:+123456789" className="text-blue-600 hover:underline">
-                  +1 (234) 567-890
+                <a
+                  href={"tel:" + contact.official_number}
+                  className="text-blue-600 hover:underline"
+                >
+                  {contact.official_number}
                 </a>
               </p>
             </div>
@@ -80,10 +141,26 @@ const ContactUs = () => {
               <h3 className="text-xl font-semibold mb-2">Follow Us</h3>
               <div className="flex space-x-4 justify-center">
                 {[
-                  { icon: <FaFacebookF />, url: "https://facebook.com", color: "text-blue-600" },
-                  { icon: <FaTwitter />, url: "https://twitter.com", color: "text-blue-400" },
-                  { icon: <FaLinkedinIn />, url: "https://linkedin.com", color: "text-blue-700" },
-                  { icon: <FaInstagram />, url: "https://instagram.com", color: "text-pink-600" },
+                  {
+                    icon: <FaFacebookF />,
+                    url: contact.facebook_link,
+                    color: "text-blue-600",
+                  },
+                  {
+                    icon: <FaTwitter />,
+                    url: contact.twitter_link,
+                    color: "text-blue-400",
+                  },
+                  {
+                    icon: <FaLinkedinIn />,
+                    url: contact.linkedin_link,
+                    color: "text-blue-700",
+                  },
+                  {
+                    icon: <FaInstagram />,
+                    url: contact.instagram_link,
+                    color: "text-pink-600",
+                  },
                 ].map((social, index) => (
                   <motion.a
                     key={index}
@@ -101,7 +178,9 @@ const ContactUs = () => {
 
           {/* Right Section - Contact Form */}
           <motion.div variants={fadeInVariant}>
-            <h3 className="text-3xl sm:text-4xl font-bold text-center mb-8">Get In Touch</h3>
+            <h3 className="text-3xl sm:text-4xl font-bold text-center mb-8">
+              Get In Touch
+            </h3>
             <motion.form
               onSubmit={handleSubmit}
               className="bg-white p-8 shadow-md rounded-lg"
@@ -110,12 +189,19 @@ const ContactUs = () => {
               {[
                 { label: "Name", type: "text", name: "name" },
                 { label: "Email", type: "email", name: "email" },
-                { label: "Contact", type: "tel", name: "contact" },
+                { label: "Contact", type: "number", name: "contact" },
                 { label: "Subject", type: "text", name: "subject" },
               ].map((field, index) => (
-                <motion.div className="mb-6" key={index} variants={fadeInVariant}>
-                  <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-2">
-                    {field.label}
+                <motion.div
+                  className="mb-6"
+                  key={index}
+                  variants={fadeInVariant}
+                >
+                  <label
+                    htmlFor={field.name}
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    {field.label} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type={field.type}
@@ -132,8 +218,11 @@ const ContactUs = () => {
 
               {/* Message Field */}
               <motion.div className="mb-6" variants={fadeInVariant}>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Message
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Message <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="message"
@@ -154,8 +243,9 @@ const ContactUs = () => {
                   className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
+                  disabled={loading}
                 >
-                  Submit
+                  {loading ? "Submit..." : "Submit"}
                 </motion.button>
               </motion.div>
             </motion.form>

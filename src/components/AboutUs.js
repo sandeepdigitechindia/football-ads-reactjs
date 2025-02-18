@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Variants for animations
 const fadeInVariant = {
   hidden: { opacity: 0, y: 30 },
@@ -17,7 +17,9 @@ const textVariant = {
   visible: { opacity: 1, x: 0, transition: { duration: 1 } },
 };
 
-const AboutUs = () => {
+const AboutUs = ({about}) => {
+  if (!about || about.length === 0)
+    return <div>No Ads Available</div>;
   return (
     <motion.section
       className="py-16 px-4 bg-gray-50"
@@ -39,7 +41,7 @@ const AboutUs = () => {
           {/* Image Section */}
           <motion.div variants={imageVariant}>
             <img
-              src="/about/about-us.jpg"
+              src={BASE_URL + about.about_page_banner}
               alt="About Us"
               className="w-full rounded-lg shadow-lg"
             />
@@ -48,23 +50,17 @@ const AboutUs = () => {
           {/* Content Section */}
           <motion.div variants={textVariant}>
             <p className="text-lg text-gray-700 mb-6">
-              Welcome to <span className="font-semibold">Football Ads</span>, the ultimate platform for football enthusiasts, clubs,
-              and advertisers. We are dedicated to bridging the gap between fans, businesses, and
-              the beautiful game of football. Our mission is to provide premium ad services, 
-              subscription plans, and tools to promote your content effectively.
+              {about.about_page_content}
             </p>
-            <p className="text-lg text-gray-700 mb-6">
-              With a focus on innovation and user satisfaction, we help clubs and advertisers
-              reach their target audience while ensuring fans stay connected with their favorite sport.
-            </p>
-            <motion.a
+           
+            {/* <motion.a
               href="/about"
               className="inline-block text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-md text-lg font-medium transition-transform transform hover:scale-105"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
               Learn More About Us
-            </motion.a>
+            </motion.a> */}
           </motion.div>
         </div>
       </div>
