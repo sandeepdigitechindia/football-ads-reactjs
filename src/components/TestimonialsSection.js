@@ -94,7 +94,7 @@ const TestimonialsSection = ({ testimonials }) => {
                 <div className="w-full flex items-center justify-between relative">
                   <div className="flex items-center gap-3">
                     <img
-                      src={BASE_URL+item.image}
+                      src={BASE_URL + item.image}
                       alt={item.name}
                       className="w-12 h-12 object-center object-cover rounded-full border"
                     />
@@ -102,7 +102,7 @@ const TestimonialsSection = ({ testimonials }) => {
                     <div className="space-y-1">
                       <p className="text-base font-semibold">{item.name}</p>
                       <p className="text-xs font-normal italic">
-                        {item.designation} 
+                        {item.designation}
                       </p>
                     </div>
                   </div>

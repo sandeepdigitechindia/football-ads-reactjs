@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import API from "../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const fadeInVariant = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
@@ -15,6 +19,57 @@ const staggerContainer = {
 };
 
 const SecondaryCTASection = () => {
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    setLoading(true);
+
+    try {
+      const formDataToSend = {
+        
+        email: formData.email,
+        
+      };
+    
+      await API.post(`${BASE_URL}/api/subscribe`, formDataToSend, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      navigate("/");
+      toast.success("Newsletter Form Submitted Successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setFormData({
+        email: "",
+      });
+    
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Submit failed. Try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+    
+  };
+
   return (
     <motion.section
       className="bg-gray-800 text-white py-16 px-4"
@@ -43,6 +98,7 @@ const SecondaryCTASection = () => {
                 Subscribe to our newsletter for updates and exclusive promotions!
               </p>
               <motion.form
+              onSubmit={handleSubmit}
                 className="flex justify-center"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -50,14 +106,21 @@ const SecondaryCTASection = () => {
               >
                 <input
                   type="email"
+                  id="email"
+                  name="email"
+                    value={formData.email}
+                  onChange={handleChange}
                   placeholder="Enter your email"
                   className="px-4 py-2 text-black rounded-l-lg w-1/2"
+                  required
                 />
                 <button
                   type="submit"
                   className="px-6 py-2 bg-blue-500 text-white rounded-r-lg"
+                  disabled={loading}
                 >
-                  Subscribe
+                  {loading ? "Subscribe..." : "Subscribe"}
+                  
                 </button>
               </motion.form>
             </motion.div>

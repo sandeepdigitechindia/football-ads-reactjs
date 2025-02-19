@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import API from "../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const countries = [
   "United States",
   "India",
@@ -9,12 +12,12 @@ const countries = [
   "Australia",
   "United Kingdom",
 ];
-const roles = ["Player", "Coach", "Agent", "Club"];
+const roles = ["player", "coach", "agent", "club"];
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     phone: "",
     dob: "",
@@ -27,21 +30,24 @@ const RegisterForm = () => {
 
   const [errors, setErrors] = useState({});
 
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const validate = () => {
     const newErrors = {};
 
     // first Name validation
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First Name is required.";
-    } else if (formData.firstName.length < 3) {
-      newErrors.firstName = "First Name must be at least 3 characters.";
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = "First Name is required.";
+    } else if (formData.first_name.length < 3) {
+      newErrors.first_name = "First Name must be at least 3 characters.";
     }
 
     // Last Name validation
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last Name is required.";
-    } else if (formData.lastName.length < 3) {
-      newErrors.lastName = "Last Name must be at least 3 characters.";
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = "Last Name is required.";
+    } else if (formData.last_name.length < 3) {
+      newErrors.last_name = "Last Name must be at least 3 characters.";
     }
 
     // Email validation
@@ -108,14 +114,31 @@ const RegisterForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Form Submitted:", formData);
-      alert("Registration successful!");
+    if (!validate()) return;
+
+    setLoading(true);
+
+    try {
+      await API.post(`${BASE_URL}/api/user/register`, {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        phone: formData.phone,
+        dob: formData.dob,
+        country: formData.country,
+        role: formData.role,
+        password: formData.password,
+      });
+      navigate("/user/dashboard");
+      toast.success("User Registered Successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       setFormData({
-        firstName: "",
-        lastName: "",
+        first_name: "",
+        last_name: "",
         email: "",
         phone: "",
         dob: "",
@@ -123,9 +146,18 @@ const RegisterForm = () => {
         role: "",
         password: "",
         confirmPassword: "",
-        acceptTerms: false,
       });
       setErrors({});
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "User register failed. Try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,25 +189,25 @@ const RegisterForm = () => {
               {/* First Name Field */}
               <div className="w-1/2">
                 <label
-                  htmlFor="firstName"
+                  htmlFor="first_name"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   First Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
+                  id="first_name"
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg ${
-                    errors.firstName ? "border-red-500" : "border-gray-300"
+                    errors.first_name ? "border-red-500" : "border-gray-300"
                   } focus:outline-none focus:ring focus:ring-blue-300`}
                   placeholder="Enter your first name"
                 />
-                {errors.firstName && (
+                {errors.first_name && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.firstName}
+                    {errors.first_name}
                   </p>
                 )}
               </div>
@@ -183,24 +215,24 @@ const RegisterForm = () => {
               {/* Last Name Field */}
               <div className="w-1/2">
                 <label
-                  htmlFor="lastName"
+                  htmlFor="last_name"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Last Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
+                  id="last_name"
+                  name="last_name"
+                  value={formData.last_name}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg ${
-                    errors.lastName ? "border-red-500" : "border-gray-300"
+                    errors.last_name ? "border-red-500" : "border-gray-300"
                   } focus:outline-none focus:ring focus:ring-blue-300`}
                   placeholder="Enter your last name"
                 />
-                {errors.lastName && (
-                  <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                {errors.last_name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.last_name}</p>
                 )}
               </div>
             </div>
@@ -411,8 +443,9 @@ const RegisterForm = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+                disabled={loading}
               >
-                Register
+                {loading ? "Register..." : "Register"}
               </button>
             </div>
           </form>
