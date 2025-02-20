@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -9,6 +12,8 @@ const LoginForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     const newErrors = {};
@@ -36,13 +41,29 @@ const LoginForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Form Submitted:", formData);
-      alert("Login successful!");
+    if (!validate()) return;
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(`${BASE_URL}/api/login`, formData);
+      localStorage.setItem("token", response.data.token);
+      navigate("/user/dashboard");
+      toast.success("Login successful!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       setFormData({ email: "", password: "" });
       setErrors({});
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed. Try again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -148,8 +169,9 @@ const LoginForm = () => {
               className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              disabled={loading}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </motion.button>
           </form>
           <div className="mt-4 text-center">

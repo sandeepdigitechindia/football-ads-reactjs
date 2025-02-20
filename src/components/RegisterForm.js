@@ -121,7 +121,7 @@ const RegisterForm = () => {
     setLoading(true);
 
     try {
-      await API.post(`${BASE_URL}/api/user/register`, {
+      await API.post(`${BASE_URL}/api/register`, {
         first_name: formData.first_name,
         last_name: formData.last_name,
         email: formData.email,
@@ -131,6 +131,7 @@ const RegisterForm = () => {
         role: formData.role,
         password: formData.password,
       });
+      localStorage.setItem("token", response.data.token);
       navigate("/user/dashboard");
       toast.success("User Registered Successfully!", {
         position: "top-right",

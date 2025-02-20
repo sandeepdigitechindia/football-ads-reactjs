@@ -1,10 +1,58 @@
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link,useNavigate } from "react-router-dom";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UserHeader() {
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  // Handle logout action
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+    toast.success("You have been logged out.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
+
+  // Open modal
+  const openModal = () => {
+    setShowModal(true);
+  };
+  // Close modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
+      {/* Modal for Confirmation */}
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Are you sure you want to log out?
+            </h3>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={closeModal}
+                className="py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogout}
+                className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <nav
         aria-label="Global"
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
@@ -31,7 +79,7 @@ export default function UserHeader() {
                     Settings
                   </Link>
                   <Link
-                    to="/user/logout"
+                    onClick={openModal}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Logout
