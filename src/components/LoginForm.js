@@ -49,8 +49,21 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(`${BASE_URL}/api/login`, formData);
-      localStorage.setItem("token", response.data.token);
-      navigate("/user/dashboard");
+
+      // Extract token and user role
+      const { token, user } = response.data;
+
+      // Store token in local storage
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role); 
+
+      // Navigate based on role
+      if (user.role === "player") {
+        navigate("/user/dashboard");
+      } else {
+        navigate("/club/dashboard");
+      }
+
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 3000,
@@ -211,25 +224,13 @@ const LoginForm = () => {
             </motion.div>
           </div>
 
-          <p className="text-center mt-2">
+          <p className="text-center mt-3">
             Don't have an account? &nbsp;
             <Link to="/register" className="text-blue-600">
               Sign Up
             </Link>
           </p>
-          <p className="text-center mt-2">
-            Go to &nbsp;
-            <Link to="/user/dashboard" className="text-blue-600">
-              User Dashboard
-            </Link>
-          </p>
-          <br />
-          <p className="text-center mt-2">
-            Go to &nbsp;
-            <Link to="/club/dashboard" className="text-blue-600">
-              Club Dashboard
-            </Link>
-          </p>
+          
         </motion.div>
       </motion.div>
     </motion.div>

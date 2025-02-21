@@ -12,6 +12,7 @@ export default function UserHeader() {
   // Handle logout action
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     navigate("/login");
     toast.success("You have been logged out.", {
       position: "top-right",

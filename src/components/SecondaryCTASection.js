@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../api";
@@ -20,7 +19,6 @@ const staggerContainer = {
 
 const SecondaryCTASection = () => {
 
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -47,7 +45,7 @@ const SecondaryCTASection = () => {
           "Content-Type": "application/json",
         },
       });
-      navigate("/");
+     
       toast.success("Newsletter Form Submitted Successfully!", {
         position: "top-right",
         autoClose: 3000,

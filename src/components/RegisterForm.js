@@ -121,7 +121,7 @@ const RegisterForm = () => {
     setLoading(true);
 
     try {
-      await API.post(`${BASE_URL}/api/register`, {
+      const response = await API.post(`${BASE_URL}/api/register`, {
         first_name: formData.first_name,
         last_name: formData.last_name,
         email: formData.email,
@@ -131,12 +131,28 @@ const RegisterForm = () => {
         role: formData.role,
         password: formData.password,
       });
-      localStorage.setItem("token", response.data.token);
-      navigate("/user/dashboard");
+
+      // Extract token and user role
+      const { token, user } = response.data;
+
+      // Store token in local storage
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role); 
+
+      // Navigate based on role
+      if (user.role === "player") {
+        navigate("/user/dashboard");
+      } else {
+        navigate("/club/dashboard");
+      }
+
+      // Show success message
       toast.success("User Registered Successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
+
+      // Reset form
       setFormData({
         first_name: "",
         last_name: "",
@@ -150,6 +166,7 @@ const RegisterForm = () => {
       });
       setErrors({});
     } catch (error) {
+      // Show error message
       toast.error(
         error.response?.data?.message || "User register failed. Try again.",
         {
@@ -233,7 +250,9 @@ const RegisterForm = () => {
                   placeholder="Enter your last name"
                 />
                 {errors.last_name && (
-                  <p className="text-red-500 text-sm mt-1">{errors.last_name}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.last_name}
+                  </p>
                 )}
               </div>
             </div>

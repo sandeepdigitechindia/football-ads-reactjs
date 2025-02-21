@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserCircleIcon } from "@heroicons/react/20/solid";
 import {
   Dialog,
   DialogPanel,
@@ -12,10 +13,9 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  UserCircleIcon,
-} from "@heroicons/react/20/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ads = [
   { name: "Advertisement for players", to: "ads" },
@@ -26,7 +26,7 @@ const ads = [
 const subscriptions = [
   { name: "3-Month Plan", to: "subscriptions" },
   { name: "6-Month Plan", to: "subscriptions" },
-  { name: "12-Month Plan", to: "subscriptions" }
+  { name: "12-Month Plan", to: "subscriptions" },
 ];
 
 const services = [
@@ -36,49 +36,67 @@ const services = [
 ];
 
 export default function Example() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isRole, setIsRole] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    setIsRole(role);
+    setIsLoggedIn(!!token);
+  }, []);
+  // Handle logout action
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setShowModal(false);
+    setIsLoggedIn(false);
+    navigate("/login");
+    toast.success("You have been logged out.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
+
+  // Open modal
+  const openModal = () => {
+    setShowModal(true);
+  };
+  // Close modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
-
-  // Routes where the user profile button should appear
-  const userRoutes = [
-    "/user/dashboard",
-    "/user/settings",
-    "/user/subscriptions",
-    "/user/posts",
-    "/user/post/create",
-    "/user/post/:id",
-    "/user/logout",
-  ];
-
-  // Check if the current route matches any of the user-specific routes
-  const isUserRoute = userRoutes.some((route) => {
-    const regex = new RegExp(
-      `^${route.replace(":id", "[^/]+")}$` // Handle dynamic :id in route
-    );
-    return regex.test(location.pathname);
-  });
-
-  // Routes where the user profile button should appear
-  const clubRoutes = [
-    "/club/dashboard",
-    "/club/settings",
-    "/club/subscriptions",
-    "/club/posts",
-    "/club/post/create",
-    "/club/post/:id",
-    "/club/logout",
-  ];
-
-  // Check if the current route matches any of the user-specific routes
-  const isClubRoute = clubRoutes.some((route) => {
-    const regex = new RegExp(
-      `^${route.replace(":id", "[^/]+")}$` // Handle dynamic :id in route
-    );
-    return regex.test(location.pathname);
-  });
 
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
+      {/* Modal for Confirmation */}
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Are you sure you want to log out?
+            </h3>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={closeModal}
+                className="py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogout}
+                className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <nav
         aria-label="Global"
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
@@ -205,52 +223,56 @@ export default function Example() {
         </PopoverGroup>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          {isUserRoute ? (
-            <Popover className="relative">
-              <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
-                <UserCircleIcon className="h-6 w-6 text-white" />
-                <span>User Profile</span>
-              </PopoverButton>
-              <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
-                <div className="p-2">
-                  <Link
-                    to="/user/settings"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Settings
-                  </Link>
-                  <Link
-                    to="/user/logout"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Logout
-                  </Link>
-                </div>
-              </PopoverPanel>
-            </Popover>
-          ) : isClubRoute ? (
-            <Popover className="relative">
-              <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
-                <UserCircleIcon className="h-6 w-6 text-white" />
-                <span>Club Profile</span>
-              </PopoverButton>
-              <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
-                <div className="p-2">
-                  <Link
-                    to="/club/settings"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Settings
-                  </Link>
-                  <Link
-                    to="/club/logout"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Logout
-                  </Link>
-                </div>
-              </PopoverPanel>
-            </Popover>
+          {isLoggedIn ? (
+            <>
+              {isRole === "player" ? (
+                <Popover className="relative">
+                  <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
+                    <UserCircleIcon className="h-6 w-6 text-white" />
+                    <span>User Profile</span>
+                  </PopoverButton>
+                  <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
+                    <div className="p-2">
+                      <Link
+                        to="/user/settings"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Settings
+                      </Link>
+                      <Link
+                        onClick={openModal}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Logout
+                      </Link>
+                    </div>
+                  </PopoverPanel>
+                </Popover>
+              ) : (
+                <Popover className="relative">
+                  <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
+                    <UserCircleIcon className="h-6 w-6 text-white" />
+                    <span>Club Profile</span>
+                  </PopoverButton>
+                  <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
+                    <div className="p-2">
+                      <Link
+                        to="/club/settings"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Settings
+                      </Link>
+                      <Link
+                        onClick={openModal}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Logout
+                      </Link>
+                    </div>
+                  </PopoverPanel>
+                </Popover>
+              )}
+            </>
           ) : (
             <Link
               to="/login"
@@ -372,42 +394,31 @@ export default function Example() {
                 </Link>
               </div>
               <div className="py-6">
-                {isUserRoute ? (
-                  <div className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
-                    <span>User Profile</span>
-                    <div className="mt-2">
+                {isLoggedIn ? (
+                  <>
+                    {isRole === "player" ? (
                       <Link
-                        to="/user/settings"
-                        className="block text-sm hover:underline"
+                        to="/user/dashboard"
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                       >
-                        Settings
+                        User Dashboard
                       </Link>
+                    ) : (
                       <Link
-                        to="/user/logout"
-                        className="block text-sm hover:underline"
+                        to="/club/dashboard"
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                       >
-                        Logout
+                        Dashboard
                       </Link>
-                    </div>
-                  </div>
-                ) : isClubRoute ? (
-                  <div className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
-                    <span>Club Profile</span>
-                    <div className="mt-2">
-                      <Link
-                        to="/club/settings"
-                        className="block text-sm hover:underline"
-                      >
-                        Settings
-                      </Link>
-                      <Link
-                        to="/club/logout"
-                        className="block text-sm hover:underline"
-                      >
-                        Logout
-                      </Link>
-                    </div>
-                  </div>
+                    )}
+
+                    <Link
+                      onClick={openModal}
+                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Logout
+                    </Link>
+                  </>
                 ) : (
                   <Link
                     to="/login"

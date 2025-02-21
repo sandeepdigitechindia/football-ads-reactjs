@@ -6,7 +6,6 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../api";
@@ -28,7 +27,7 @@ const staggerContainer = {
 };
 
 const ContactUs = ({ contact }) => {
-  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -61,7 +60,6 @@ const ContactUs = ({ contact }) => {
           "Content-Type": "application/json",
         },
       });
-      navigate("/");
       toast.success("Contact Form Submitted Successfully!", {
         position: "top-right",
         autoClose: 3000,

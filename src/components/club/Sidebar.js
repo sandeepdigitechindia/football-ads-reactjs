@@ -20,6 +20,7 @@ const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     navigate("/login");
     toast.success("You have been logged out.", {
       position: "top-right",
