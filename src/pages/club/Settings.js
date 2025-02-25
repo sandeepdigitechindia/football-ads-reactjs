@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/club/Sidebar";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import API from "../../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Sample countries and roles
 const countries = [
   "United States",
@@ -14,8 +18,8 @@ const Settings = () => {
   const [formData, setFormData] = useState({
     club_name: "",
     club_logo: null,
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     phone: "",
     country: "",
@@ -25,9 +29,59 @@ const Settings = () => {
     profilePicture: null,
   });
 
+  const [loading, setLoading] = useState(false);
+  const [club, setClub] = useState(null);
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const fetchClubId = async () => {
+      try {
+        const response = await API.get("/api/club/profile");
+        // Ensure the response is an array
+
+        const clubFromAPI = {
+          id: response.data.user.id,
+          role: response.data.user.role,
+        };
+
+        setClub(clubFromAPI);
+      } catch (error) {
+        console.error("Error fetching club:", error);
+      }
+    };
+
+    fetchClubId();
+  }, []);
+
+  useEffect(() => {
+    const fetchClubProfile = async () => {
+      if (!club?.id) return;
+
+      try {
+        const response = await API.get(`/api/club/${club.id}`);
+        const getData = response.data;
+
+        setFormData({
+          club_name: getData.club_name || "",
+          club_logo: getData.club_logo ? BASE_URL + getData.club_logo : null,
+          first_name: getData.first_name || "",
+          last_name: getData.last_name || "",
+          email: getData.email || "",
+          phone: getData.phone || "",
+          country: getData.country || "",
+          password: getData.password || "",
+          profilePicture: getData.profile ? BASE_URL + getData.profile : null,
+        });
+      } catch (error) {
+        console.error("Error fetching club profile:", error);
+      }
+    };
+
+    fetchClubProfile();
+  }, [club]);
+
   const handleTabChange = (tab) => setActiveTab(tab);
-  const [preview, setPreview] = useState(null); // For profile picture preview
+  const [preview, setPreview] = useState(null);
 
   const validate = () => {
     const newErrors = {};
@@ -40,11 +94,11 @@ const Settings = () => {
       if (!formData.club_logo) {
         newErrors.club_logo = "Club Logo is required.";
       }
-      if (!formData.firstName.trim()) {
-        newErrors.firstName = "First Name is required.";
+      if (!formData.first_name.trim()) {
+        newErrors.first_name = "First Name is required.";
       }
-      if (!formData.lastName.trim()) {
-        newErrors.lastName = "Last Name is required.";
+      if (!formData.last_name.trim()) {
+        newErrors.last_name = "Last Name is required.";
       }
       if (!formData.email.trim()) {
         newErrors.email = "Email is required.";
@@ -94,26 +148,85 @@ const Settings = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Form Submitted:", formData);
-      alert("Changes saved!");
-      // Reset or update the form
-      setFormData({
-        club_name: "",
-        club_logo: null,
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        country: "",
-        password: "",
-        confirmPassword: "",
-        currentPassword: "",
-        profilePicture: null,
-      });
+    if (!validate()) return;
+
+    setLoading(true);
+
+    try {
+      const formDataToSend = new FormData();
+      if (activeTab === "profile") {
+        // Append text fields
+        formDataToSend.append("club_name", formData.club_name);
+        formDataToSend.append("first_name", formData.first_name);
+        formDataToSend.append("last_name", formData.last_name);
+        formDataToSend.append("email", formData.email);
+        formDataToSend.append("phone", formData.phone);
+        formDataToSend.append("country", formData.country);
+
+        // Append file only if it's selected
+        if (formData.profilePicture instanceof File) {
+          formDataToSend.append("profile", formData.profilePicture);
+        }
+
+        // Append file only if it's selected
+        if (formData.club_logo instanceof File) {
+          formDataToSend.append("club_logo", formData.club_logo);
+        }
+
+        await API.put(`${BASE_URL}/api/club/${club.id}`, formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        toast.success("Club Updated Successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      if (activeTab === "password") {
+        
+        // Only include password if it's not empty
+        if (formData.password.trim() !== "") {
+          formDataToSend.password = formData.password;
+        }
+
+        await API.put(`${BASE_URL}/api/club/${club.id}`, formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        toast.success("Password Changed Successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        setFormData({
+          password: "",
+          confirmPassword: "",
+          currentPassword: "",
+        });
+      }
+
       setErrors({});
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Update failed. Try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -165,7 +278,11 @@ const Settings = () => {
                   <div className="relative w-32 h-32">
                     <label htmlFor="profilePicture" className="cursor-pointer">
                       <img
-                        src={preview || "/common/man.png"}
+                        src={
+                          preview ||
+                          formData.profilePicture ||
+                          "/common/man.png"
+                        }
                         alt="Profile Preview"
                         className="w-32 h-32 rounded-full object-cover border shadow-md"
                       />
@@ -221,7 +338,8 @@ const Settings = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleSubmit}
+                    name="club_logo"
+                    onChange={handleFileChange}
                     className={`w-full p-3 border ${
                       errors.club_logo ? "border-red-500" : "border-gray-300"
                     } rounded-lg`}
@@ -231,6 +349,11 @@ const Settings = () => {
                       {errors.club_logo}
                     </p>
                   )}
+                  <img
+                    src={formData.club_logo}
+                    alt={`${formData.club_name}`}
+                    className="w-48 h-24 rounded-full mx-auto my-4"
+                  />
                 </div>
 
                 {/* Name Fields (First Name and Last Name) */}
@@ -238,25 +361,25 @@ const Settings = () => {
                   {/* First Name Field */}
                   <div className="w-1/2">
                     <label
-                      htmlFor="firstName"
+                      htmlFor="first_name"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
                       First Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={formData.firstName}
+                      id="first_name"
+                      name="first_name"
+                      value={formData.first_name}
                       onChange={handleChange}
                       className={`w-full px-4 py-2 border rounded-lg ${
-                        errors.firstName ? "border-red-500" : "border-gray-300"
+                        errors.first_name ? "border-red-500" : "border-gray-300"
                       } focus:outline-none focus:ring focus:ring-blue-300`}
                       placeholder="Enter your first name"
                     />
-                    {errors.firstName && (
+                    {errors.first_name && (
                       <p className="text-red-500 text-sm mt-1">
-                        {errors.firstName}
+                        {errors.first_name}
                       </p>
                     )}
                   </div>
@@ -264,25 +387,25 @@ const Settings = () => {
                   {/* Last Name Field */}
                   <div className="w-1/2">
                     <label
-                      htmlFor="lastName"
+                      htmlFor="last_name"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
                       Last Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={formData.lastName}
+                      id="last_name"
+                      name="last_name"
+                      value={formData.last_name}
                       onChange={handleChange}
                       className={`w-full px-4 py-2 border rounded-lg ${
-                        errors.lastName ? "border-red-500" : "border-gray-300"
+                        errors.last_name ? "border-red-500" : "border-gray-300"
                       } focus:outline-none focus:ring focus:ring-blue-300`}
                       placeholder="Enter your last name"
                     />
-                    {errors.lastName && (
+                    {errors.last_name && (
                       <p className="text-red-500 text-sm mt-1">
-                        {errors.lastName}
+                        {errors.last_name}
                       </p>
                     )}
                   </div>
@@ -370,8 +493,9 @@ const Settings = () => {
                 <button
                   type="submit"
                   className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+                  disabled={loading}
                 >
-                  Save Changes
+                  {loading ? "Save Changes..." : "Update"}
                 </button>
               </form>
             )}
@@ -412,7 +536,6 @@ const Settings = () => {
                     type="password"
                     id="password"
                     name="password"
-                    value={formData.password}
                     onChange={handleChange}
                     className={`w-full px-4 py-2 border rounded-lg ${
                       errors.password ? "border-red-500" : "border-gray-300"
@@ -457,8 +580,9 @@ const Settings = () => {
                 <button
                   type="submit"
                   className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+                  disabled={loading}
                 >
-                  Change Password
+                  {loading ? "Change Password..." : "Update"}
                 </button>
               </form>
             )}

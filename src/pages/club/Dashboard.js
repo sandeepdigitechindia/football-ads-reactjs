@@ -1,54 +1,130 @@
-import React, { useState, useRef } from "react";
-import {  useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/club/Sidebar";
 import DataTable from "react-data-table-component";
+import Swal from "sweetalert2";
+import API from "../../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Dashboard = () => {
   const navigate = useNavigate();
-  const initialData = [
-    {
-      id: 1,
-      image: "/common/club.png",
-      name: "Club 1",
-      title: "Post Title 1",
-      applicantsCount: 5,
-      date: "Jan 10, 2025",
-      status: "Open",
-    },
-    {
-      id: 2,
-      image: "/common/club.png",
-      name: "Club 2",
-      title: "Post Title 2",
-      applicantsCount: 2,
-      date: "Jan 9, 2025",
-      status: "Close",
-    },
-    {
-      id: 3,
-      image: "/common/club.png",
-      name: "Club 3",
-      title: "Post Title 3",
-      applicantsCount: 8,
-      date: "Jan 8, 2025",
-      status: "Archived",
-    },
-    {
-      id: 4,
-      image: "/common/club.png",
-      name: "Club 4",
-      title: "Another Post",
-      applicantsCount: 3,
-      date: "Jan 7, 2025",
-      status: "Open",
-    },
-  ];
 
-  const [data, setData] = useState(initialData);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
+
+  const [stats, setStats] = useState([]);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const response = await API.get("/api/club/dashboard");
+
+        // Ensure the response is an array
+        if (!Array.isArray(response.data)) {
+          throw new Error("Invalid response format");
+        }
+
+        const postsFromAPI = response.data.map((data) => ({
+          title: data.title || "N/A",
+          count: data.count || "N/A",
+          gradient: data.gradient || "N/A",
+          shadow: data.shadow || "N/A",
+          link: data.link || "N/A",
+        }));
+
+        setStats(postsFromAPI);
+      } catch (error) {
+        console.error("Error fetching dashboard:", error);
+        setError(error.response?.data?.message || "Failed to fetch dashboard");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await API.get("/api/club/posts?limit=50&recent=true", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Ensure the response is an array
+        if (!Array.isArray(response.data)) {
+          throw new Error("Invalid response format");
+        }
+
+        const postsFromAPI = response.data.map((post) => ({
+          id: post._id || "",
+          image: BASE_URL + post.userId.club_logo || "/common/club.png",
+          name: post.userId.club_name || "N/A",
+          title: post.title || "N/A",
+          applicantsCount: "5",
+          date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
+          status: post.status,
+        }));
+
+        setData(postsFromAPI);
+        setOriginalData(postsFromAPI);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setError(error.response?.data?.message || "Failed to fetch posts");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  // State to manage dropdown visibility
-  const [dropdownOpen, setDropdownOpen] = useState(null);
-  const dropdownRef = useRef(null);
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+    if (value === "") {
+      setData(originalData);
+    } else {
+      const filtered = originalData.filter(
+        (post) =>
+          post.club_name.toLowerCase().includes(value) ||
+          post.title.toLowerCase().includes(value)
+      );
+      setData(filtered);
+    }
+  };
+
+  // Handle Delete Post (e.g., delete from API or state)
+  const handleDeletePost = async (postId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await API.delete(`/api/club/posts/permanent/${postId}`);
+          setData((prevPosts) =>
+            prevPosts.filter((post) => post.id !== postId)
+          );
+          Swal.fire("Deleted!", "Post has been deleted.", "success");
+        } catch (error) {
+          Swal.fire("Error!", "Failed to delete post. Try again.", "error");
+        }
+      }
+    });
+  };
 
   const columns = [
     {
@@ -114,10 +190,9 @@ const Dashboard = () => {
       sortable: true,
       cell: (row) => (
         <div className="text-sm text-gray-600 text-center">
-          {/* Circle with applicant count and onClick event */}
           <div
             className="inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
-            onClick={() => navigate(`/club/post/applicants/${row.id}`)} // Navigate to applicants page
+            onClick={() => navigate(`/club/post/applicants/${row.id}`)}
           >
             {row.applicantsCount}
           </div>{" "}
@@ -130,71 +205,27 @@ const Dashboard = () => {
       name: "Action",
       cell: (row) => (
         <div className="text-center relative">
-          {/* Action Button */}
-          <button
-            className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition flex items-center gap-2"
-            onClick={() =>
-              setDropdownOpen(dropdownOpen === row.id ? null : row.id)
-            } // Toggle dropdown
+          <select
+            className="p-2 mx-4 border rounded shadow-sm outline-none"
+            onChange={(e) => {
+              const action = e.target.value;
+              if (action === "view") {
+                navigate(`/club/post/view/${row.id}`);
+              } else if (action === "edit") {
+                navigate(`/club/post/edit/${row.id}`);
+              } else if (action === "delete") {
+                handleDeletePost(row.id);
+              }
+              e.target.value = "";
+            }}
           >
-            <span>Action</span>
-            {/* Add a dropdown arrow icon */}
-            <i
-              className={`fas fa-chevron-down ${
-                dropdownOpen === row.id ? "transform rotate-180" : ""
-              }`}
-            ></i>
-          </button>
-
-          {/* Dropdown Menu */}
-          {dropdownOpen === row.id && (
-            <div
-              ref={dropdownRef}
-              className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg opacity-100 pointer-events-auto z-50"
-            >
-              <ul className="list-none p-0 m-0">
-                {/* View Post Option */}
-                <li>
-                  <button
-                    onClick={() => navigate(`/club/post/view/${row.id}`)}
-                    className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300"
-                  >
-                    <i className="fas fa-eye mr-2"></i> View Post
-                  </button>
-                </li>
-
-                {/* Edit Post Option */}
-                <li>
-                  <button
-                    onClick={() => navigate(`/club/post/edit/${row.id}`)}
-                    className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300"
-                  >
-                    <i className="fas fa-edit mr-2"></i> Edit Post
-                  </button>
-                </li>
-
-                {/* Delete Post Option */}
-                <li>
-                  <button
-                    onClick={() => handleDeletePost(row.id)}
-                    className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300 text-red-500"
-                  >
-                    <i className="fas fa-trash-alt mr-2"></i> Delete Post
-                  </button>
-                </li>
-
-                {/* Applicants Option */}
-                {/* <li>
-                    <button
-                      onClick={() => navigate(`/club/post/applicants/${row.id}`)}
-                      className="w-full text-left py-2 px-4 hover:bg-gray-200 transition duration-300"
-                    >
-                      <i className="fas fa-users mr-2"></i> Applicants
-                    </button>
-                  </li> */}
-              </ul>
-            </div>
-          )}
+            <option value="" className="">
+              Action
+            </option>
+            <option value="view">👁️ View</option>
+            <option value="edit">✏️ Edit</option>
+            <option value="delete">🗑️ Delete</option>
+          </select>
         </div>
       ),
       center: true,
@@ -251,27 +282,6 @@ const Dashboard = () => {
       },
     },
   };
-
-  const handleSearch = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearchTerm(value);
-    const filtered = initialData.filter((item) =>
-      item.title.toLowerCase().includes(value)
-    );
-    setData(filtered);
-  };
-
-  // Handle Delete Post (e.g., delete from API or state)
-  const handleDeletePost = (postId) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this post?"
-    );
-    if (isConfirmed) {
-      setData(data.filter((post) => post.id !== postId));
-      alert("Post deleted successfully!");
-    }
-  };
-
   return (
     <div className="bg-gray-100">
       {/* Wrapper for Sidebar and Main Content */}
@@ -286,26 +296,7 @@ const Dashboard = () => {
           </header>
           {/* Cards Section */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Total Added Posts",
-                count: 120,
-                gradient: "from-blue-500 via-indigo-500 to-purple-500",
-                shadow: "shadow-blue-500/50",
-              },
-              {
-                title: "Active Subscriptions",
-                count: 2,
-                gradient: "from-green-500 via-teal-500 to-emerald-500",
-                shadow: "shadow-green-500/50",
-              },
-              {
-                title: "Downloaded Resume",
-                count: 3,
-                gradient: "from-red-500 via-pink-500 to-rose-500",
-                shadow: "shadow-red-500/50",
-              },
-            ].map((card, index) => (
+            {stats.map((card, index) => (
               <div
                 key={index}
                 className={`relative bg-gradient-to-r ${card.gradient} p-4 rounded-xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}
@@ -316,9 +307,12 @@ const Dashboard = () => {
 
                 {/* Align button to bottom-right */}
                 <div className="absolute bottom-4 right-4">
-                <button className="bg-white text-gray-800 py-1 px-2 text-sm rounded shadow hover:bg-gray-100 transition">
+                  <Link
+                    to={card.link}
+                    className="bg-white text-gray-800 py-1 px-2 text-sm rounded shadow hover:bg-gray-100 transition"
+                  >
                     View Details
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -356,17 +350,24 @@ const Dashboard = () => {
             </div>
 
             {/* Data Table */}
-            <DataTable
-              columns={columns}
-              data={data}
-              pagination
-              highlightOnHover
-              striped
-              responsive
-              customStyles={customStyles}
-            />
+            {loading ? (
+              <p>Loading clubs...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <DataTable
+                  columns={columns}
+                  data={data}
+                  pagination
+                  highlightOnHover
+                  striped
+                  responsive
+                  customStyles={customStyles}
+                />
+              </div>
+            )}
           </div>
-
         </main>
       </div>
     </div>

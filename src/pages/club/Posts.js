@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/club/Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 import API from "../../api";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Posts = () => {
-  
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,15 +18,13 @@ const Posts = () => {
     const fetchPosts = async () => {
       try {
         const token = localStorage.getItem("token");
-       
+
         const response = await API.get("/api/club/posts?recent=true", {
           headers: {
             Authorization: `Bearer ${token}`, // Pass token in header
           },
         });
-    
-        console.log(response.data);
-        
+
         // Ensure the response is an array
         if (!Array.isArray(response.data)) {
           throw new Error("Invalid response format");
@@ -35,7 +32,7 @@ const Posts = () => {
 
         const postsFromAPI = response.data.map((post) => ({
           id: post._id || "",
-          image: BASE_URL+post.userId.club_logo || "/common/club.png",
+          image: BASE_URL + post.userId.club_logo || "/common/club.png",
           name: post.userId.club_name || "N/A",
           title: post.title || "N/A",
           applicantsCount: "5",
@@ -162,10 +159,9 @@ const Posts = () => {
       sortable: true,
       cell: (row) => (
         <div className="text-sm text-gray-600 text-center">
-         
           <div
             className="inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
-            onClick={() => navigate(`/club/post/applicants/${row.id}`)} 
+            onClick={() => navigate(`/club/post/applicants/${row.id}`)}
           >
             {row.applicantsCount}
           </div>{" "}
@@ -305,22 +301,22 @@ const Posts = () => {
             </div>
 
             {loading ? (
-                <p>Loading clubs...</p>
-              ) : error ? (
-                <p className="text-red-500">{error}</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <DataTable
-                    columns={columns}
-                    data={data}
-                    pagination
-                    highlightOnHover
-                    striped
-                    responsive
-                    customStyles={customStyles}
-                  />
-                </div>
-              )}
+              <p>Loading clubs...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <DataTable
+                  columns={columns}
+                  data={data}
+                  pagination
+                  highlightOnHover
+                  striped
+                  responsive
+                  customStyles={customStyles}
+                />
+              </div>
+            )}
           </div>
         </main>
       </div>

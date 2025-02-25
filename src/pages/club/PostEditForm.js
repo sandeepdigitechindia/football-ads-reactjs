@@ -14,35 +14,13 @@ const PostForm = () => {
     position: "",
     salary: "",
     location: "",
-    club: "",
+   
   });
   const { id } = useParams();
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [clubs, setClubs] = useState([]);
-
-  useEffect(() => {
-    const fetchClubs = async () => {
-      try {
-        const response = await API.get("/api/club?role=club");
-        if (!Array.isArray(response.data)) {
-          throw new Error("Invalid response format");
-        }
-
-        const clubsFromAPI = response.data.map((club) => ({
-          id: club._id || "",
-          clubName: club.club_name || "N/A",
-        }));
-
-        setClubs(clubsFromAPI);
-      } catch (error) {
-        console.error("Error fetching clubs:", error);
-      }
-    };
-
-    fetchClubs();
-  }, []);
+  
 
   // Fetch post data from API
   useEffect(() => {
@@ -57,7 +35,6 @@ const PostForm = () => {
           salary: postData.salary || "",
           location: postData.location || "",
           image: postData.image || null,
-          club: postData.userId?._id || "",
         });
       } catch (error) {
         console.error("Error fetching post data:", error);
@@ -67,22 +44,6 @@ const PostForm = () => {
     if (id) fetchPost();
   }, [id]);
 
-  // Ensure club is set only after both data are fetched
-  useEffect(() => {
-    if (formData.club && clubs.length > 0) {
-      const clubExists = clubs.some((club) => club.id === formData.club);
-      if (!clubExists) {
-        console.warn("Club not found in list, resetting...");
-        setFormData((prev) => ({ ...prev, club: "" }));
-      }
-    }
-  }, [formData.club, clubs]);
-
-  // Debugging: Check selected club value
-  useEffect(() => {
-    console.log("Selected Club ID:", formData.club);
-    console.log("Available Clubs:", clubs);
-  }, [formData, clubs]);
 
   const validate = () => {
     const newErrors = {};
@@ -92,7 +53,6 @@ const PostForm = () => {
     if (!formData.position.trim()) newErrors.position = "Position is required.";
     if (!formData.salary.trim()) newErrors.salary = "Salary is required.";
     if (!formData.location.trim()) newErrors.location = "Location is required.";
-    if (!formData.club.trim()) newErrors.club = "club is required.";
     return newErrors;
   };
 
@@ -123,7 +83,6 @@ const PostForm = () => {
       formDataToSend.append("position", formData.position);
       formDataToSend.append("salary", formData.salary);
       formDataToSend.append("location", formData.location);
-      formDataToSend.append("userId", formData.club);
 
       // Append file only if it's selected
       if (formData.image instanceof File) {
@@ -177,34 +136,7 @@ const PostForm = () => {
               Edit Job Post
             </h1>
             <form onSubmit={handleSubmit}>
-              {/* Club Dropdown */}
-              <div className="mb-4">
-                <label
-                  htmlFor="club"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Club <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="club"
-                  name="club"
-                  value={formData.club}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg ${
-                    errors.club ? "border-red-500" : "border-gray-300"
-                  } focus:outline-none focus:ring focus:ring-blue-300`}
-                >
-                  <option value="">Select your club</option>
-                  {clubs.map((club, index) => (
-                    <option key={index} value={club.id}>
-                      {club.clubName}
-                    </option>
-                  ))}
-                </select>
-                {errors.club && (
-                  <p className="text-red-500 text-sm mt-1">{errors.club}</p>
-                )}
-              </div>
+             
 
               {/* Title */}
               <div className="mb-4">

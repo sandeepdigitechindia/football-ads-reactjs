@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import Sidebar from "../../components/club/Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../../api";
@@ -14,36 +15,11 @@ const PostForm = () => {
     position: "",
     salary: "",
     location: "",
-    club: "",
   });
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
-  const [clubs, setClubs] = useState([]);
-
-  useEffect(() => {
-    const fetchClubs = async () => {
-      try {
-        const response = await API.get("/api/club?role=club");
-        if (!Array.isArray(response.data)) {
-          throw new Error("Invalid response format");
-        }
-        
-        const clubsFromAPI = response.data.map((club) => ({
-          id: club._id || "",
-          clubName: club.club_name || "N/A",
-        }));
-        console.log(clubsFromAPI);
-        setClubs(clubsFromAPI);
-      } catch (error) {
-        console.error("Error fetching clubs:", error);
-      }
-    };
-
-    fetchClubs();
-  }, []);
 
   const validate = () => {
     const newErrors = {};
@@ -54,7 +30,6 @@ const PostForm = () => {
     if (!formData.position.trim()) newErrors.position = "Position is required.";
     if (!formData.salary.trim()) newErrors.salary = "Salary is required.";
     if (!formData.location.trim()) newErrors.location = "Location is required.";
-    if (!formData.club.trim()) newErrors.club = "club is required.";
     return newErrors;
   };
 
@@ -69,6 +44,17 @@ const PostForm = () => {
     });
   };
 
+  const token = localStorage.getItem("token");
+  let userId = null;
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userId = decodedToken.id;
+    } catch (error) {
+      console.error("Invalid token", error);
+    }
+  }
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -83,7 +69,7 @@ const PostForm = () => {
       data.append("position", formData.position);
       data.append("salary", formData.salary);
       data.append("location", formData.location);
-      data.append("userId", formData.club);
+      data.append("userId", userId);
 
       await API.post(`${BASE_URL}/api/club/posts`, data, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -102,7 +88,6 @@ const PostForm = () => {
         position: "",
         salary: "",
         location: "",
-        club: "",
       });
       setErrors({});
     } catch (error) {
@@ -140,37 +125,6 @@ const PostForm = () => {
               Create Job Post
             </h1>
             <form onSubmit={handleSubmit}>
-              {/* Club Dropdown */}
-              <div className="mb-4">
-                <label
-                  htmlFor="club"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Club <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="club"
-                  name="club"
-                  value={formData.club}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg ${
-                    errors.club ? "border-red-500" : "border-gray-300"
-                  } focus:outline-none focus:ring focus:ring-blue-300`}
-                >
-                  <option value="">Select your club</option>
-
-                  {clubs.map((club, index) => (
-                    <option key={index} value={club.id}>
-                      {club.clubName}
-                    </option>
-                  ))}
-                </select>
-
-                {errors.club && (
-                  <p className="text-red-500 text-sm mt-1">{errors.club}</p>
-                )}
-              </div>
-
               {/* Title */}
               <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">
