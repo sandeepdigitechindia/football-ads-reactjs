@@ -112,7 +112,7 @@ const SubscriptionPlans = ({ subscriptions }) => {
 
               {/* Buy Now Button with Shake Effect */}
               <motion.a
-                href={plan.link}
+                href="payment"
                 className={`block text-center py-2 px-4 rounded-md text-white font-medium transition duration-300 
             ${index === 1 ? "bg-blue-600" : "bg-gray-600"} 
             group-hover:bg-blue-600`}

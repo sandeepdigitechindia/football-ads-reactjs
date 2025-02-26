@@ -18,7 +18,6 @@ const staggerContainer = {
 };
 
 const SecondaryCTASection = () => {
-
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -30,22 +29,20 @@ const SecondaryCTASection = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setLoading(true);
 
     try {
       const formDataToSend = {
-        
         email: formData.email,
-        
       };
-    
+
       await API.post(`${BASE_URL}/api/subscribe`, formDataToSend, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-     
+
       toast.success("Newsletter Form Submitted Successfully!", {
         position: "top-right",
         autoClose: 3000,
@@ -53,7 +50,6 @@ const SecondaryCTASection = () => {
       setFormData({
         email: "",
       });
-    
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Submit failed. Try again.",
@@ -65,7 +61,6 @@ const SecondaryCTASection = () => {
     } finally {
       setLoading(false);
     }
-    
   };
 
   return (
@@ -93,10 +88,11 @@ const SecondaryCTASection = () => {
             {/* Newsletter Subscription */}
             <motion.div className="mb-8" variants={fadeInVariant}>
               <p className="text-xl mb-4">
-                Subscribe to our newsletter for updates and exclusive promotions!
+                Subscribe to our newsletter for updates and exclusive
+                promotions!
               </p>
               <motion.form
-              onSubmit={handleSubmit}
+                onSubmit={handleSubmit}
                 className="flex justify-center"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -106,7 +102,7 @@ const SecondaryCTASection = () => {
                   type="email"
                   id="email"
                   name="email"
-                    value={formData.email}
+                  value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
                   className="px-4 py-2 text-black rounded-l-lg w-1/2"
@@ -118,7 +114,6 @@ const SecondaryCTASection = () => {
                   disabled={loading}
                 >
                   {loading ? "Subscribe..." : "Subscribe"}
-                  
                 </button>
               </motion.form>
             </motion.div>
@@ -131,10 +126,26 @@ const SecondaryCTASection = () => {
               variants={staggerContainer}
             >
               {[
-                { src: "/social/facebook.png", link: "https://www.facebook.com", color: "hover:scale-110" },
-                { src: "/social/twitter.png", link: "https://twitter.com", color: "hover:scale-110" },
-                { src: "/social/instagram.png", link: "https://www.instagram.com", color: "hover:scale-110" },
-                { src: "/social/linkedin.png", link: "https://www.linkedin.com", color: "hover:scale-110" },
+                {
+                  src: "/social/facebook.png",
+                  link: "https://www.facebook.com",
+                  color: "hover:scale-110",
+                },
+                {
+                  src: "/social/twitter.png",
+                  link: "https://twitter.com",
+                  color: "hover:scale-110",
+                },
+                {
+                  src: "/social/instagram.png",
+                  link: "https://www.instagram.com",
+                  color: "hover:scale-110",
+                },
+                {
+                  src: "/social/linkedin.png",
+                  link: "https://www.linkedin.com",
+                  color: "hover:scale-110",
+                },
               ].map((item, index) => (
                 <motion.a
                   key={index}
@@ -162,7 +173,7 @@ const SecondaryCTASection = () => {
             transition={{ duration: 1 }}
           >
             <img
-              src="/about/login.jpg" // Replace with your image path
+              src="/about/login.jpg"
               alt="Login Illustration"
               className="mt-4 rounded-lg w-full object-cover"
             />

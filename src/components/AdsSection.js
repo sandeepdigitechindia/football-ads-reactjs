@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AdsSection = ({ ads }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
   // Animation Variants
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -66,12 +71,50 @@ const AdsSection = ({ ads }) => {
               <p className="text-gray-600 text-sm sm:text-base mb-3">
                 {ad.description}
               </p>
-              <a
-                href={"ads/" + ad._id}
-                className="text-blue-600 hover:underline text-sm"
-              >
-                See More
-              </a>
+
+              {/* Posted Date */}
+              <p className="text-gray-500 text-xs sm:text-sm mb-3">
+                Posted on: {new Date(ad.createdAt).toLocaleDateString()}
+              </p>
+
+              {/* Card Footer */}
+              <div className="flex justify-between items-center mt-4">
+                <a
+                  href={"ads/" + ad.slug}
+                  className="flex items-center gap-2 text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
+                >
+                  <span>See More</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </a>
+                {isLoggedIn ? (
+                  <a
+                    href={"/apply/" + ad._id}
+                    className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
+                  >
+                    Apply Now
+                  </a>
+                ) : (
+                  <a
+                    href={"/login"}
+                    className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
+                  >
+                    Apply Now
+                  </a>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>
@@ -89,20 +132,6 @@ const AdsSection = ({ ads }) => {
             className="inline-block px-5 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300"
           >
             See All Ads
-          </a>
-        </motion.div>
-
-        {/* Subscription Prompt Animation */}
-        <motion.div
-          className="mt-3 md:mt-4 text-sm text-gray-600"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <span>Want full access to all ads? </span>
-          <a href="/subscribe" className="text-blue-600 hover:underline">
-            Subscribe Now
           </a>
         </motion.div>
       </div>

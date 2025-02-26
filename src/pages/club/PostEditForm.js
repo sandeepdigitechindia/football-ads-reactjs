@@ -11,6 +11,7 @@ const PostForm = () => {
     title: "",
     image: null,
     description: "",
+    long_description: "",
     position: "",
     salary: "",
     location: "",
@@ -31,6 +32,7 @@ const PostForm = () => {
         setFormData({
           title: postData.title || "",
           description: postData.description || "",
+          long_description: postData.long_description || "",
           position: postData.position || "",
           salary: postData.salary || "",
           location: postData.location || "",
@@ -50,6 +52,8 @@ const PostForm = () => {
     if (!formData.title.trim()) newErrors.title = "Title is required.";
     if (!formData.description.trim())
       newErrors.description = "Description is required.";
+    if (!formData.long_description.trim())
+      newErrors.long_description = "Long Description is required.";
     if (!formData.position.trim()) newErrors.position = "Position is required.";
     if (!formData.salary.trim()) newErrors.salary = "Salary is required.";
     if (!formData.location.trim()) newErrors.location = "Location is required.";
@@ -80,6 +84,7 @@ const PostForm = () => {
       // Append text fields
       formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
+      formDataToSend.append("long_description", formData.long_description);
       formDataToSend.append("position", formData.position);
       formDataToSend.append("salary", formData.salary);
       formDataToSend.append("location", formData.location);
@@ -197,6 +202,27 @@ const PostForm = () => {
                 {errors.description && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.description}
+                  </p>
+                )}
+              </div>
+
+              {/* Long Description */}
+              <div className="mb-4">
+                <label className="block text-gray-700 font-medium mb-2">
+                  Long Description
+                </label>
+                <textarea
+                  name="long_description"
+                  value={formData.long_description}
+                  onChange={handleChange}
+                  className={`w-full p-3 border ${
+                    errors.long_description ? "border-red-500" : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                  rows="4"
+                ></textarea>
+                {errors.long_description && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.long_description}
                   </p>
                 )}
               </div>
