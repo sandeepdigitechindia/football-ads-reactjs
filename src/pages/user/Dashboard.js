@@ -1,9 +1,85 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/user/Sidebar";
 import DataTable from "react-data-table-component";
+import API from "../../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const response = await API.get("/api/user/dashboard");
+
+        // Ensure the response is an array
+        if (!Array.isArray(response.data)) {
+          throw new Error("Invalid response format");
+        }
+
+        const postsFromAPI = response.data.map((data) => ({
+          title: data.title || "N/A",
+          count: data.count || "N/A",
+          gradient: data.gradient || "N/A",
+          shadow: data.shadow || "N/A",
+          link: data.link || "N/A",
+        }));
+
+        setStats(postsFromAPI);
+      } catch (error) {
+        console.error("Error fetching dashboard:", error);
+        setError(error.response?.data?.message || "Failed to fetch dashboard");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await API.get("/api/user/posts?limit=50&recent=true", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Ensure the response is an array
+        if (!Array.isArray(response.data)) {
+          throw new Error("Invalid response format");
+        }
+
+        const postsFromAPI = response.data.map((post) => ({
+          id: post.postId_id || "",
+          image: BASE_URL + post.clubId.club_logo || "/common/club.png",
+          name: post.clubId.club_name || "N/A",
+          title: post.postId.title || "N/A",
+          applicantsCount: "5",
+          date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
+          status: post.status,
+        }));
+
+        setData(postsFromAPI);
+        setOriginalData(postsFromAPI);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setError(error.response?.data?.message || "Failed to fetch posts");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   // Data for the table
   const initialData = [
     {
@@ -205,26 +281,7 @@ const Dashboard = () => {
           </header>
           {/* Cards Section */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Total Applied Posts",
-                count: 120,
-                gradient: "from-blue-500 via-indigo-500 to-purple-500",
-                shadow: "shadow-blue-500/50",
-              },
-              {
-                title: "Active Subscriptions",
-                count: 2,
-                gradient: "from-green-500 via-teal-500 to-emerald-500",
-                shadow: "shadow-green-500/50",
-              },
-              {
-                title: "Resume Downloaded ",
-                count: 3,
-                gradient: "from-red-500 via-pink-500 to-rose-500",
-                shadow: "shadow-red-500/50",
-              },
-            ].map((card, index) => (
+            {stats.map((card, index) => (
               <div
                 key={index}
                 className={`relative bg-gradient-to-r ${card.gradient} p-4 rounded-xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}
@@ -235,9 +292,12 @@ const Dashboard = () => {
 
                 {/* Align button to bottom-right */}
                 <div className="absolute bottom-4 right-4">
-                  <button className="bg-white text-gray-800 py-1 px-2 text-sm rounded shadow hover:bg-gray-100 transition">
+                  <Link
+                    to={card.link}
+                    className="bg-white text-gray-800 py-1 px-2 text-sm rounded shadow hover:bg-gray-100 transition"
+                  >
                     View Details
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -275,15 +335,23 @@ const Dashboard = () => {
             </div>
 
             {/* Data Table */}
-            <DataTable
-              columns={columns}
-              data={data}
-              pagination
-              highlightOnHover
-              striped
-              responsive
-              customStyles={customStyles}
-            />
+            {loading ? (
+              <p>Loading clubs...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <DataTable
+                  columns={columns}
+                  data={data}
+                  pagination
+                  highlightOnHover
+                  striped
+                  responsive
+                  customStyles={customStyles}
+                />
+              </div>
+            )}
           </div>
         </main>
       </div>

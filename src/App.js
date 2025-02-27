@@ -119,7 +119,7 @@ const App = () => {
             <Route path="/faqs" element={<FAQ />} />
 
             <Route
-              path="/payment"
+              path="/payment/:id"
               element={
                 <Elements stripe={stripePromise}>
                   <PaymentForm />

@@ -1,12 +1,132 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import API from "../api";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AdsSection = ({ ads }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [formData, setFormData] = useState({
+    upload_cv: null,
+  });
+
+  const [showModal, setShowModal] = useState(false);
+  const [user, setUser] = useState(null);
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await API.get("/api/user/profile");
+        // Ensure the response is an array
+        const userFromAPI = {
+          id: response.data.user.id,
+          role: response.data.user.role,
+        };
+        setUser(userFromAPI);
+      } catch (error) {
+        console.error("Error fetching club:", error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user?.id) return;
+
+      try {
+        const response = await API.get(`/api/user/${user.id}`);
+        const getData = response.data;
+        setFormData({
+          upload_cv: getData.upload_cv ? BASE_URL + getData.upload_cv : null,
+        });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }));
+  };
+
+  // Submit the application
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const formDataToSend = {
+        userId: user.id,
+        postId: post._id,
+        clubId: post.userId,
+      };
+
+      // First API call: Apply for post
+      await API.post(`${BASE_URL}/api/post-apply`, formDataToSend, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Check if a new CV file is selected
+      if (formData.upload_cv && formData.upload_cv instanceof File) {
+        const formDataToSendCv = new FormData();
+        formDataToSendCv.append("upload_cv", formData.upload_cv);
+
+        // Second API call: Upload CV (Only if file is selected)
+        await API.put(`${BASE_URL}/api/user/${user.id}`, formDataToSendCv, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
+
+      toast.success("Post Applied Successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      setShowModal(false);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Submit failed. Try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Open modal
+  const openModal = (ad) => {
+    setPost(ad);
+    setShowModal(true);
+  };
+  // Close modal
+  const closeModal = () => {
+    setShowModal(false);
+    setPost(null);
+  };
+
   // Animation Variants
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -43,6 +163,58 @@ const AdsSection = ({ ads }) => {
         >
           Recent Ads
         </motion.h2>
+        {showModal && (
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Apply for {post.position}
+              </h3>
+              {formData.upload_cv && (
+                <div className="mb-4">
+                  <p className="text-gray-700">Previously Uploaded CV:</p>
+                  <a
+                    href={formData.upload_cv}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    View CV
+                  </a>
+                </div>
+              )}
+
+              <div className="mb-4">
+                <label className="block text-gray-700">
+                  Upload New CV{" "}
+                  {formData.upload_cv ? "(Optional)" : "(Required)"}
+                </label>
+                <input
+                  type="file"
+                  name="upload_cv"
+                  onChange={handleFileChange}
+                  className="mt-2"
+                  required={!formData.upload_cv}
+                />
+              </div>
+
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={closeModal}
+                  className="py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                  disabled={loading}
+                >
+                  {loading ? "Apply..." : "Apply"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Ads Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
@@ -100,19 +272,19 @@ const AdsSection = ({ ads }) => {
                   </svg>
                 </a>
                 {isLoggedIn ? (
-                  <a
-                    href={"/apply/" + ad._id}
+                  <Link
+                    onClick={() => openModal(ad)}
                     className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
                   >
                     Apply Now
-                  </a>
+                  </Link>
                 ) : (
-                  <a
-                    href={"/login"}
+                  <Link
+                    to={"/login"}
                     className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
                   >
                     Apply Now
-                  </a>
+                  </Link>
                 )}
               </div>
             </motion.div>

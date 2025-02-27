@@ -9,6 +9,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AdsDetailSection = ({ ads }) => {
   const [formData, setFormData] = useState({
     upload_cv: null,
+    isSubscription: "",
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -43,6 +44,7 @@ const AdsDetailSection = ({ ads }) => {
         const getData = response.data;
         setFormData({
           upload_cv: getData.upload_cv ? BASE_URL + getData.upload_cv : null,
+          isSubscription: getData.isSubscription || "",
         });
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -267,15 +269,26 @@ const AdsDetailSection = ({ ads }) => {
 
           {/* Apply Now Button */}
           {isLoggedIn ? (
-            <Link
-              onClick={openModal}
-              className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              Apply Now
-            </Link>
+            <>
+              {formData.isSubscription===true ? (
+                <Link
+                  onClick={openModal}
+                  className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                  Apply Now
+                </Link>
+              ) : (
+                <Link
+                  to={`/user/subscriptions`}
+                  className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                  Apply Now
+                </Link>
+              )}
+            </>
           ) : (
             <Link
-              href={`/login`}
+              to={`/login`}
               className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
               Apply Now

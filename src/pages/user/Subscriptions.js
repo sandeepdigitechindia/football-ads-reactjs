@@ -1,7 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/user/Sidebar";
 import SubscriptionsSection from "../../components/SubscriptionsSection";
+import API from "../../api";
 const Subscriptions = () => {
+
+  const [subscriptionData, setSubscriptionData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+      const fetchSubscriptionData = async () => {
+        try {
+          const response = await API.get("/api/user/subscriptions");
+          setSubscriptionData(response.data);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching subscriptions data:", error);
+          setLoading(false);
+        }
+      };
+  
+      fetchSubscriptionData();
+    }, []);
+    if (loading) {
+      return <div className="text-center text-lg font-bold">Loading...</div>;
+    }
+  
+    if (!subscriptionData) {
+      return (
+        <div className="text-center text-lg font-bold text-red-500">
+          Error loading data.
+        </div>
+      );
+    }
   // Sample subscription data
   const subscriptions = [
     {
@@ -55,7 +84,7 @@ const Subscriptions = () => {
             
           </header> */}
 
-          <SubscriptionsSection />
+          <SubscriptionsSection subscriptions={subscriptionData} />
 
           {/* Active Subscriptions */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
