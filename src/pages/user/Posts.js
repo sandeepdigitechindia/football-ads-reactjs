@@ -1,50 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/user/Sidebar";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
-
+import API from "../../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Posts = () => {
   const navigate = useNavigate();
-  const initialData = [
-    {
-      id: 1,
-      image: "/common/club.png",
-      name: "Club 1",
-      title: "Post Title 1",
-      description: "Description for Post Title 1.",
-      date: "Jan 10, 2025",
-      status: "Applied",
-    },
-    {
-      id: 2,
-      image: "/common/club.png",
-      name: "Club 2",
-      title: "Post Title 2",
-      description: "Description for Post Title 2.",
-      date: "Jan 9, 2025",
-      status: "Close",
-    },
-    {
-      id: 3,
-      image: "/common/club.png",
-      name: "Club 3",
-      title: "Post Title 3",
-      description: "Description for Post Title 3.",
-      date: "Jan 8, 2025",
-      status: "Archived",
-    },
-    {
-      id: 4,
-      image: "/common/club.png",
-      name: "Club 4",
-      title: "Another Post",
-      description: "Description for Another Post.",
-      date: "Jan 7, 2025",
-      status: "Open",
-    },
-  ];
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-  const [data, setData] = useState(initialData);
+        const response = await API.get("/api/user/posts?limit=50&recent=true", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Ensure the response is an array
+        if (!Array.isArray(response.data)) {
+          throw new Error("Invalid response format");
+        }
+
+        const postsFromAPI = response.data.map((post) => ({
+          id: post.postId._id || "",
+          image: BASE_URL + post.clubId.club_logo || "/common/club.png",
+          name: post.clubId.club_name || "N/A",
+          title: post.postId.title || "N/A",
+          description: post.postId.description || "N/A",
+          applicantsCount: "5",
+          date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
+          status: post.postId.status,
+        }));
+
+        setData(postsFromAPI);
+        setOriginalData(postsFromAPI);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setError(error.response?.data?.message || "Failed to fetch posts");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const columns = [
@@ -58,7 +63,7 @@ const Posts = () => {
         />
       ),
       sortable: true,
-      center: true, // Center-align the column content
+      center: true,
     },
     {
       name: "Club Name",
@@ -119,27 +124,27 @@ const Posts = () => {
       name: "Action",
       cell: (row) => (
         <div className="text-center">
-          <button
+          {/* <button
             className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition shadow disabled:bg-gray-400 disabled:cursor-not-allowed"
             onClick={() => navigate(`/user/post/${row.id}`)}
-            disabled={row.status === "Applied"} 
+            disabled={row.status === "Applied"}
           >
             {row.status === "Applied" ? "Applied" : "Apply"}
-          </button>
-    
-          <br />
-          <br />
-    
+          </button> */}
+
+          {/* <br /> */}
+          {/* <br /> */}
+
           <button
             className="py-2 px-5 bg-gray-500 text-white rounded hover:bg-blue-600 transition shadow"
-            onClick={() => navigate(`/user/post/${row.id}`)}
+            onClick={() => navigate(`/user/post/view/${row.id}`)}
           >
             View
           </button>
         </div>
       ),
       center: true,
-    }
+    },
   ];
 
   const customStyles = {
@@ -196,10 +201,16 @@ const Posts = () => {
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearchTerm(value);
-    const filtered = initialData.filter((item) =>
-      item.title.toLowerCase().includes(value)
-    );
-    setData(filtered);
+    if (value === "") {
+      setData(originalData);
+    } else {
+      const filtered = originalData.filter(
+        (post) =>
+          post.clubId.club_name.toLowerCase().includes(value) ||
+          post.postId.title.toLowerCase().includes(value)
+      );
+      setData(filtered);
+    }
   };
 
   return (
@@ -224,7 +235,7 @@ const Posts = () => {
               <h2 className="text-xl font-medium text-gray-800">All Posts</h2>
               <div className="relative mt-2 sm:mt-0 w-full sm:w-auto">
                 <input
-                  type="text" 
+                  type="text"
                   placeholder="Search by title..."
                   value={searchTerm}
                   onChange={handleSearch}
@@ -248,15 +259,23 @@ const Posts = () => {
             </div>
 
             {/* Data Table */}
-            <DataTable
-              columns={columns}
-              data={data}
-              pagination
-              highlightOnHover
-              striped
-              responsive
-              customStyles={customStyles}
-            />
+            {loading ? (
+              <p>Loading clubs...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <DataTable
+                  columns={columns}
+                  data={data}
+                  pagination
+                  highlightOnHover
+                  striped
+                  responsive
+                  customStyles={customStyles}
+                />
+              </div>
+            )}
           </div>
         </main>
       </div>

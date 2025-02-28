@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -20,55 +20,84 @@ const Footer = () => {
                   Privacy Policy
                 </Link>
               </li>
-              
             </ul>
           </div>
 
           {/* Contact Information */}
           <div>
             <h3 className="text-lg font-bold mb-4">Contact</h3>
-            <p>Email: <a href="mailto:info@footballads.com" className="hover:underline">info@footballads.com</a></p>
-            <p>Phone: <a href="tel:+1234567890" className="hover:underline">+1 234 567 890</a></p>
+            <p>
+              Email:{" "}
+              <a href="mailto:info@footballads.com" className="hover:underline">
+                info@footballads.com
+              </a>
+            </p>
+            <p>
+              Phone:{" "}
+              <a href="tel:+1234567890" className="hover:underline">
+                +1 234 567 890
+              </a>
+            </p>
             <p>Address: 123 Football Lane, Soccer City, SC 12345</p>
           </div>
 
           {/* Copyright */}
           <div className="text-center md:text-right">
-            <p>&copy; {new Date().getFullYear()} Football Ads. All rights reserved.</p>
-            <p className="text-sm">Built with passion for football enthusiasts.</p>
+            <p>
+              &copy; {new Date().getFullYear()} Football Ads. All rights
+              reserved.
+            </p>
+            <p className="text-sm">
+              Built with passion for football enthusiasts.
+            </p>
 
-{/* Social Media Links */}
-<div className="flex justify-center mt-5 gap-6">
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/facebook.png"
-              alt="Facebook"
-              className="w-8 h-8 hover:text-blue-600 transition-colors"
-            />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/twitter.png"
-              alt="Twitter"
-              className="w-8 h-8 hover:text-blue-400 transition-colors"
-            />
-          </a>
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/instagram.png"
-              alt="Instagram"
-              className="w-8 h-8 hover:text-pink-600 transition-colors"
-            />
-          </a>
-          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/social/linkedin.png"
-              alt="LinkedIn"
-              className="w-8 h-8 hover:text-blue-700 transition-colors"
-            />
-          </a>
-        </div>
-
+            {/* Social Media Links */}
+            <div className="flex justify-center mt-5 gap-6">
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/social/facebook.png"
+                  alt="Facebook"
+                  className="w-8 h-8 hover:text-blue-600 transition-colors"
+                />
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/social/twitter.png"
+                  alt="Twitter"
+                  className="w-8 h-8 hover:text-blue-400 transition-colors"
+                />
+              </a>
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/social/instagram.png"
+                  alt="Instagram"
+                  className="w-8 h-8 hover:text-pink-600 transition-colors"
+                />
+              </a>
+              <a
+                href="https://www.linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/social/linkedin.png"
+                  alt="LinkedIn"
+                  className="w-8 h-8 hover:text-blue-700 transition-colors"
+                />
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -34,6 +34,7 @@ import UserSubscriptions from "./pages/user/Subscriptions";
 import UserPosts from "./pages/user/Posts";
 import UserPostForm from "./pages/user/PostForm";
 import UserPostDetail from "./pages/user/PostDetail";
+import UserPaymentForm from "./pages/user/PaymentForm";
 
 import ClubDashboard from "./pages/club/Dashboard";
 import ClubSettings from "./pages/club/Settings";
@@ -44,12 +45,13 @@ import ClubPostEditForm from "./pages/club/PostEditForm";
 import ClubPostDetail from "./pages/club/PostDetail";
 import ClubPostApplicant from "./pages/club/ClubPostApplicant";
 import ClubPostApplicantView from "./pages/club/ClubPostApplicantView";
+import ClubPaymentForm from "./pages/club/PaymentForm";
 
 import PrivateRoute from "./components/PrivateRoute";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import PaymentForm from "./pages/PaymentForm";
+
 const stripePromise = loadStripe(
   "pk_test_51QwO2EHrDqXdbSIj3uvQtyd4yAvmEmyPToR1ZnxpDl5CcZ7lXCUhRa41DIMgwQOtCAUc5SJSguQymUuYA6bDmiG600aehxUWJt"
 );
@@ -118,14 +120,6 @@ const App = () => {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/faqs" element={<FAQ />} />
 
-            <Route
-              path="/payment/:id"
-              element={
-                <Elements stripe={stripePromise}>
-                  <PaymentForm />
-                </Elements>
-              }
-            />
             <Route path="/thank-you" element={<ThankYou />} />
             {/* user routes */}
             <Route element={<PrivateRoute allowedRoles={["player"]} />}>
@@ -137,7 +131,16 @@ const App = () => {
               />
               <Route path="/user/posts" element={<UserPosts />} />
               <Route path="/user/post/create" element={<UserPostForm />} />
-              <Route path="/user/post/:id" element={<UserPostDetail />} />
+              <Route path="/user/post/view/:id" element={<UserPostDetail />} />
+
+              <Route
+                path="/user/payment/:id"
+                element={
+                  <Elements stripe={stripePromise}>
+                    <UserPaymentForm />
+                  </Elements>
+                }
+              />
             </Route>
 
             {/* club routes */}
@@ -147,6 +150,15 @@ const App = () => {
               <Route
                 path="/club/subscriptions"
                 element={<ClubSubscriptions />}
+              />
+
+              <Route
+                path="/club/payment/:id"
+                element={
+                  <Elements stripe={stripePromise}>
+                    <ClubPaymentForm />
+                  </Elements>
+                }
               />
               <Route path="/club/posts" element={<ClubPosts />} />
               <Route path="/club/post/create" element={<ClubPostForm />} />

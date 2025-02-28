@@ -8,6 +8,7 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import SecondaryCTASection from "../components/SecondaryCTASection";
 import WhyChooseUs from "../components/WhyChooseUs";
 import API from "../api";
+const subscriptionLink = {"link":"/club/payment"};
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 1 } },
@@ -64,7 +65,7 @@ const Home = () => {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <SubscriptionsSection subscriptions={homeData.subscriptions} />
+        <SubscriptionsSection subscriptions={homeData.subscriptions} subscriptionLink={subscriptionLink} />
       </motion.div>
 
       {/* Additional Services Section */}

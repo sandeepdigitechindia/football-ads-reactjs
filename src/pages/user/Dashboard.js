@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState([]);
+  const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const Dashboard = () => {
         if (!Array.isArray(response.data)) {
           throw new Error("Invalid response format");
         }
-
+        console.log(response);
         const postsFromAPI = response.data.map((data) => ({
           title: data.title || "N/A",
           count: data.count || "N/A",
@@ -58,13 +59,14 @@ const Dashboard = () => {
         }
 
         const postsFromAPI = response.data.map((post) => ({
-          id: post.postId_id || "",
+          id: post.postId._id || "",
           image: BASE_URL + post.clubId.club_logo || "/common/club.png",
           name: post.clubId.club_name || "N/A",
           title: post.postId.title || "N/A",
+          description: post.postId.description || "N/A",
           applicantsCount: "5",
           date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
-          status: post.status,
+          status: post.postId.status,
         }));
 
         setData(postsFromAPI);
@@ -80,47 +82,7 @@ const Dashboard = () => {
     fetchPosts();
   }, []);
 
-  // Data for the table
-  const initialData = [
-    {
-      id: 1,
-      image: "/common/club.png",
-      name: "Club 1",
-      title: "Post Title 1",
-      description: "Description for Post Title 1.",
-      date: "Jan 10, 2025",
-      status: "Applied",
-    },
-    {
-      id: 2,
-      image: "/common/club.png",
-      name: "Club 2",
-      title: "Post Title 2",
-      description: "Description for Post Title 2.",
-      date: "Jan 9, 2025",
-      status: "Close",
-    },
-    {
-      id: 3,
-      image: "/common/club.png",
-      name: "Club 3",
-      title: "Post Title 3",
-      description: "Description for Post Title 3.",
-      date: "Jan 8, 2025",
-      status: "Archived",
-    },
-    {
-      id: 4,
-      image: "/common/club.png",
-      name: "Club 4",
-      title: "Another Post",
-      description: "Description for Another Post.",
-      date: "Jan 7, 2025",
-      status: "Open",
-    },
-  ];
-
-  const [data, setData] = useState(initialData);
+  
   const [searchTerm, setSearchTerm] = useState("");
 
   const columns = [
@@ -134,7 +96,7 @@ const Dashboard = () => {
         />
       ),
       sortable: true,
-      center: true, // Center-align the column content
+      center: true, 
     },
     {
       name: "Club Name",
@@ -178,7 +140,7 @@ const Dashboard = () => {
       selector: (row) => (
         <span
           className={`px-3 py-1 rounded-full text-sm font-medium ${
-            row.status === "Open" || row.status === "Applied"
+            row.status === "Open"
               ? "bg-green-100 text-green-700"
               : row.status === "Close"
               ? "bg-yellow-100 text-yellow-700"
@@ -197,7 +159,7 @@ const Dashboard = () => {
         <div className="text-center">
           <button
             className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition shadow"
-            onClick={() => navigate(`/user/post/${row.id}`)}
+            onClick={() => navigate(`/user/post/view/${row.id}`)}
           >
             View
           </button>
@@ -261,10 +223,16 @@ const Dashboard = () => {
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearchTerm(value);
-    const filtered = initialData.filter((item) =>
-      item.title.toLowerCase().includes(value)
-    );
-    setData(filtered);
+    if (value === "") {
+      setData(originalData);
+    } else {
+      const filtered = originalData.filter(
+        (post) =>
+          post.clubId.club_name.toLowerCase().includes(value) ||
+          post.postId.title.toLowerCase().includes(value)
+      );
+      setData(filtered);
+    }
   };
 
   return (

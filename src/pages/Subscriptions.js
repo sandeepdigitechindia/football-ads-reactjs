@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SubscriptionsSection from "../components/SubscriptionsSection";
 import API from "../api";
+const subscriptionLink = {"link":"/club/payment"};
 const Subscription = () => {
   const [subscriptionData, setSubscriptionData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,7 +34,7 @@ const Subscription = () => {
   return (
     <div className="home">
       {/* Ads Section */}
-      <SubscriptionsSection subscriptions={subscriptionData.subscriptions} />
+      <SubscriptionsSection subscriptions={subscriptionData.subscriptions}  subscriptionLink={subscriptionLink} />
     </div>
   );
 };

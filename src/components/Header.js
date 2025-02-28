@@ -144,10 +144,12 @@ export default function Example() {
               </div>
             </PopoverPanel>
           </Popover>
-          <Link to="/subscriptions" className="text-sm/6 font-semibold text-white-900">
-          Subscriptions
+          <Link
+            to="/subscriptions"
+            className="text-sm/6 font-semibold text-white-900"
+          >
+            Subscriptions
           </Link>
-         
 
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900 border-none outline-none">
@@ -202,6 +204,12 @@ export default function Example() {
                   <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
                     <div className="p-2">
                       <Link
+                        to="/user/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Dashboard
+                      </Link>
+                      <Link
                         to="/user/settings"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
@@ -224,6 +232,12 @@ export default function Example() {
                   </PopoverButton>
                   <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
                     <div className="p-2">
+                      <Link
+                        to="/club/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Dashboard
+                      </Link>
                       <Link
                         to="/club/settings"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -312,7 +326,7 @@ export default function Example() {
                 >
                   Subscriptions
                 </Link>
-               
+
                 <Disclosure as="div" className="-mx-3">
                   <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
                     Services

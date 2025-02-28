@@ -69,7 +69,7 @@ const Settings = () => {
           email: getData.email || "",
           phone: getData.phone || "",
           country: getData.country || "",
-          password: getData.password || "",
+        
           profilePicture: getData.profile ? BASE_URL + getData.profile : null,
         });
       } catch (error) {
@@ -536,6 +536,7 @@ const Settings = () => {
                     type="password"
                     id="password"
                     name="password"
+                    value={formData.password}
                     onChange={handleChange}
                     className={`w-full px-4 py-2 border rounded-lg ${
                       errors.password ? "border-red-500" : "border-gray-300"

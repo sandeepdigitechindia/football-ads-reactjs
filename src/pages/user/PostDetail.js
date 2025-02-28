@@ -1,26 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Sidebar from "../../components/user/Sidebar";
-
+import API from "../../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PostDetail = () => {
   const { id } = useParams();
   const [showMore, setShowMore] = React.useState(false);
 
+  const [formData, setFormData] = useState({
+    title: "",
+    image: null,
+    description: "",
+    position: "",
+    salary: "",
+    location: "",
+    date: "",
+    status: "",
+    club_name: "",
+    club_logo: "",
+  });
+  // Fetch user data from API
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await API.get(`/api/user/posts/${id}`);
+        const postData = response.data;
+        setFormData({
+          title: postData.title || "",
+          description: postData.description || "",
+          position: postData.position || "",
+          salary: postData.salary || "",
+          location: postData.location || "",
+          image: postData.image || null,
+          date: postData.createdAt,
+          status: postData.status,
+          club_name: postData.userId?.club_name || "",
+          club_logo: postData.userId?.club_logo || "",
+        });
+      } catch (error) {
+        console.error("Error fetching post data:", error);
+      }
+    };
+
+    if (id) fetchUser();
+  }, [id]);
+
   // Mock data; replace with actual API call if needed
   const job = {
     id: id,
-    title: "Software Engineer",
-    image: "/post/post.jpg",
-    description:
-      "We are looking for a talented Software Engineer to join our team. You will be responsible for developing and maintaining high-quality software applications.",
-    position: "Full-Time",
-    salary: "$80,000 - $100,000 per year",
-    location: "San Francisco, CA, USA",
-    date: "Jan 15, 2025",
-    status: "Published",
+    title: formData.title,
+    image: BASE_URL + formData.image || "/post/post.jpg",
+    description: formData.description,
+    position: formData.position,
+    salary: formData.salary,
+    location: formData.location,
+    date: formData.date,
+    status: formData.status,
     company: {
-      name: "Tech Innovators Inc.",
-      logo: "/common/club.png",
+      name: formData.club_name,
+      logo: BASE_URL + formData.club_logo,
       location: "San Francisco, CA, USA",
       subDescription:
         "Tech Innovators Inc. is a leading tech company that builds innovative solutions to solve real-world problems.",
@@ -28,6 +66,8 @@ const PostDetail = () => {
         "Company ABC was founded in 2000 and has been at the forefront of the technology industry, providing cutting-edge solutions to clients across the globe. We specialize in AI, machine learning, and enterprise software solutions. With over 500 employees and a network of partners worldwide, we continue to push the boundaries of innovation and impact the future of technology.",
     },
   };
+
+  // Mock data; replace with actual API call if needed
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -40,12 +80,12 @@ const PostDetail = () => {
             <h1 className="text-4xl font-extrabold text-gray-900">
               Job Details
             </h1>
-            <button
+            {/* <button
               onClick={() => alert(`You applied for ${job.title}`)}
               className="py-2 px-6 bg-blue-600 text-white text-lg rounded hover:bg-blue-700 transition shadow-lg"
             >
               Apply Now
-            </button>
+            </button> */}
           </header>
 
           {/* Job Details Section */}

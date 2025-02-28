@@ -72,6 +72,12 @@ export default function ClubHeader() {
             <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
               <div className="p-2">
                 <Link
+                  to="/club/dashboard"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Dashboard
+                </Link>
+                <Link
                   to="/club/settings"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >

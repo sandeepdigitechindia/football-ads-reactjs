@@ -1,9 +1,10 @@
 import React from "react";
 
 import { motion } from "framer-motion";
-const SubscriptionPlans = ({ subscriptions }) => {
+const SubscriptionPlans = ({ subscriptions, subscriptionLink }) => {
   if (!subscriptions || subscriptions.length === 0)
     return <div>No Ads Available</div>;
+  console.log(subscriptions);
   return (
     <motion.section
       className="py-16 px-4 bg-gray-50"
@@ -83,10 +84,8 @@ const SubscriptionPlans = ({ subscriptions }) => {
                 </span>
               </motion.div>
 
-              {/* Features List */}
               <ul className="text-gray-600 text-sm sm:text-base text-left mb-6 space-y-2">
-                {console.log(JSON.parse(plan.features))}
-                {JSON.parse(plan.features).map((feature, idx) => (
+                {plan.features.map((feature, idx) => (
                   <motion.li
                     key={idx}
                     className="flex items-center gap-2"
@@ -105,14 +104,14 @@ const SubscriptionPlans = ({ subscriptions }) => {
                     >
                       {feature.status ? "✔" : "✘"}
                     </span>
-                    {feature}
+                    {feature.name}
                   </motion.li>
                 ))}
               </ul>
 
               {/* Buy Now Button with Shake Effect */}
               <motion.a
-                href={`/payment/${plan._id}`}
+                href={`${subscriptionLink.link}/${plan._id}`}
                 className={`block text-center py-2 px-4 rounded-md text-white font-medium transition duration-300 
             ${index === 1 ? "bg-blue-600" : "bg-gray-600"} 
             group-hover:bg-blue-600`}

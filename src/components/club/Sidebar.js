@@ -4,7 +4,7 @@ import {
   FaTimes,
   FaTachometerAlt,
   FaClipboardList,
-  FaDollarSign,
+  FaEuroSign,
   FaCogs,
   FaSignOutAlt,
 } from "react-icons/fa";
@@ -44,7 +44,7 @@ const Sidebar = () => {
     {
       name: "Subscriptions",
       link: "/club/subscriptions",
-      icon: <FaDollarSign />,
+      icon: <FaEuroSign />,
     },
     { name: "Settings", link: "/club/settings", icon: <FaCogs /> },
     {

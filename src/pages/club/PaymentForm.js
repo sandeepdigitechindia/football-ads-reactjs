@@ -3,7 +3,7 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import API from "../api";
+import API from "../../api";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const cardStyle = {
   style: {
@@ -24,31 +24,30 @@ const PaymentForm = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+  const [club, setclub] = useState(null);
   const [subscriptionData, setSubscriptionData] = useState(null);
 
   useEffect(() => {
-    const fetchUserId = async () => {
+    const fetchClubId = async () => {
       try {
-        const response = await API.get("/api/user/profile");
+        const response = await API.get("/api/club/profile");
         // Ensure the response is an array
-        const userFromAPI = {
+        const clubFromAPI = {
           id: response.data.user.id,
           role: response.data.user.role,
         };
-        setUser(userFromAPI);
+        setclub(clubFromAPI);
       } catch (error) {
         console.error("Error fetching club:", error);
       }
     };
 
-    fetchUserId();
+    fetchClubId();
   }, []);
-
   useEffect(() => {
     const fetchSubscriptionData = async () => {
       try {
-        const response = await API.get(`/api/user/subscriptions/${id}`);
+        const response = await API.get(`/api/club/subscriptions/${id}`);
         setSubscriptionData(response.data);
         setLoading(false);
       } catch (error) {
@@ -121,7 +120,7 @@ const PaymentForm = () => {
       } else if (paymentIntent.status === "succeeded") {
         try {
           const formDataToSend = {
-            userId: user.id,
+            userId: club.id,
             subscriptionId: subscriptionData._id,
             price: subscriptionData.price,
             duration: subscriptionData.duration,
@@ -131,7 +130,7 @@ const PaymentForm = () => {
           };
 
           await API.post(
-            `${BASE_URL}/api/subscription-purchase`,
+            `${BASE_URL}/api/club/subscriptions/purchase`,
             formDataToSend,
             {
               headers: {
