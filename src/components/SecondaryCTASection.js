@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,10 +18,37 @@ const staggerContainer = {
 };
 
 const SecondaryCTASection = () => {
+  const [settingData, setSettingData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
   });
+
+  useEffect(() => {
+    const fetchSettingData = async () => {
+      try {
+        const response = await API.get("/api/settings");
+        setSettingData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching home data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSettingData();
+  }, []);
+  if (loading) {
+    return <div className="text-center text-lg font-bold">Loading...</div>;
+  }
+
+  if (!settingData) {
+    return (
+      <div className="text-center text-lg font-bold text-red-500">
+        Error loading data.
+      </div>
+    );
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -128,22 +155,22 @@ const SecondaryCTASection = () => {
               {[
                 {
                   src: "/social/facebook.png",
-                  link: "https://www.facebook.com",
+                  link: `${settingData.facebook_link}`,
                   color: "hover:scale-110",
                 },
                 {
                   src: "/social/twitter.png",
-                  link: "https://twitter.com",
+                  link: `${settingData.twitter_link}`,
                   color: "hover:scale-110",
                 },
                 {
                   src: "/social/instagram.png",
-                  link: "https://www.instagram.com",
+                  link: `${settingData.instagram_link}`,
                   color: "hover:scale-110",
                 },
                 {
                   src: "/social/linkedin.png",
-                  link: "https://www.linkedin.com",
+                  link: `${settingData.linkedin_link}`,
                   color: "hover:scale-110",
                 },
               ].map((item, index) => (
@@ -173,8 +200,8 @@ const SecondaryCTASection = () => {
             transition={{ duration: 1 }}
           >
             <img
-              src="/about/login.jpg"
-              alt="Login Illustration"
+              alt={settingData.site_name}
+              src={BASE_URL + settingData.home_page_banner}
               className="mt-4 rounded-lg w-full object-cover"
             />
           </motion.div>

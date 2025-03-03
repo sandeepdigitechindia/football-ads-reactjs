@@ -16,6 +16,8 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import API from "../api";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ads = [
   { name: "Advertisement for players", to: "ads" },
@@ -34,6 +36,10 @@ export default function Example() {
   const [isRole, setIsRole] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const [settingData, setSettingData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,6 +47,33 @@ export default function Example() {
     setIsRole(role);
     setIsLoggedIn(!!token);
   }, []);
+
+  useEffect(() => {
+    const fetchSettingData = async () => {
+      try {
+        const response = await API.get("/api/settings");
+        setSettingData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching home data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSettingData();
+  }, []);
+  if (loading) {
+    return <div className="text-center text-lg font-bold">Loading...</div>;
+  }
+
+  if (!settingData) {
+    return (
+      <div className="text-center text-lg font-bold text-red-500">
+        Error loading data.
+      </div>
+    );
+  }
+
   // Handle logout action
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -63,8 +96,7 @@ export default function Example() {
     setShowModal(false);
   };
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
       {/* Modal for Confirmation */}
@@ -97,8 +129,8 @@ export default function Example() {
       >
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">DB10</span>
-            <img alt="" src="/logo.png" className="h-8 w-auto" />
+            <span className="sr-only">{settingData.site_name}</span>
+            <img alt={settingData.site_name} src={BASE_URL + settingData.site_logo} className="h-8 w-auto" />
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -274,7 +306,7 @@ export default function Example() {
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <Link to="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">DB10</span>
+              <span className="sr-only">{settingData.site_name}</span>
               <img
                 alt=""
                 src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"

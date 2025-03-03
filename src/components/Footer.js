@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import API from "../api";
 
 // Animation Variants
 const fadeInVariant = {
@@ -19,6 +20,34 @@ const staggerContainer = {
 };
 
 const Footer = () => {
+  const [settingData, setSettingData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSettingData = async () => {
+      try {
+        const response = await API.get("/api/settings");
+        setSettingData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching home data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSettingData();
+  }, []);
+  if (loading) {
+    return <div className="text-center text-lg font-bold">Loading...</div>;
+  }
+
+  if (!settingData) {
+    return (
+      <div className="text-center text-lg font-bold text-red-500">
+        Error loading data.
+      </div>
+    );
+  }
   return (
     <motion.footer
       className="bg-blue-900 text-white py-[100px]"
@@ -28,7 +57,10 @@ const Footer = () => {
       variants={staggerContainer}
     >
       <div className="container mx-auto px-4">
-        <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" variants={staggerContainer}>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          variants={staggerContainer}
+        >
           {/* Quick Links */}
           <motion.div variants={fadeInVariant}>
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
@@ -56,31 +88,61 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Contact</h3>
             <p>
               Email:{" "}
-              <a href="mailto:info@footballads.com" className="hover:underline">
-                info@footballads.com
+              <a
+                href={`mailto:${settingData.official_mail}`}
+                className="hover:underline"
+              >
+                {settingData.official_mail}
               </a>
             </p>
             <p>
               Phone:{" "}
-              <a href="tel:+1234567890" className="hover:underline">
-                +1 234 567 890
+              <a
+                href={`tel:${settingData.official_number}`}
+                className="hover:underline"
+              >
+                {settingData.official_number}
               </a>
             </p>
-            <p>Address: 123 Football Lane, Soccer City, SC 12345</p>
+            <p>Address: {settingData.official_address}</p>
           </motion.div>
 
           {/* Copyright & Social Links */}
-          <motion.div className="text-center md:text-right" variants={fadeInVariant}>
-            <p>&copy; {new Date().getFullYear()} Football Ads. All rights reserved.</p>
-            <p className="text-sm">Built with passion for football enthusiasts.</p>
+          <motion.div
+            className="text-center md:text-right"
+            variants={fadeInVariant}
+          >
+            <p>
+              &copy; {new Date().getFullYear()} {settingData.site_name}. All
+              rights reserved.
+            </p>
+            <p className="text-sm">
+              Built with passion for football enthusiasts.
+            </p>
 
             {/* Social Media Links */}
             <div className="flex justify-center mt-5 gap-6">
               {[
-                { name: "Facebook", url: "https://www.facebook.com", icon: "/social/facebook.png" },
-                { name: "Twitter", url: "https://twitter.com", icon: "/social/twitter.png" },
-                { name: "Instagram", url: "https://www.instagram.com", icon: "/social/instagram.png" },
-                { name: "LinkedIn", url: "https://www.linkedin.com", icon: "/social/linkedin.png" },
+                {
+                  name: "Facebook",
+                  url: `${settingData.facebook_link}`,
+                  icon: "/social/facebook.png",
+                },
+                {
+                  name: "Twitter",
+                  url: `${settingData.twitter_link}`,
+                  icon: "/social/twitter.png",
+                },
+                {
+                  name: "Instagram",
+                  url: `${settingData.instagram_link}`,
+                  icon: "/social/instagram.png",
+                },
+                {
+                  name: "LinkedIn",
+                  url: `${settingData.linkedin_link}`,
+                  icon: "/social/linkedin.png",
+                },
               ].map((social, index) => (
                 <motion.a
                   key={index}

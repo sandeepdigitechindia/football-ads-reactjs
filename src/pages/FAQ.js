@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import API from "../api";
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+
+  const [faqData, setFaqData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFaqData = async () => {
+      try {
+        const response = await API.get("/api/faqs");
+        setFaqData(response.data.faqs);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching faq data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchFaqData();
+  }, []);
+  if (loading) {
+    return <div className="text-center text-lg font-bold">Loading...</div>;
+  }
+
+  if (!faqData) {
+    return (
+      <div className="text-center text-lg font-bold text-red-500">
+        Error loading data.
+      </div>
+    );
+  }
 
   const toggleQuestion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-
-  const faqs = [
-    {
-      question: 'What is your return policy?',
-      answer: 'We offer a 30-day return policy for all our products. If you are not satisfied with your purchase, you can return it within 30 days of receipt.',
-    },
-    {
-      question: 'How can I contact customer support?',
-      answer: 'You can reach our customer support team by emailing support@example.com or by calling (123) 456-7890.',
-    },
-    {
-      question: 'Do you offer international shipping?',
-      answer: 'Yes, we offer international shipping to most countries. Shipping costs will vary based on your location.',
-    },
-    {
-      question: 'How do I track my order?',
-      answer: 'Once your order has been shipped, we will send you a tracking number via email. You can track your order through our website or the courier service.',
-    },
-    {
-      question: 'Can I modify or cancel my order after placing it?',
-      answer: 'Orders can be modified or canceled within 24 hours of placing them. After that, we cannot make changes to your order.',
-    },
-  ];
 
   return (
     <div className="home">
@@ -38,7 +44,7 @@ const FAQ = () => {
           Frequently Asked Questions
         </h1>
         <div className="space-y-8">
-          {faqs.map((faq, index) => (
+          {faqData.map((faq, index) => (
             <div
               key={index}
               className="bg-white shadow-md rounded-lg p-6"

@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import API from "../../api";
 const Footer = () => {
+  const [settingData, setSettingData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSettingData = async () => {
+      try {
+        const response = await API.get("/api/settings");
+        setSettingData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching home data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSettingData();
+  }, []);
+  if (loading) {
+    return <div className="text-center text-lg font-bold">Loading...</div>;
+  }
+
+  if (!settingData) {
+    return (
+      <div className="text-center text-lg font-bold text-red-500">
+        Error loading data.
+      </div>
+    );
+  }
   return (
     <footer className="bg-blue-900 text-white py-20">
       <div className="container mx-auto px-4">
@@ -20,6 +48,11 @@ const Footer = () => {
                   Privacy Policy
                 </Link>
               </li>
+              <li>
+                <Link to="/faqs" className="hover:underline">
+                  FAQ
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -28,24 +61,30 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Contact</h3>
             <p>
               Email:{" "}
-              <a href="mailto:info@footballads.com" className="hover:underline">
-                info@footballads.com
+              <a
+                href={`mailto:${settingData.official_mail}`}
+                className="hover:underline"
+              >
+                {settingData.official_mail}
               </a>
             </p>
             <p>
               Phone:{" "}
-              <a href="tel:+1234567890" className="hover:underline">
-                +1 234 567 890
+              <a
+                href={`tel:${settingData.official_number}`}
+                className="hover:underline"
+              >
+                {settingData.official_number}
               </a>
             </p>
-            <p>Address: 123 Football Lane, Soccer City, SC 12345</p>
+            <p>Address: {settingData.official_address}</p>
           </div>
 
           {/* Copyright */}
           <div className="text-center md:text-right">
             <p>
-              &copy; {new Date().getFullYear()} Football Ads. All rights
-              reserved.
+              &copy; {new Date().getFullYear()} {settingData.site_name}. All
+              rights reserved.
             </p>
             <p className="text-sm">
               Built with passion for football enthusiasts.
@@ -53,8 +92,8 @@ const Footer = () => {
 
             {/* Social Media Links */}
             <div className="flex justify-center mt-5 gap-6">
-              <a
-                href="https://www.facebook.com"
+              <Link
+                to={settingData.facebook_link}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -63,9 +102,9 @@ const Footer = () => {
                   alt="Facebook"
                   className="w-8 h-8 hover:text-blue-600 transition-colors"
                 />
-              </a>
-              <a
-                href="https://twitter.com"
+              </Link>
+              <Link
+                to={settingData.twitter_link}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -74,9 +113,9 @@ const Footer = () => {
                   alt="Twitter"
                   className="w-8 h-8 hover:text-blue-400 transition-colors"
                 />
-              </a>
-              <a
-                href="https://www.instagram.com"
+              </Link>
+              <Link
+                to={settingData.instagram_link}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -85,9 +124,9 @@ const Footer = () => {
                   alt="Instagram"
                   className="w-8 h-8 hover:text-pink-600 transition-colors"
                 />
-              </a>
-              <a
-                href="https://www.linkedin.com"
+              </Link>
+              <Link
+                to={settingData.linkedin_link}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -96,7 +135,7 @@ const Footer = () => {
                   alt="LinkedIn"
                   className="w-8 h-8 hover:text-blue-700 transition-colors"
                 />
-              </a>
+              </Link>
             </div>
           </div>
         </div>

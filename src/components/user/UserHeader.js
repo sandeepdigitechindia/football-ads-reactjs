@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
@@ -91,7 +91,11 @@ export default function UserHeader() {
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
             <span className="sr-only">{settingData.site_name}</span>
-            <img alt={settingData.site_name} src={BASE_URL + settingData.site_logo} className="h-8 w-auto" />
+            <img
+              alt={settingData.site_name}
+              src={BASE_URL + settingData.site_logo}
+              className="h-8 w-auto"
+            />
           </Link>
         </div>
 
