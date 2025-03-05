@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AboutUs from "../components/AboutUs";
 import API from "../api";
+import Loader from "../components/Loader";
 const About = () => {
   const [aboutUsData, setAboutUsData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ const About = () => {
     fetchAboutUsData();
   }, []);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!aboutUsData) {

@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 // import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 import API from "../../api";
+import Loader from "../../components/Loader";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Posts = () => {
   const navigate = useNavigate();
@@ -35,9 +36,9 @@ const Posts = () => {
           image: BASE_URL + post.userId.club_logo || "/common/club.png",
           name: post.userId.club_name || "N/A",
           title: post.title || "N/A",
-          applicantsCount: "5",
+          applicantsCount: post.applicantCount,
           date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
-          status: post.status,
+          status: post.status === "true" ? "Open" : "Close",
         }));
 
         setData(postsFromAPI);
@@ -251,6 +252,10 @@ const Posts = () => {
       },
     },
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="bg-gray-100">

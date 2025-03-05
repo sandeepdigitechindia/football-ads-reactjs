@@ -4,6 +4,7 @@ import Sidebar from "../../components/club/Sidebar";
 import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import API from "../../api";
+import Loader from "../../components/Loader";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -12,9 +13,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
-
   const [stats, setStats] = useState([]);
-
+  
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
@@ -66,9 +66,10 @@ const Dashboard = () => {
           image: BASE_URL + post.userId.club_logo || "/common/club.png",
           name: post.userId.club_name || "N/A",
           title: post.title || "N/A",
-          applicantsCount: "5",
+          applicantsCount: post.applicantCount,
           date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
-          status: post.status,
+          status: post.status === "true" ? "Open" : "Close",
+        
         }));
 
         setData(postsFromAPI);
@@ -282,6 +283,10 @@ const Dashboard = () => {
       },
     },
   };
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="bg-gray-100">
       {/* Wrapper for Sidebar and Main Content */}

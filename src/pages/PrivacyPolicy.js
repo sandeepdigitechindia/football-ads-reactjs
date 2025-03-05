@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
+import Loader from "../components/Loader";
 const PrivacyPolicy = () => {
   const [settingData, setSettingData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +20,7 @@ const PrivacyPolicy = () => {
     fetchSettingData();
   }, []);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!settingData) {

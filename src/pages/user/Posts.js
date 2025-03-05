@@ -3,6 +3,7 @@ import Sidebar from "../../components/user/Sidebar";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import API from "../../api";
+import Loader from "../../components/Loader";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Posts = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Posts = () => {
           description: post.postId.description || "N/A",
           applicantsCount: "5",
           date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
-          status: post.postId.status,
+          status: post.postId.status === "true" ? "Open" : "Close",
         }));
 
         setData(postsFromAPI);
@@ -212,6 +213,10 @@ const Posts = () => {
       setData(filtered);
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="bg-gray-100">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdsSection from "../components/AdsSection";
 import API from "../api";
+import Loader from "../components/Loader";
 const Ads = () => {
   const [adsData, setAdsData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ const Ads = () => {
     fetchAdsData();
   }, []);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!adsData) {

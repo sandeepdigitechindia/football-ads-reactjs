@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import API from "../api";
+import Loader from "../components/Loader";
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -21,7 +22,7 @@ const FAQ = () => {
     fetchFaqData();
   }, []);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!faqData) {

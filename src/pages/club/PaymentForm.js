@@ -82,7 +82,7 @@ const PaymentForm = () => {
 
     try {
       const formDataToSend = {
-        amount: 10,
+        amount: subscriptionData.price,
         currency: "eur",
       };
       const response = await API.post(

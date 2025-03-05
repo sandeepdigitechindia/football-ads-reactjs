@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/user/Sidebar";
 import DataTable from "react-data-table-component";
 import API from "../../api";
+import Loader from "../../components/Loader";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ const Dashboard = () => {
           description: post.postId.description || "N/A",
           applicantsCount: "5",
           date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
-          status: post.postId.status,
+          status: post.postId.status === "true" ? "Open" : "Close",
         }));
 
         setData(postsFromAPI);
@@ -234,6 +235,10 @@ const Dashboard = () => {
       setData(filtered);
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="bg-gray-100">

@@ -33,7 +33,7 @@ const PostDetail = () => {
           location: postData.location || "",
           image: postData.image || null,
           date: postData.createdAt,
-          status: postData.status,
+          status: postData.status === "true" ? "Open" : "Close",
           club_name: postData.userId?.club_name || "",
           club_logo: postData.userId?.club_logo || "",
         });

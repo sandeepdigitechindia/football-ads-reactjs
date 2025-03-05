@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdditionalServicesSection from '../components/AdditionalServicesSection';
 import API from "../api";
+import Loader from "../components/Loader";
 const ServicesForClubs = () => {
 
   const [serviceData, setServiceData] = useState(null);
@@ -21,7 +22,7 @@ const ServicesForClubs = () => {
     fetchServiceData();
   }, []);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!serviceData) {

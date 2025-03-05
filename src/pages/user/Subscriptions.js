@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/user/Sidebar";
 import SubscriptionsSection from "../../components/SubscriptionsSection";
 import API from "../../api";
+import Loader from "../../components/Loader";
 const subscriptionLink = {"link":"/user/payment"};
 const Subscriptions = () => {
   const [subscriptionData, setSubscriptionData] = useState(null);
@@ -38,7 +39,7 @@ const Subscriptions = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!subscriptionData) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ContactUs from "../components/ContactUs";
 import API from "../api";
+import Loader from "../components/Loader";
 const Contact = () => {
   const [contactUsData, setContactUsData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ const Contact = () => {
     fetchContactUsData();
   }, []);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!contactUsData) {

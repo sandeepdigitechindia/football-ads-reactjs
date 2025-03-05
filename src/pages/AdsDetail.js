@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AdsDetailSection from "../components/AdsDetailSection";
 import API from "../api";
+import Loader from "../components/Loader";
 const Ads = () => {
   const { slug } = useParams();
   const [adsData, setAdsData] = useState(null);
@@ -22,7 +23,7 @@ const Ads = () => {
     if (slug) fetchAdsData();
   }, [slug]);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <Loader />;
   }
 
   if (!adsData) {
