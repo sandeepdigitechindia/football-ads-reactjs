@@ -52,7 +52,9 @@ import PrivateRoute from "./components/PrivateRoute";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe("pk_test_51QxT60QDmVcJiVbdwEalNZCurhjzFN6hUff4SJk2wpKbvK5sCMY6GRjMPkWxrQ1MDjknr2pUZW7fNxT9XT0Ymh0L00PsSkhcM3");
+const stripePromise = loadStripe(
+  "pk_test_51QxT60QDmVcJiVbdwEalNZCurhjzFN6hUff4SJk2wpKbvK5sCMY6GRjMPkWxrQ1MDjknr2pUZW7fNxT9XT0Ymh0L00PsSkhcM3"
+);
 
 // Component to handle headers and footers dynamically
 const DynamicWrapper = ({ children }) => {
