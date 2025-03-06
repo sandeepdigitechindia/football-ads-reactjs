@@ -19,27 +19,31 @@ const ClubPostApplicant = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await API.get(
-          `/api/club/posts/applicants?postId=${id}`
-        );
-
+        let response; 
+  
+        if (id) {
+          response = await API.get(`/api/club/posts/applicants?postId=${id}`);
+        } else {
+          response = await API.get(`/api/club/posts/applicants`);
+        }
+  
         // Ensure the response is an array
         if (!Array.isArray(response.data)) {
           throw new Error("Invalid response format");
         }
-
+  
         const usersFromAPI = response.data.map((user) => ({
           id: user._id || "",
-          first_name: user.userId.first_name || "N/A",
-          last_name: user.userId.last_name || "N/A",
-          phone: user.userId.phone || "N/A",
-          email: user.userId.email || "N/A",
-          profilePic: BASE_URL + user.userId.profile || "/common/man.png",
-          cv: BASE_URL + user.userId.upload_cv || "#",
+          first_name: user.userId?.first_name || "N/A",
+          last_name: user.userId?.last_name || "N/A",
+          phone: user.userId?.phone || "N/A",
+          email: user.userId?.email || "N/A",
+          profilePic: BASE_URL + (user.userId?.profile || "/common/man.png"),
+          cv: BASE_URL + (user.userId?.upload_cv || "#"),
           status: user.status === "true" ? "Seen" : "Unseen",
-          applicantId: user.userId._id || "",
+          applicantId: user.userId?._id || "",
         }));
-
+  
         setData(usersFromAPI);
         setOriginalData(usersFromAPI);
       } catch (error) {
@@ -49,9 +53,9 @@ const ClubPostApplicant = () => {
         setLoading(false);
       }
     };
-
+  
     fetchUsers();
-  }, [id]);
+  }, [id]); 
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -181,9 +185,7 @@ const ClubPostApplicant = () => {
         <div className="text-center">
           <button
             className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition shadow"
-            onClick={() =>
-              navigate(`/club/post/applicant/view/${row.id}`)
-            }
+            onClick={() => navigate(`/club/post/applicant/view/${row.id}`)}
           >
             View
           </button>

@@ -14,26 +14,20 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [stats, setStats] = useState([]);
-  
+
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
         const response = await API.get("/api/club/dashboard");
 
-        // Ensure the response is an array
-        if (!Array.isArray(response.data)) {
-          throw new Error("Invalid response format");
-        }
+        const getData = response.data;
 
-        const postsFromAPI = response.data.map((data) => ({
-          title: data.title || "N/A",
-          count: data.count || "N/A",
-          gradient: data.gradient || "N/A",
-          shadow: data.shadow || "N/A",
-          link: data.link || "N/A",
-        }));
-
-        setStats(postsFromAPI);
+        setStats({
+          totalPosts: getData.totalPosts || 0,
+          totalSubscriptionPurchase:
+            getData.totalSubscriptionPurchase || 0,
+          totalPostApplicantStatus: getData.totalPostApplicantStatus || 0,
+        });
       } catch (error) {
         console.error("Error fetching dashboard:", error);
         setError(error.response?.data?.message || "Failed to fetch dashboard");
@@ -69,7 +63,6 @@ const Dashboard = () => {
           applicantsCount: post.applicantCount,
           date: new Date(post.createdAt).toLocaleDateString("en-GB") || "N/A",
           status: post.status === "true" ? "Open" : "Close",
-        
         }));
 
         setData(postsFromAPI);
@@ -301,7 +294,29 @@ const Dashboard = () => {
           </header>
           {/* Cards Section */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {stats.map((card, index) => (
+            {[
+              {
+                title: "Total Added Posts",
+                count: stats.totalPosts,
+                gradient: "from-blue-500 via-indigo-500 to-purple-500",
+                shadow: "shadow-blue-500/50",
+                link: "/club/posts",
+              },
+              {
+                title: "Active Subscriptions",
+                count: stats.totalSubscriptionPurchase,
+                gradient: "from-green-500 via-teal-500 to-emerald-500",
+                shadow: "shadow-green-500/50",
+                link: "/club/subscriptions",
+              },
+              {
+                title: "Downloaded Resume",
+                count: stats.totalPostApplicantStatus,
+                gradient: "from-red-500 via-pink-500 to-rose-500",
+                shadow: "shadow-red-500/50",
+                link: "/club/post/applicants",
+              },
+            ].map((card, index) => (
               <div
                 key={index}
                 className={`relative bg-gradient-to-r ${card.gradient} p-4 rounded-xl text-white transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${card.shadow}`}

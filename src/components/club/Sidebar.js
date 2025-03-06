@@ -7,10 +7,12 @@ import {
   FaEuroSign,
   FaCogs,
   FaSignOutAlt,
+  FaHistory,
 } from "react-icons/fa";
-import { useState } from "react";
+import { useState,useContext  } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../../context/AuthContext";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -18,6 +20,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
+  const { user, logout } = useContext(AuthContext);
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -45,6 +48,11 @@ const Sidebar = () => {
       name: "Subscriptions",
       link: "/club/subscriptions",
       icon: <FaEuroSign />,
+    },
+    {
+      name: "Transactions",
+      link: "/club/transactions",
+      icon: <FaHistory />,
     },
     { name: "Settings", link: "/club/settings", icon: <FaCogs /> },
     {
@@ -75,7 +83,7 @@ const Sidebar = () => {
                 Cancel
               </button>
               <button
-                onClick={handleLogout}
+                onClick={logout}
                 className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
               >
                 Logout

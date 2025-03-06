@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const LoginForm = () => {
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,7 +16,7 @@ const LoginForm = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  const { login } = useContext(AuthContext);
   const validate = () => {
     const newErrors = {};
 
@@ -52,18 +54,14 @@ const LoginForm = () => {
 
       // Extract token and user role
       const { token, user } = response.data;
-
+     
       // Store token in local storage
       localStorage.setItem("token", token);
       localStorage.setItem("role", user.role); 
-
+      login(user);
       // Navigate based on role
-      if (user.role === "player") {
-        navigate("/user/dashboard");
-      } else {
-        navigate("/club/dashboard");
-      }
-
+      navigate("/");
+      
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 3000,

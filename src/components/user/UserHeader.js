@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
+import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../../api";
@@ -12,7 +13,9 @@ export default function UserHeader() {
 
   const [settingData, setSettingData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user, logout } = useContext(AuthContext);
 
+  
   useEffect(() => {
     const fetchSettingData = async () => {
       try {
@@ -75,7 +78,7 @@ export default function UserHeader() {
                 Cancel
               </button>
               <button
-                onClick={handleLogout}
+                onClick={logout}
                 className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
               >
                 Logout

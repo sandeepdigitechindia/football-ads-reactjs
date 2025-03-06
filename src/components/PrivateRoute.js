@@ -1,22 +1,16 @@
+import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const PrivateRoute = ({ allowedRoles }) => {
-  const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role");
+  const { user } = useContext(AuthContext);
 
-  // If user is not logged in, redirect to login page
-  if (!token) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  // If user's role is not allowed, redirect to dashboard
-  if (!allowedRoles.includes(userRole)) {
-    if (userRole === "player") {
-        return <Navigate to={`/user/dashboard`} replace />;
-      } else {
-        return <Navigate to={`/club/dashboard`} replace />; 
-      }
-    
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

@@ -1,18 +1,20 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect,useState,useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../../context/AuthContext";
 import API from "../../api";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 export default function ClubHeader() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const [settingData, setSettingData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const { user, logout } = useContext(AuthContext);
     useEffect(() => {
       const fetchSettingData = async () => {
         try {
@@ -74,7 +76,7 @@ export default function ClubHeader() {
                 Cancel
               </button>
               <button
-                onClick={handleLogout}
+                onClick={logout}
                 className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
               >
                 Logout
