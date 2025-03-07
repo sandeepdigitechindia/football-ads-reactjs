@@ -46,8 +46,8 @@ const SubscriptionPurchase = () => {
         setData(purchasesFromAPI);
         setOriginalData(purchasesFromAPI);
       } catch (error) {
-        console.error("Error fetching clubs:", error);
-        setError(error.response?.data?.message || "Failed to fetch clubs");
+        console.error("Error fetching transactions:", error);
+        setError(error.response?.data?.message || "Failed to fetch transactions");
       } finally {
         setLoading(false);
       }
@@ -206,7 +206,7 @@ const SubscriptionPurchase = () => {
               </div>
             </div>
             {loading ? (
-              <p>Loading clubs...</p>
+              <p>Loading Transactions...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (

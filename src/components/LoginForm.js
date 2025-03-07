@@ -57,7 +57,6 @@ const LoginForm = () => {
      
       // Store token in local storage
       localStorage.setItem("token", token);
-      localStorage.setItem("role", user.role); 
       login(user);
       // Navigate based on role
       navigate("/");

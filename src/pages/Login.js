@@ -1,4 +1,4 @@
-import React,{useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 const Login = () => {
@@ -14,11 +14,11 @@ const Login = () => {
       }
     }
   }, [token, role, navigate]);
-    return (
-      <div className="home">
-        {/* Ads Section */}
-        <LoginForm />
-      </div>
-    );
-  };
+  return (
+    <div className="home">
+      {/* Ads Section */}
+      <LoginForm />
+    </div>
+  );
+};
 export default Login;

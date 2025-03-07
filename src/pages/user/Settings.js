@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import Sidebar from "../../components/user/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../../api";
+import { CountryContext } from "../../context/CountryContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-// Sample countries
-const countries = [
-  "United States",
-  "India",
-  "Canada",
-  "Australia",
-  "United Kingdom",
-];
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -33,7 +26,7 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [errors, setErrors] = useState({});
-
+  const { countries } = useContext(CountryContext);
   useEffect(() => {
     const fetchUserId = async () => {
       try {
@@ -189,7 +182,7 @@ const Settings = () => {
       if (activeTab === "password") {
         // Only include password if it's not empty
         if (formData.password.trim() !== "") {
-          formDataToSend.password = formData.password;
+          formDataToSend.append("password", formData.password);
         }
 
         await API.put(`${BASE_URL}/api/user/${user.id}`, formDataToSend, {

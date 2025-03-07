@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// ✅ Create the context
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -15,12 +16,19 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("role", userData.role);
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setUser(null);
+    toast.success("You have been logged out.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
 
   return (

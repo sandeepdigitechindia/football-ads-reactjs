@@ -8,6 +8,7 @@ import {
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReCAPTCHA from "react-google-recaptcha";
 import API from "../api";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Animation Variants
@@ -27,8 +28,8 @@ const staggerContainer = {
 };
 
 const ContactUs = ({ contact }) => {
-
   const [loading, setLoading] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -43,7 +44,15 @@ const ContactUs = ({ contact }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!captchaValue) {
+      toast.error("Please complete the reCAPTCHA verification.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -53,8 +62,9 @@ const ContactUs = ({ contact }) => {
         number: formData.contact,
         subject: formData.subject,
         msg: formData.message,
+        captcha: captchaValue,
       };
-    
+
       await API.post(`${BASE_URL}/api/contact`, formDataToSend, {
         headers: {
           "Content-Type": "application/json",
@@ -68,10 +78,10 @@ const ContactUs = ({ contact }) => {
         name: "",
         email: "",
         contact: "",
-        subject:"",
-        message:"",
+        subject: "",
+        message: "",
       });
-    
+      setCaptchaValue(null);
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Submit failed. Try again.",
@@ -83,7 +93,6 @@ const ContactUs = ({ contact }) => {
     } finally {
       setLoading(false);
     }
-    
   };
 
   return (
@@ -231,6 +240,14 @@ const ContactUs = ({ contact }) => {
                   className="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                   rows="5"
                   required
+                />
+              </motion.div>
+
+              {/* reCAPTCHA */}
+              <motion.div className="mb-6 text-center" variants={fadeInVariant}>
+                <ReCAPTCHA
+                  sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                  onChange={(value) => setCaptchaValue(value)}
                 />
               </motion.div>
 

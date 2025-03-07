@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../api";
+import { CountryContext } from "../context/CountryContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const countries = [
-  "United States",
-  "India",
-  "Canada",
-  "Australia",
-  "United Kingdom",
-];
+
 const roles = ["player", "coach", "agent", "club"];
 
 const RegisterForm = () => {
@@ -32,6 +27,7 @@ const RegisterForm = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { countries } = useContext(CountryContext);
 
   const validate = () => {
     const newErrors = {};
@@ -137,7 +133,7 @@ const RegisterForm = () => {
 
       // Store token in local storage
       localStorage.setItem("token", token);
-      localStorage.setItem("role", user.role); 
+      localStorage.setItem("role", user.role);
 
       // Navigate based on role
       if (user.role === "player") {

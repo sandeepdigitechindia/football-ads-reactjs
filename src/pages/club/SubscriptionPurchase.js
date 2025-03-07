@@ -222,7 +222,7 @@ const SubscriptionPurchase = () => {
               </div>
             </div>
             {loading ? (
-              <p>Loading clubs...</p>
+              <p>Loading transactions...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (

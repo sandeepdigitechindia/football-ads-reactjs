@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   FaBars,
   FaTimes,
@@ -9,27 +9,15 @@ import {
   FaSignOutAlt,
   FaHistory,
 } from "react-icons/fa";
-import { useState,useContext  } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 const Sidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const { user, logout } = useContext(AuthContext);
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    navigate("/login");
-    toast.success("You have been logged out.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
 
   // Open modal
   const openModal = () => {
@@ -82,12 +70,14 @@ const Sidebar = () => {
               >
                 Cancel
               </button>
-              <button
-                onClick={logout}
-                className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-              >
-                Logout
-              </button>
+              {user && (
+                <button
+                  onClick={logout}
+                  className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                >
+                  Logout
+                </button>
+              )}
             </div>
           </div>
         </div>
