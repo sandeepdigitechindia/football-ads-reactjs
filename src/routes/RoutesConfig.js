@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import PageComponent from "../pages/PageComponent";
+import NotFoundPage from "../pages/NotFoundPage";
 import Home from "../pages/Home";
 import Ads from "../pages/Ads";
 import AdsDetail from "../pages/AdsDetail";
@@ -48,12 +50,26 @@ const stripePromise = loadStripe(
 const RoutesConfig = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route
+        path="/"
+        element={
+          <PageComponent>
+            <Home />
+          </PageComponent>
+        }
+      />
       <Route path="/ads" element={<Ads />} />
       <Route path="/ads/:slug" element={<AdsDetail />} />
       <Route path="/subscriptions" element={<Subscriptions />} />
       <Route path="/services" element={<ServicesForClubs />} />
-      <Route path="/about" element={<About />} />
+      <Route
+        path="/about"
+        element={
+          <PageComponent>
+            <About />
+          </PageComponent>
+        }
+      />
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route
@@ -136,6 +152,9 @@ const RoutesConfig = () => {
           }
         />
       </Route>
+
+      {/* Catch all unmatched routes */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };
