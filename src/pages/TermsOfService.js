@@ -1,35 +1,8 @@
-import React, { useEffect, useState } from "react";
-import API from "../api";
-import Loader from "../components/Loader";
+import React, { useContext } from "react";
+import { SettingContext } from "../context/SettingContext";
 const TermsOfService = () => {
-  const [settingData, setSettingData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSettingData = async () => {
-      try {
-        const response = await API.get("/api/settings");
-        setSettingData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching home data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchSettingData();
-  }, []);
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (!settingData) {
-    return (
-      <div className="text-center text-lg font-bold text-red-500">
-        Error loading data.
-      </div>
-    );
-  }
+  const { settingData } = useContext(SettingContext);
+  
   return (
     <div className="home">
       <div className="container mx-auto py-16 px-4">

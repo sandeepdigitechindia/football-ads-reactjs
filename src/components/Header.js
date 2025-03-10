@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import { SettingContext } from "../context/SettingContext";
 import { Link } from "react-router-dom";
 import {
   Dialog,
@@ -13,7 +14,7 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import API from "../api";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ads = [
@@ -30,34 +31,14 @@ const services = [
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [settingData, setSettingData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { settingData,loading } = useContext(SettingContext);
 
-
-  useEffect(() => {
-    const fetchSettingData = async () => {
-      try {
-        const response = await API.get("/api/settings");
-        setSettingData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching home data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchSettingData();
-  }, []);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <div>Loading settings...</div>; 
   }
 
   if (!settingData) {
-    return (
-      <div className="text-center text-lg font-bold text-red-500">
-        Error loading data.
-      </div>
-    );
+    return <div>No settings available.</div>; 
   }
 
   return (

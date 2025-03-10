@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
-
+import { SettingContext } from "../context/SettingContext";
 const Counter = ({ start, end, duration }) => {
   const [count, setCount] = useState(start);
 
@@ -35,6 +35,7 @@ const cardVariants = {
 };
 
 const WhyChooseUs = () => {
+  const { settingData } = useContext(SettingContext);
   return (
     <motion.div
       className="bg-blue-900 py-16"
@@ -71,9 +72,14 @@ const WhyChooseUs = () => {
               whileHover="hover"
             >
               <h3 className="text-3xl font-bold text-gray-800">
-                <Counter start={0} end={1500} duration={2000} />+
+                <Counter
+                  start={0}
+                  end={settingData.wcu_count1}
+                  duration={2000}
+                />
+                +
               </h3>
-              <p className="text-lg text-gray-600">Happy Clients</p>
+              <p className="text-lg text-gray-600">{settingData.wcu_title1}</p>
             </motion.div>
 
             {/* Countries */}
@@ -83,9 +89,14 @@ const WhyChooseUs = () => {
               whileHover="hover"
             >
               <h3 className="text-3xl font-bold text-gray-800">
-                <Counter start={0} end={25} duration={2000} />+
+                <Counter
+                  start={0}
+                  end={settingData.wcu_count2}
+                  duration={2000}
+                />
+                +
               </h3>
-              <p className="text-lg text-gray-600">Countries</p>
+              <p className="text-lg text-gray-600">{settingData.wcu_title2}</p>
             </motion.div>
 
             {/* Contracts */}
@@ -95,9 +106,14 @@ const WhyChooseUs = () => {
               whileHover="hover"
             >
               <h3 className="text-3xl font-bold text-gray-800">
-                <Counter start={0} end={300} duration={2000} />+
+                <Counter
+                  start={0}
+                  end={settingData.wcu_count3}
+                  duration={2000}
+                />
+                +
               </h3>
-              <p className="text-lg text-gray-600">Contracts</p>
+              <p className="text-lg text-gray-600">{settingData.wcu_title3}</p>
             </motion.div>
           </motion.div>
         </div>

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../api";
+import { SettingContext } from "../context/SettingContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const fadeInVariant = {
   hidden: { opacity: 0, y: 30 },
@@ -18,37 +19,11 @@ const staggerContainer = {
 };
 
 const SecondaryCTASection = () => {
-  const [settingData, setSettingData] = useState(null);
+  const { settingData } = useContext(SettingContext);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
   });
-
-  useEffect(() => {
-    const fetchSettingData = async () => {
-      try {
-        const response = await API.get("/api/settings");
-        setSettingData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching home data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchSettingData();
-  }, []);
-  if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
-  }
-
-  if (!settingData) {
-    return (
-      <div className="text-center text-lg font-bold text-red-500">
-        Error loading data.
-      </div>
-    );
-  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

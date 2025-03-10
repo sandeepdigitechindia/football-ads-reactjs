@@ -27,6 +27,8 @@ const RegisterForm = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { countries } = useContext(CountryContext);
 
   const validate = () => {
@@ -391,17 +393,28 @@ const RegisterForm = () => {
               >
                 Password <span className="text-red-500">*</span>
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } focus:outline-none focus:ring focus:ring-blue-300`}
-                placeholder="Enter your password"
-              />
+              <div className="flex relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 border rounded-lg ${
+                    errors.password ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:ring focus:ring-blue-300`}
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  className="text-gray-500 hover:text-gray-700 absolute right-4 top-2"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i
+                    className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}
+                  ></i>
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">{errors.password}</p>
               )}
@@ -415,17 +428,30 @@ const RegisterForm = () => {
               >
                 Confirm Password <span className="text-red-500">*</span>
               </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
-                } focus:outline-none focus:ring focus:ring-blue-300`}
-                placeholder="Confirm your password"
-              />
+              <div className="flex relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 border rounded-lg ${
+                    errors.confirmPassword
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } focus:outline-none focus:ring focus:ring-blue-300`}
+                  placeholder="Confirm your password"
+                />
+                <button
+                  type="button"
+                  className="text-gray-500 hover:text-gray-700 absolute right-4 top-2"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <i
+                    className={showConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"}
+                  ></i>
+                </button>
+              </div>
               {errors.confirmPassword && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.confirmPassword}

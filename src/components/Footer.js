@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { SettingContext } from "../context/SettingContext";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import API from "../api";
 
-// Animation Variants
 const fadeInVariant = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
@@ -14,39 +13,19 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Delay between each child animation
+      staggerChildren: 0.2, 
     },
   },
 };
 
 const Footer = () => {
-  const [settingData, setSettingData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSettingData = async () => {
-      try {
-        const response = await API.get("/api/settings");
-        setSettingData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching home data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchSettingData();
-  }, []);
+  const { settingData,loading } = useContext(SettingContext);
   if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
+    return <div>Loading settings...</div>; 
   }
 
   if (!settingData) {
-    return (
-      <div className="text-center text-lg font-bold text-red-500">
-        Error loading data.
-      </div>
-    );
+    return <div>No settings available.</div>; 
   }
   return (
     <motion.footer

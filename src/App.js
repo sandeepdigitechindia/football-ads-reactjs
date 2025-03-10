@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
+import { SettingProvider } from "./context/SettingContext";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./context/AuthContext";
 import RoutesConfig from "./routes/RoutesConfig";
@@ -9,18 +10,22 @@ import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   return (
+    <SettingProvider>
     <HelmetProvider>
       <ErrorBoundary>
-        <AuthProvider>
-          <ToastContainer position="top-right" autoClose={3000} />
-          <Router>
-            <DynamicWrapper>
-              <RoutesConfig />
-            </DynamicWrapper>
-          </Router>
-        </AuthProvider>
+       
+          <AuthProvider>
+            <ToastContainer position="top-right" autoClose={3000} />
+            <Router>
+              <DynamicWrapper>
+                <RoutesConfig />
+              </DynamicWrapper>
+            </Router>
+          </AuthProvider>
+        
       </ErrorBoundary>
     </HelmetProvider>
+    </SettingProvider>
   );
 };
 

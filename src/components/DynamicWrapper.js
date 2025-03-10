@@ -8,18 +8,27 @@ import UserFooter from "./user/UserFooter";
 import ClubFooter from "./club/ClubFooter";
 
 const DynamicWrapper = ({ children }) => {
- 
-  const { user } = useContext(AuthContext); 
+  const { user } = useContext(AuthContext);
 
   const renderHeader = () => {
     if (user?.role === "player") return <UserHeader />;
-    if (user?.role === "club") return <ClubHeader />;
+    if (
+      user?.role === "club" ||
+      user?.role === "coach" ||
+      user?.role === "agent"
+    )
+      return <ClubHeader />;
     return <Header />;
   };
 
   const renderFooter = () => {
     if (user?.role === "player") return <UserFooter />;
-    if (user?.role === "club") return <ClubFooter />;
+    if (
+      user?.role === "club" ||
+      user?.role === "coach" ||
+      user?.role === "agent"
+    )
+      return <ClubFooter />;
     return <Footer />;
   };
 

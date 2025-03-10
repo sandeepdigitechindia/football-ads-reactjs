@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
 import {
@@ -16,7 +16,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { AuthContext } from "../../context/AuthContext";
-import API from "../../api";
+import { SettingContext } from "../../context/SettingContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ads = [
@@ -32,40 +32,12 @@ const services = [
 ];
 
 export default function UserHeader() {
- 
   const [showModal, setShowModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const [settingData, setSettingData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { settingData } = useContext(SettingContext);
 
   const { user, logout } = useContext(AuthContext);
-
-  useEffect(() => {
-    const fetchSettingData = async () => {
-      try {
-        const response = await API.get("/api/settings");
-        setSettingData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching home data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchSettingData();
-  }, []);
-  if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
-  }
-
-  if (!settingData) {
-    return (
-      <div className="text-center text-lg font-bold text-red-500">
-        Error loading data.
-      </div>
-    );
-  }
 
   // Open modal
   const openModal = () => {
@@ -76,7 +48,6 @@ export default function UserHeader() {
     setShowModal(false);
   };
 
-  
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
       {/* Modal for Confirmation */}
@@ -110,7 +81,11 @@ export default function UserHeader() {
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
             <span className="sr-only">{settingData.site_name}</span>
-            <img alt={settingData.site_name} src={BASE_URL + settingData.site_logo} className="h-8 w-auto" />
+            <img
+              alt={settingData.site_name}
+              src={BASE_URL + settingData.site_logo}
+              className="h-8 w-auto"
+            />
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -207,36 +182,34 @@ export default function UserHeader() {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {user ? (
             <>
-            
-                <Popover className="relative">
-                  <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
-                    <UserCircleIcon className="h-6 w-6 text-white" />
-                    <span>User Profile</span>
-                  </PopoverButton>
-                  <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
-                    <div className="p-2">
-                      <Link
-                        to="/user/dashboard"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Dashboard
-                      </Link>
-                      <Link
-                        to="/user/settings"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Settings
-                      </Link>
-                      <Link
-                        onClick={openModal}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Logout
-                      </Link>
-                    </div>
-                  </PopoverPanel>
-                </Popover>
-             
+              <Popover className="relative">
+                <PopoverButton className="flex items-center gap-x-2 text-sm font-semibold text-white">
+                  <UserCircleIcon className="h-6 w-6 text-white" />
+                  <span className="capitalize">{user.role} Profile</span>
+                </PopoverButton>
+                <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-gray-900/5">
+                  <div className="p-2">
+                    <Link
+                      to="/user/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/user/settings"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Settings
+                    </Link>
+                    <Link
+                      onClick={openModal}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </Link>
+                  </div>
+                </PopoverPanel>
+              </Popover>
             </>
           ) : (
             <Link
@@ -347,14 +320,12 @@ export default function UserHeader() {
               <div className="py-6">
                 {user ? (
                   <>
-                  
-                      <Link
-                        to="/user/dashboard"
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                      >
-                        User Dashboard
-                      </Link>
-                  
+                    <Link
+                      to="/user/dashboard"
+                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      User Dashboard
+                    </Link>
 
                     <Link
                       onClick={openModal}

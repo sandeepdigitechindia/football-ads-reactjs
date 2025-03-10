@@ -1,35 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import API from "../../api";
+import { SettingContext } from "../../context/SettingContext";
 const Footer = () => {
-  const [settingData, setSettingData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSettingData = async () => {
-      try {
-        const response = await API.get("/api/settings");
-        setSettingData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching home data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchSettingData();
-  }, []);
-  if (loading) {
-    return <div className="text-center text-lg font-bold">Loading...</div>;
-  }
-
-  if (!settingData) {
-    return (
-      <div className="text-center text-lg font-bold text-red-500">
-        Error loading data.
-      </div>
-    );
-  }
+  const { settingData } = useContext(SettingContext);
+  
   return (
     <footer className="bg-blue-900 text-white py-20">
       <div className="container mx-auto px-4">

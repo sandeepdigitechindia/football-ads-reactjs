@@ -164,9 +164,9 @@ const AdsDetailSection = ({ ads }) => {
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
             {ads.description}
           </p>
-          <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-            {ads.long_description}
-          </p>
+          
+          <div dangerouslySetInnerHTML={{ __html: ads.long_description }} />
+          
         </div>
 
         {/* Right Section: Job Details Cards */}

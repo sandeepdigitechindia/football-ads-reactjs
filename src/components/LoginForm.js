@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const LoginForm = () => {
-  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,6 +15,7 @@ const LoginForm = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
   const validate = () => {
     const newErrors = {};
@@ -54,13 +54,13 @@ const LoginForm = () => {
 
       // Extract token and user role
       const { token, user } = response.data;
-     
+
       // Store token in local storage
       localStorage.setItem("token", token);
       login(user);
       // Navigate based on role
       navigate("/");
-      
+
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 3000,
@@ -158,17 +158,28 @@ const LoginForm = () => {
               >
                 Password <span className="text-red-500">*</span>
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } focus:outline-none focus:ring focus:ring-blue-300`}
-                placeholder="Enter your password"
-              />
+              <div className="flex relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 border rounded-lg ${
+                    errors.password ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:ring focus:ring-blue-300`}
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  className="text-gray-500 hover:text-gray-700 absolute right-4 top-2"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i
+                    className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}
+                  ></i>
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">{errors.password}</p>
               )}
@@ -227,7 +238,6 @@ const LoginForm = () => {
               Sign Up
             </Link>
           </p>
-          
         </motion.div>
       </motion.div>
     </motion.div>
