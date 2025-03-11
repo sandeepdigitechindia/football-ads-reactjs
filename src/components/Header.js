@@ -17,11 +17,11 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const ads = [
-  { name: "Advertisement for players", to: "ads" },
-  { name: "Advertisement for coaches", to: "ads" },
-  { name: "Advertisement for jobs in football", to: "ads" },
-];
+// const ads = [
+//   { name: "Advertisement for players", to: "ads" },
+//   { name: "Advertisement for coaches", to: "ads" },
+//   { name: "Advertisement for jobs in football", to: "ads" },
+// ];
 
 const services = [
   { name: "Scouting Organization", to: "services" },
@@ -31,14 +31,14 @@ const services = [
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { settingData,loading } = useContext(SettingContext);
+  const { settingData, loading } = useContext(SettingContext);
 
   if (loading) {
-    return <div>Loading settings...</div>; 
+    return <div>Loading settings...</div>;
   }
 
   if (!settingData) {
-    return <div>No settings available.</div>; 
+    return <div>No settings available.</div>;
   }
 
   return (
@@ -71,7 +71,10 @@ export default function Example() {
           {/* <Link to="/" className="text-sm/6 font-semibold text-white-900">
             Home
           </Link> */}
-          <Popover className="relative">
+          <Link to="/ads" className="text-sm/6 font-semibold text-white-900">
+            Ads
+          </Link>
+          {/* <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900 border-none outline-none">
               Ads
               <ChevronDownIcon
@@ -99,7 +102,7 @@ export default function Example() {
                 ))}
               </div>
             </PopoverPanel>
-          </Popover>
+          </Popover> */}
           <Link
             to="/subscriptions"
             className="text-sm/6 font-semibold text-white-900"
@@ -191,7 +194,13 @@ export default function Example() {
                 >
                   Home
                 </Link> */}
-                <Disclosure as="div" className="-mx-3">
+                <Link
+                  to="/ads"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  Ads
+                </Link>
+                {/* <Disclosure as="div" className="-mx-3">
                   <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
                     Ads
                     <ChevronDownIcon
@@ -211,7 +220,7 @@ export default function Example() {
                       </DisclosureButton>
                     ))}
                   </DisclosurePanel>
-                </Disclosure>
+                </Disclosure> */}
                 <Link
                   to="/subscriptions"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"

@@ -105,7 +105,9 @@ const RoutesConfig = () => {
         <Route path="/user/posts" element={<UserPosts />} />
         <Route path="/user/post/create" element={<UserPostForm />} />
         <Route path="/user/post/view/:id" element={<UserPostDetail />} />
-        <Route
+        
+      </Route>
+      <Route
           path="/user/payment/:id"
           element={
             <Elements stripe={stripePromise}>
@@ -113,7 +115,6 @@ const RoutesConfig = () => {
             </Elements>
           }
         />
-      </Route>
 
       {/* Club Routes */}
       <Route element={<PrivateRoute allowedRoles={["club", "coach"]} />}>
@@ -143,7 +144,9 @@ const RoutesConfig = () => {
           path="/club/post/applicant/view/:id"
           element={<ClubPostApplicantView />}
         />
-        <Route
+        
+      </Route>
+      <Route
           path="/club/payment/:id"
           element={
             <Elements stripe={stripePromise}>
@@ -151,7 +154,6 @@ const RoutesConfig = () => {
             </Elements>
           }
         />
-      </Route>
 
       {/* Catch all unmatched routes */}
       <Route path="*" element={<NotFoundPage />} />

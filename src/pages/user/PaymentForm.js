@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { useNavigate, useParams } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../../api";
@@ -24,26 +25,9 @@ const PaymentForm = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+
   const [subscriptionData, setSubscriptionData] = useState(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const response = await API.get("/api/user/profile");
-        // Ensure the response is an array
-        const userFromAPI = {
-          id: response.data.user.id,
-          role: response.data.user.role,
-        };
-        setUser(userFromAPI);
-      } catch (error) {
-        console.error("Error fetching club:", error);
-      }
-    };
-
-    fetchUserId();
-  }, []);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchSubscriptionData = async () => {
@@ -121,7 +105,7 @@ const PaymentForm = () => {
       } else if (paymentIntent.status === "succeeded") {
         try {
           const formDataToSend = {
-            userId: user.id,
+            userId: user._id,
             subscriptionId: subscriptionData._id,
             price: subscriptionData.price,
             duration: subscriptionData.duration,

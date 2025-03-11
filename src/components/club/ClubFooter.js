@@ -2,8 +2,15 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { SettingContext } from "../../context/SettingContext";
 const Footer = () => {
-  const { settingData } = useContext(SettingContext);
-  
+  const { settingData, loading } = useContext(SettingContext);
+  if (loading) {
+    return <div>Loading settings...</div>;
+  }
+
+  if (!settingData) {
+    return <div>No settings available.</div>;
+  }
+
   return (
     <footer className="bg-blue-900 text-white py-20">
       <div className="container mx-auto px-4">

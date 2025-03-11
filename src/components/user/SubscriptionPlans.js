@@ -5,7 +5,6 @@ const SubscriptionPlans = ({ subscriptions, subscriptionPurchaseData }) => {
   if (!subscriptions || subscriptions.length === 0)
     return <div>No Ads Available</div>;
 
-  console.log(subscriptions, subscriptionPurchaseData);
 
   return (
     <motion.section
