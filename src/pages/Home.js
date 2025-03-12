@@ -9,7 +9,6 @@ import SecondaryCTASection from "../components/SecondaryCTASection";
 import WhyChooseUs from "../components/WhyChooseUs";
 import API from "../api";
 import Loader from "../components/Loader";
-import NavigationButtons from "../components/NavigationButtons";
 const subscriptionLink = { link: "/club/payment" };
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },

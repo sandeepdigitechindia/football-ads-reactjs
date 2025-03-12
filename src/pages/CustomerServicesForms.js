@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 const CustomerServicesForms = () => {
   const [formData, setFormData] = useState({});
-  const [errors, setErrors] = useState({});
+  const [errors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
