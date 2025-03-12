@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 const SubscriptionPlans = ({ subscriptions, subscriptionLink }) => {
   if (!subscriptions || subscriptions.length === 0)
     return <div>No Ads Available</div>;
-  console.log(subscriptions);
   return (
     <motion.section
       className="py-16 px-4 bg-gray-50"

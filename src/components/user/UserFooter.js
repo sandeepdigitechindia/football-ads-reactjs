@@ -74,7 +74,7 @@ const Footer = () => {
             </p>
 
             {/* Social Media Links */}
-            <div className="flex justify-center mt-5 gap-6">
+            <div className="flex justify-center md:justify-end mt-5 gap-6">
               <Link
                 to={settingData.facebook_link}
                 target="_blank"
