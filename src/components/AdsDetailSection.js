@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import API from "../api";
+import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -14,34 +15,17 @@ const AdsDetailSection = ({ ads }) => {
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [user, setUser] = useState(null);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const response = await API.get("/api/user/profile");
-        // Ensure the response is an array
-        const userFromAPI = {
-          id: response.data.user.id,
-          role: response.data.user.role,
-        };
-        setUser(userFromAPI);
-      } catch (error) {
-        console.error("Error fetching club:", error);
-      }
-    };
-
-    fetchUserId();
-  }, []);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!user?.id) return;
+      if (!user?._id) return;
 
       try {
-        const response = await API.get(`/api/user/${user.id}`);
+        const response = await API.get(`/api/user/${user._id}`);
         const getData = response.data;
         setFormData({
           upload_cv: getData.upload_cv ? BASE_URL + getData.upload_cv : null,
@@ -74,7 +58,7 @@ const AdsDetailSection = ({ ads }) => {
     setLoading(true);
     try {
       const formDataToSend = {
-        userId: user.id,
+        userId: user._id,
         postId: ads._id,
         clubId: ads.userId._id,
       };
@@ -92,7 +76,7 @@ const AdsDetailSection = ({ ads }) => {
         formDataToSendCv.append("upload_cv", formData.upload_cv);
 
         // Second API call: Upload CV (Only if file is selected)
-        await API.put(`${BASE_URL}/api/user/${user.id}`, formDataToSendCv, {
+        await API.put(`${BASE_URL}/api/user/${user._id}`, formDataToSendCv, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -165,9 +149,8 @@ const AdsDetailSection = ({ ads }) => {
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
             {ads.description}
           </p>
-          
+
           <div dangerouslySetInnerHTML={{ __html: ads.long_description }} />
-          
         </div>
 
         {/* Right Section: Job Details Cards */}
@@ -271,7 +254,7 @@ const AdsDetailSection = ({ ads }) => {
           {/* Apply Now Button */}
           {isLoggedIn ? (
             <>
-              {formData.isSubscription===true ? (
+              {formData.isSubscription === true ? (
                 <Link
                   onClick={openModal}
                   className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"

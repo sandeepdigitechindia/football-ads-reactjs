@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import MainBanner from "../components/MainBanner";
 import AdsSection from "../components/AdsSection";
+import ClubsSection from "../components/ClubsSection";
 import SubscriptionsSection from "../components/SubscriptionsSection";
 import AdditionalServicesSection from "../components/AdditionalServicesSection";
 import TestimonialsSection from "../components/TestimonialsSection";
@@ -49,6 +50,17 @@ const Home = () => {
       {/* Main Banner Section (No animation, already full width) */}
 
       <MainBanner mainBanner={homeData.main_banner} />
+
+      {/* Clubs Section */}
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <ClubsSection clubs={homeData.clubs} />
+      </motion.div>
+
       {/* Ads Section */}
       <motion.div
         variants={sectionVariants}

@@ -4,6 +4,8 @@ import PageComponent from "../pages/PageComponent";
 import NotFoundPage from "../pages/NotFoundPage";
 import Home from "../pages/Home";
 import Ads from "../pages/Ads";
+import Clubs from "../pages/Clubs";
+import ClubDetail from "../pages/ClubDetail";
 import AdsDetail from "../pages/AdsDetail";
 import Subscriptions from "../pages/Subscriptions";
 import ServicesForClubs from "../pages/ServicesForClubs";
@@ -63,6 +65,8 @@ const RoutesConfig = () => {
       />
       <Route path="/ads" element={<Ads />} />
       <Route path="/ads/:slug" element={<AdsDetail />} />
+      <Route path="/clubs" element={<Clubs />} />
+      <Route path="/clubs/:id" element={<ClubDetail />} />
       <Route path="/subscriptions" element={<Subscriptions />} />
       <Route path="/services" element={<ServicesForClubs />} />
       <Route

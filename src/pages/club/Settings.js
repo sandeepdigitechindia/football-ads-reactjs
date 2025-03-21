@@ -3,6 +3,7 @@ import Sidebar from "../../components/club/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../../api";
+import { AuthContext } from "../../context/AuthContext";
 import { CountryContext } from "../../context/CountryContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -24,36 +25,16 @@ const Settings = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [club, setClub] = useState(null);
   const [errors, setErrors] = useState({});
   const { countries } = useContext(CountryContext);
-
-  useEffect(() => {
-    const fetchClubId = async () => {
-      try {
-        const response = await API.get("/api/club/profile");
-        // Ensure the response is an array
-
-        const clubFromAPI = {
-          id: response.data.user.id,
-          role: response.data.user.role,
-        };
-
-        setClub(clubFromAPI);
-      } catch (error) {
-        console.error("Error fetching club:", error);
-      }
-    };
-
-    fetchClubId();
-  }, []);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchClubProfile = async () => {
-      if (!club?.id) return;
+      if (!user?._id) return;
 
       try {
-        const response = await API.get(`/api/club/${club.id}`);
+        const response = await API.get(`/api/club/${user._id}`);
         const getData = response.data;
 
         setFormData({
@@ -74,7 +55,7 @@ const Settings = () => {
     };
 
     fetchClubProfile();
-  }, [club]);
+  }, [user]);
 
   const handleTabChange = (tab) => setActiveTab(tab);
   const [preview, setPreview] = useState(null);
@@ -183,7 +164,7 @@ const Settings = () => {
           formDataToSend.append("club_logo", formData.club_logo);
         }
 
-        await API.put(`${BASE_URL}/api/club/${club.id}`, formDataToSend, {
+        await API.put(`${BASE_URL}/api/club/${user._id}`, formDataToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -199,7 +180,7 @@ const Settings = () => {
           formDataToSend.append("password", formData.password);
         }
 
-        await API.put(`${BASE_URL}/api/club/${club.id}`, formDataToSend, {
+        await API.put(`${BASE_URL}/api/club/${user._id}`, formDataToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

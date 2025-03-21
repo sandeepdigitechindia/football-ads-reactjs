@@ -1,8 +1,9 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../../components/user/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../../api";
+import { AuthContext } from "../../context/AuthContext";
 import { CountryContext } from "../../context/CountryContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -24,35 +25,17 @@ const Settings = () => {
 
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
   const [errors, setErrors] = useState({});
   const { countries } = useContext(CountryContext);
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const response = await API.get("/api/user/profile");
-        // Ensure the response is an array
 
-        const userFromAPI = {
-          id: response.data.user.id,
-          role: response.data.user.role,
-        };
-
-        setUser(userFromAPI);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-
-    fetchUserId();
-  }, []);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!user?.id) return;
+      if (!user?._id) return;
 
       try {
-        const response = await API.get(`/api/user/${user.id}`);
+        const response = await API.get(`/api/user/${user._id}`);
         const getData = response.data;
 
         setFormData({
@@ -169,7 +152,7 @@ const Settings = () => {
           formDataToSend.append("upload_cv", formData.upload_cv);
         }
 
-        await API.put(`${BASE_URL}/api/user/${user.id}`, formDataToSend, {
+        await API.put(`${BASE_URL}/api/user/${user._id}`, formDataToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -185,7 +168,7 @@ const Settings = () => {
           formDataToSend.append("password", formData.password);
         }
 
-        await API.put(`${BASE_URL}/api/user/${user.id}`, formDataToSend, {
+        await API.put(`${BASE_URL}/api/user/${user._id}`, formDataToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
