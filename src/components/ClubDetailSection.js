@@ -11,7 +11,7 @@ const ClubDetailSection = ({ club }) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      <div className="max-w-3xl bg-white p-6 sm:p-8 rounded-lg shadow-lg text-center">
+      <div className="max-w-3xl  p-6 sm:p-8 text-center">
         <motion.img
           src={BASE_URL+club.club_logo}
           alt={club.club_name}
@@ -23,9 +23,7 @@ const ClubDetailSection = ({ club }) => {
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
           {club.club_name}
         </h2>
-        <p className="text-gray-600 text-sm sm:text-base mb-4">
-          {club.club_desc}
-        </p>
+        
         <div className="border-t border-gray-300 my-4"></div>
         <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
           {club.club_desc}

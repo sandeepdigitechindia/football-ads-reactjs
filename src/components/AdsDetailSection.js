@@ -161,6 +161,24 @@ const AdsDetailSection = ({ ads }) => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
+          <div className="max-w-3xl  p-6 sm:p-8 text-center">
+            <motion.img
+              src={BASE_URL + ads.userId.club_logo}
+              alt={ads.userId.club_name}
+              className="w-24 h-24 md:w-32 md:h-32 object-cover mx-auto rounded-full border border-gray-300 mb-4"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+            />
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+              {ads.userId.club_name}
+            </h2>
+
+            <div className="border-t border-gray-300 my-4"></div>
+            <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+              {ads.userId.club_desc}
+            </p>
+          </div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Job Details
           </h3>

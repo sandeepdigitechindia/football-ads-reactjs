@@ -16,7 +16,7 @@ const ClubDetail = () => {
       try {
         const [clubResponse, adsResponse] = await Promise.all([
           API.get(`/api/clubs/${id}`),
-          API.get("/api/posts"),
+          API.get(`/api/posts?userId=${id}`),
         ]);
 
         setClubData(clubResponse.data);
@@ -45,11 +45,10 @@ const ClubDetail = () => {
 
   return (
     <div className="home">
-      {/* Club Detail Section */}
-      <ClubDetailSection club={clubData} />
-
       {/* Ads Section */}
       <AdsSection ads={adsData} />
+      {/* Club Detail Section */}
+      <ClubDetailSection club={clubData} />
     </div>
   );
 };
