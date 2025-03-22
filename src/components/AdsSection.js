@@ -231,12 +231,12 @@ const AdsSection = ({ ads }) => {
 
                 {/* Buttons */}
                 <div className="flex items-center gap-4 mt-3">
-                  <a
-                    href={"ads/" + ad.slug}
+                  <Link
+                    to={"/ads/" + ad.slug}
                     className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
                   >
                     Read More
-                  </a>
+                  </Link>
 
                   {isLoggedIn ? (
                     <button

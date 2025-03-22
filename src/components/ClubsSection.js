@@ -26,29 +26,33 @@ const ClubsSection = ({ clubs }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {clubs.map((club, index) => (
             <a href={"clubs/" + club._id}>
-              <motion.div
-                key={index}
-                className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <img
-                  src={BASE_URL + club.club_logo}
-                  alt={club.club_name}
-                  className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-full border border-gray-300"
-                />
-                <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
-                    {club.club_name}
-                  </h3>
-                  <p className="text-gray-600 text-sm sm:text-base">
-                    {club.club_desc}
-                  </p>
-                </div>
-              </motion.div>
-            </a>
+            <motion.div
+              key={index}
+              className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02 }}
+            >
+              {/* Club Logo */}
+              <img
+                src={BASE_URL + club.club_logo}
+                alt={club.club_name}
+                className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-full border border-gray-300"
+              />
+          
+              {/* Club Details */}
+              <div className="w-2/3">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">
+                  {club.club_name}
+                </h3>
+                <p className="text-gray-600 text-sm sm:text-base line-clamp-2">
+                  {club.club_desc}
+                </p>
+              </div>
+            </motion.div>
+          </a>
+          
           ))}
         </div>
 

@@ -18,6 +18,7 @@ const AdsDetailSection = ({ ads }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showFullDesc, setShowFullDesc] = useState(false);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -111,6 +112,9 @@ const AdsDetailSection = ({ ads }) => {
     setShowModal(false);
   };
 
+  // Limit description to first 100 characters
+  const shortDesc = ads.userId.club_desc.slice(0, 100) + "...";
+
   // Animation Variants
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -176,7 +180,14 @@ const AdsDetailSection = ({ ads }) => {
 
             <div className="border-t border-gray-300 my-4"></div>
             <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-              {ads.userId.club_desc}
+            {showFullDesc ? ads.userId.club_desc : shortDesc}{" "}
+            <button
+              onClick={() => setShowFullDesc(!showFullDesc)}
+              className="text-blue-600 hover:underline font-semibold"
+            >
+              {showFullDesc ? "Read Less" : "Read More"}
+            </button>
+             
             </p>
           </div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
@@ -293,7 +304,7 @@ const AdsDetailSection = ({ ads }) => {
               to={`/login`}
               className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
-              Apply Now
+              Register
             </Link>
           )}
 
