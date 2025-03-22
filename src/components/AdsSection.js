@@ -199,76 +199,61 @@ const AdsSection = ({ ads }) => {
           </div>
         )}
 
-        {/* Ads Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {ads.map((ad, index) => (
             <motion.div
               key={index}
-              className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center gap-4"
               variants={cardVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className="flex justify-center mb-4">
+              {/* Left Side - Image */}
+              <div className="w-1/3 flex-shrink-0">
                 <motion.img
                   src={BASE_URL + ad.image}
                   alt={ad.title}
-                  className="object-cover h-36 sm:h-40 md:h-48 lg:h-56 w-full rounded-md"
+                  className="object-cover h-32 sm:h-40 w-full rounded-md"
                   whileHover={{ scale: 1.1 }}
                 />
               </div>
 
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3">
-                {ad.title}
-              </h3>
-              <p className="text-gray-600 text-sm sm:text-base mb-3">
-                {ad.description}
-              </p>
+              {/* Right Side - Content */}
+              <div className="w-2/3">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 truncate">
+                  {ad.title}
+                </h3>
+                <p className="text-gray-600 text-sm sm:text-base line-clamp-2 mb-3">
+                  {ad.description}
+                </p>
 
-              {/* Posted Date */}
-              <p className="text-gray-500 text-xs sm:text-sm mb-3">
-                Posted on: {new Date(ad.createdAt).toLocaleDateString()}
-              </p>
+                {/* Buttons */}
+                <div className="flex items-center gap-4 mt-3">
+                  <a
+                    href={"ads/" + ad.slug}
+                    className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
+                  >
+                    Read More
+                  </a>
 
-              {/* Card Footer */}
-              <div className="flex justify-between items-center mt-4">
-                <a
-                  href={"ads/" + ad.slug}
-                  className="flex items-center gap-2 text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
-                >
-                  <span>See More</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </a>
-                {isLoggedIn ? (
-                  <Link
-                    onClick={() => openModal(ad)}
-                    className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
-                  >
-                    Apply Now
-                  </Link>
-                ) : (
-                  <Link
-                    to={"/login"}
-                    className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
-                  >
-                    Register
-                  </Link>
-                )}
+                  {isLoggedIn ? (
+                    <button
+                      onClick={() => openModal(ad)}
+                      className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
+                    >
+                      Apply Now
+                    </button>
+                  ) : (
+                    <Link
+                      to={"/login"}
+                      className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
+                    >
+                      Register
+                    </Link>
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}
