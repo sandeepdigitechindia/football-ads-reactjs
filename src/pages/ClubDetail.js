@@ -45,10 +45,11 @@ const ClubDetail = () => {
 
   return (
     <div className="home">
-      {/* Ads Section */}
-      <AdsSection ads={adsData} />
+      
       {/* Club Detail Section */}
       <ClubDetailSection club={clubData} />
+      {/* Ads Section */}
+      <AdsSection ads={adsData} />
     </div>
   );
 };

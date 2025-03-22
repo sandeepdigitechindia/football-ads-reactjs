@@ -51,16 +51,6 @@ const Home = () => {
 
       <MainBanner mainBanner={homeData.main_banner} />
 
-      {/* Clubs Section */}
-      <motion.div
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        <ClubsSection clubs={homeData.clubs} />
-      </motion.div>
-
       {/* Ads Section */}
       <motion.div
         variants={sectionVariants}
@@ -69,6 +59,16 @@ const Home = () => {
         viewport={{ once: true }}
       >
         <AdsSection ads={homeData.posts} />
+      </motion.div>
+
+      {/* Clubs Section */}
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <ClubsSection clubs={homeData.clubs} />
       </motion.div>
 
       {/* Subscriptions Section */}
