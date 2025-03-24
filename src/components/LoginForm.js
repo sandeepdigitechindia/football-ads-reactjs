@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ const LoginForm = () => {
     password: "",
   });
 
+  const location = useLocation();
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -58,8 +59,12 @@ const LoginForm = () => {
       // Store token in local storage
       localStorage.setItem("token", token);
       login(user);
-      // Navigate based on role
-      navigate("/");
+
+      // Get the redirect URL from the query parameter
+      const params = new URLSearchParams(location.search);
+      const redirectUrl = params.get("redirect") || "/";
+
+      navigate(redirectUrl);
 
       toast.success("Login successful!", {
         position: "top-right",

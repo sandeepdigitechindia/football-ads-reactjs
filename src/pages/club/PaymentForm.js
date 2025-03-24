@@ -27,6 +27,15 @@ const PaymentForm = () => {
   const [loading, setLoading] = useState(false);
   const [subscriptionData, setSubscriptionData] = useState(null);
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === "player") {
+        navigate("/user/subscriptions");
+      } 
+    }
+  }, [user, navigate]);
+
   useEffect(() => {
     const fetchSubscriptionData = async () => {
       try {

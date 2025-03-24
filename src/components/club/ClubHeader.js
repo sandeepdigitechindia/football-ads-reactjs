@@ -84,7 +84,7 @@ export default function ClubHeader() {
       )}
       <nav
         aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto flex max-w-7xl items-center justify-between p-8 lg:px-8"
       >
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">

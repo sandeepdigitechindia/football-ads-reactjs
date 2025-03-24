@@ -30,6 +30,14 @@ const PaymentForm = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
+      if (user) {
+        if (user.role !== "player") {
+          navigate("/subscriptions");
+        }
+      }
+    }, [user, navigate]);
+
+  useEffect(() => {
     const fetchSubscriptionData = async () => {
       try {
         const response = await API.get(`/api/user/subscriptions/${id}`);

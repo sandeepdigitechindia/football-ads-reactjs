@@ -48,7 +48,7 @@ const ClubDetailSection = ({ club }) => {
             <span className="font-semibold">Country:</span> {club.country}
           </p>
           <p className="text-gray-700 text-base sm:text-lg">
-            <span className="font-semibold">Published On:</span>{" "}
+            <span className="font-semibold">Listed On:</span>{" "}
             {new Date(club.createdAt).toLocaleDateString()}
           </p>
           {user?.role === "player" && user?.isSubscription===true ? (

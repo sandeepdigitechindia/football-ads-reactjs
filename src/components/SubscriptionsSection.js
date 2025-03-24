@@ -1,7 +1,12 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 const SubscriptionPlans = ({ subscriptions, subscriptionLink }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
   if (!subscriptions || subscriptions.length === 0)
     return <div>No Ads Available</div>;
   return (
@@ -109,18 +114,35 @@ const SubscriptionPlans = ({ subscriptions, subscriptionLink }) => {
               </ul>
 
               {/* Buy Now Button with Shake Effect */}
-              <motion.a
-                href={`/club/payment/${plan._id}`}
-                className={`block text-center py-2 px-4 rounded-md text-white font-medium transition duration-300 
+              {isLoggedIn ? (
+                <motion.a
+                  href={`/club/payment/${plan._id}`}
+                  className={`block text-center py-2 px-4 rounded-md text-white font-medium transition duration-300 
             ${index === 1 ? "bg-blue-600" : "bg-gray-600"} 
             group-hover:bg-blue-600`}
-                whileHover={{
-                  rotate: [0, -3, 3, 0],
-                  transition: { duration: 0.3 },
-                }}
-              >
-                Buy Now
-              </motion.a>
+                  whileHover={{
+                    rotate: [0, -3, 3, 0],
+                    transition: { duration: 0.3 },
+                  }}
+                >
+                  Buy Now
+                </motion.a>
+              ) : (
+                <Link
+                  to={`/login?redirect=${encodeURIComponent(
+                    window.location.pathname
+                  )}`}
+                  className={`block text-center py-2 px-4 rounded-md text-white font-medium transition duration-300 
+                  ${index === 1 ? "bg-blue-600" : "bg-gray-600"} 
+                  group-hover:bg-blue-600`}
+                  whileHover={{
+                    rotate: [0, -3, 3, 0],
+                    transition: { duration: 0.3 },
+                  }}
+                >
+                  Buy Now
+                </Link>
+              )}
 
               {/* Payment Image with Slide-In Effect */}
               <motion.img

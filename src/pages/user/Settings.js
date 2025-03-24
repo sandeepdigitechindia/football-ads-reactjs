@@ -449,11 +449,19 @@ const Settings = () => {
                       {errors.upload_cv}
                     </p>
                   )}
-                  <img
-                    src={formData.upload_cv}
-                    alt={`${formData.first_name}`}
-                    className="w-48 h-24 rounded-full mx-auto my-4"
-                  />
+                  {formData.upload_cv?.endsWith(".pdf") ? (
+                    <iframe
+                      src={formData.upload_cv}
+                      className="w-full h-96 mx-auto my-4 border"
+                      title="CV Preview"
+                    />
+                  ) : (
+                    <img
+                      src={formData.upload_cv}
+                      alt={`${formData.first_name}`}
+                      className="w-48 h-24 rounded-full mx-auto my-4"
+                    />
+                  )}
                 </div>
                 <button
                   type="submit"

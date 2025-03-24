@@ -8,6 +8,17 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+const maskPhoneNumber = (phone) => {
+  if (!phone) return "";
+  return phone.slice(0, 2) + "****" + phone.slice(-2);
+};
+
+const maskEmail = (email) => {
+  if (!email) return "";
+  const [localPart, domain] = email.split("@");
+  return localPart.slice(0, 3) + "****@" + domain;
+};
+
 const AdsDetailSection = ({ ads }) => {
   const [formData, setFormData] = useState({
     upload_cv: null,
@@ -178,16 +189,50 @@ const AdsDetailSection = ({ ads }) => {
               {ads.userId.club_name}
             </h2>
 
+            <p className="text-gray-700 text-base sm:text-lg">
+              <span className="font-semibold">Country:</span>{" "}
+              {ads.userId.country}
+            </p>
+            <p className="text-gray-700 text-base sm:text-lg">
+              <span className="font-semibold">Listed On:</span>{" "}
+              {new Date(ads.userId.createdAt).toLocaleDateString()}
+            </p>
+            {user?.role === "player" && user?.isSubscription === true ? (
+              <>
+                <p className="text-gray-700 text-base sm:text-lg">
+                  <span className="font-semibold">Phone:</span>{" "}
+                  {ads.userId.phone}
+                </p>
+                <p className="text-gray-700 text-base sm:text-lg">
+                  <span className="font-semibold">Email:</span>{" "}
+                  {ads.userId.email}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-700 text-base sm:text-lg">
+                  <span className="font-semibold">Phone:</span>{" "}
+                  {maskPhoneNumber(ads.userId.phone)}
+                </p>
+                <p className="text-gray-700 text-base sm:text-lg">
+                  <span className="font-semibold">Email:</span>{" "}
+                  {maskEmail(ads.userId.email)}
+                </p>
+                <p className="text-red-500 text-base sm:text-lg mt-2">
+                  🔒 Subscribe to view full contact details.
+                </p>
+              </>
+            )}
+
             <div className="border-t border-gray-300 my-4"></div>
             <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-            {showFullDesc ? ads.userId.club_desc : shortDesc}{" "}
-            <button
-              onClick={() => setShowFullDesc(!showFullDesc)}
-              className="text-blue-600 hover:underline font-semibold"
-            >
-              {showFullDesc ? "Read Less" : "Read More"}
-            </button>
-             
+              {showFullDesc ? ads.userId.club_desc : shortDesc}{" "}
+              <button
+                onClick={() => setShowFullDesc(!showFullDesc)}
+                className="text-blue-600 hover:underline font-semibold"
+              >
+                {showFullDesc ? "Read Less" : "Read More"}
+              </button>
             </p>
           </div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
@@ -301,7 +346,9 @@ const AdsDetailSection = ({ ads }) => {
             </>
           ) : (
             <Link
-              to={`/login`}
+              to={`/login?redirect=${encodeURIComponent(
+                window.location.pathname
+              )}`}
               className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
               Register

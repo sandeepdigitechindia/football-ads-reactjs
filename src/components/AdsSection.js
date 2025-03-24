@@ -247,7 +247,9 @@ const AdsSection = ({ ads }) => {
                     </button>
                   ) : (
                     <Link
-                      to={"/login"}
+                      to={`/login?redirect=${encodeURIComponent(
+                        window.location.pathname
+                      )}`}
                       className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
                     >
                       Register
