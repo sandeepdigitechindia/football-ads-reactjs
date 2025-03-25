@@ -328,7 +328,7 @@ const AdsDetailSection = ({ ads }) => {
           {/* Apply Now Button */}
           {isLoggedIn ? (
             <>
-              {formData.isSubscription === true ? (
+              {user.isSubscription === true ? (
                 <Link
                   onClick={openModal}
                   className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
@@ -337,7 +337,9 @@ const AdsDetailSection = ({ ads }) => {
                 </Link>
               ) : (
                 <Link
-                  to={`/user/subscriptions`}
+                to={`/user/subscriptions?redirect=${encodeURIComponent(
+                  window.location.pathname
+                )}`}
                   className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
                 >
                   Apply Now

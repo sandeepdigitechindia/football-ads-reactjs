@@ -17,7 +17,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { login, updateUser } = useContext(AuthContext);
   const validate = () => {
     const newErrors = {};
 
@@ -59,12 +59,16 @@ const LoginForm = () => {
       // Store token in local storage
       localStorage.setItem("token", token);
       login(user);
-
-      // Get the redirect URL from the query parameter
+      await updateUser();
       const params = new URLSearchParams(location.search);
       const redirectUrl = params.get("redirect") || "/";
 
-      navigate(redirectUrl);
+      if (!user.isSubscription) {
+        localStorage.setItem("redirectAfterPurchase", redirectUrl);
+        navigate("/user/subscriptions");
+      } else {
+        navigate(redirectUrl);
+      }
 
       toast.success("Login successful!", {
         position: "top-right",

@@ -239,12 +239,25 @@ const AdsSection = ({ ads }) => {
                   </Link>
 
                   {isLoggedIn ? (
-                    <button
-                      onClick={() => openModal(ad)}
-                      className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
-                    >
-                      Apply Now
-                    </button>
+                    <>
+                      {user.isSubscription === true ? (
+                        <Link
+                          onClick={() => openModal(ad)}
+                          className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                        >
+                          Apply Now
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/user/subscriptions?redirect=${encodeURIComponent(
+                            window.location.pathname
+                          )}`}
+                          className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                        >
+                          Apply Now
+                        </Link>
+                      )}
+                    </>
                   ) : (
                     <Link
                       to={`/login?redirect=${encodeURIComponent(

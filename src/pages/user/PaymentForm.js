@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -27,15 +27,15 @@ const PaymentForm = () => {
   const [loading, setLoading] = useState(false);
 
   const [subscriptionData, setSubscriptionData] = useState(null);
-  const { user } = useContext(AuthContext);
+  const { user,updateUser } = useContext(AuthContext);
 
   useEffect(() => {
-      if (user) {
-        if (user.role !== "player") {
-          navigate("/subscriptions");
-        }
+    if (user) {
+      if (user.role !== "player") {
+        navigate("/subscriptions");
       }
-    }, [user, navigate]);
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     const fetchSubscriptionData = async () => {
@@ -119,7 +119,7 @@ const PaymentForm = () => {
             duration: subscriptionData.duration,
             paymentMethod: paymentMethod.type,
             paymentStatus: paymentIntent.status,
-            transactionId: paymentIntent.id
+            transactionId: paymentIntent.id,
           };
 
           await API.post(
@@ -146,13 +146,20 @@ const PaymentForm = () => {
         } finally {
           setLoading(false);
         }
-
+        await updateUser();
         toast.success("Payment successful!", {
           position: "top-right",
           autoClose: 3000,
         });
         elements.getElement(CardElement).clear();
-        setTimeout(() => navigate("/thank-you"), 2000);
+
+        setTimeout(() => {
+          
+          const redirectUrl =
+            localStorage.getItem("redirectAfterPurchase") || "/";
+          localStorage.removeItem("redirectAfterPurchase");
+          navigate(redirectUrl);
+        }, 2000);
       }
     } catch (error) {
       toast.error(
