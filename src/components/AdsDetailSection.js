@@ -28,9 +28,10 @@ const AdsDetailSection = ({ ads }) => {
   const [showModal, setShowModal] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [applied, setApplied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user, updateUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -100,7 +101,9 @@ const AdsDetailSection = ({ ads }) => {
         autoClose: 3000,
       });
 
+      setApplied(true);
       setShowModal(false);
+      await updateUser();
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Submit failed. Try again.",
@@ -120,6 +123,13 @@ const AdsDetailSection = ({ ads }) => {
   };
   // Close modal
   const closeModal = () => {
+    if (
+      window.confirm(
+        "You haven't uploaded a CV. Are you sure you want to apply without one?"
+      )
+    ) {
+      handleSubmit(); // Apply without CV
+    }
     setShowModal(false);
   };
 
@@ -197,18 +207,8 @@ const AdsDetailSection = ({ ads }) => {
               <span className="font-semibold">Listed On:</span>{" "}
               {new Date(ads.userId.createdAt).toLocaleDateString()}
             </p>
-            {user?.role === "player" && user?.isSubscription === true ? (
-              <>
-                <p className="text-gray-700 text-base sm:text-lg">
-                  <span className="font-semibold">Phone:</span>{" "}
-                  {ads.userId.phone}
-                </p>
-                <p className="text-gray-700 text-base sm:text-lg">
-                  <span className="font-semibold">Email:</span>{" "}
-                  {ads.userId.email}
-                </p>
-              </>
-            ) : (
+            {!isLoggedIn ||
+            (user?.role === "player" && !user?.isSubscription) ? (
               <>
                 <p className="text-gray-700 text-base sm:text-lg">
                   <span className="font-semibold">Phone:</span>{" "}
@@ -222,7 +222,18 @@ const AdsDetailSection = ({ ads }) => {
                   🔒 Subscribe to view full contact details.
                 </p>
               </>
-            )}
+            ) : user?.role === "player" && user?.isSubscription ? (
+              <>
+                <p className="text-gray-700 text-base sm:text-lg">
+                  <span className="font-semibold">Phone:</span>{" "}
+                  {ads.userId.phone}
+                </p>
+                <p className="text-gray-700 text-base sm:text-lg">
+                  <span className="font-semibold">Email:</span>{" "}
+                  {ads.userId.email}
+                </p>
+              </>
+            ) : null}
 
             <div className="border-t border-gray-300 my-4"></div>
             <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
@@ -326,20 +337,25 @@ const AdsDetailSection = ({ ads }) => {
           </div>
 
           {/* Apply Now Button */}
-          {isLoggedIn ? (
+          {isLoggedIn && user?.role === "player" ? (
             <>
-              {user.isSubscription === true ? (
-                <Link
+              {user?.isSubscription === true ? (
+                <button
                   onClick={openModal}
-                  className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                  disabled={applied}
+                  className={`mt-4 block text-center text-white text-sm px-4 py-2 rounded-lg transition w-full ${
+                    applied
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  }`}
                 >
-                  Apply Now
-                </Link>
+                  {applied ? "Applied" : "Apply Now"}
+                </button>
               ) : (
                 <Link
-                to={`/user/subscriptions?redirect=${encodeURIComponent(
-                  window.location.pathname
-                )}`}
+                  to={`/user/subscriptions?redirect=${encodeURIComponent(
+                    window.location.pathname
+                  )}`}
                   className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
                 >
                   Apply Now
@@ -363,11 +379,11 @@ const AdsDetailSection = ({ ads }) => {
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">
                   Apply for {ads.position}
                 </h3>
-                {formData.upload_cv && (
+                {user.upload_cv && (
                   <div className="mb-4">
                     <p className="text-gray-700">Previously Uploaded CV:</p>
                     <a
-                      href={formData.upload_cv}
+                      href={BASE_URL + user.upload_cv}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 underline"

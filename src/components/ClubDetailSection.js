@@ -43,7 +43,6 @@ const ClubDetailSection = ({ club }) => {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
             {club.club_name}
           </h2>
-
           <p className="text-gray-700 text-base sm:text-lg">
             <span className="font-semibold">Country:</span> {club.country}
           </p>
@@ -51,7 +50,21 @@ const ClubDetailSection = ({ club }) => {
             <span className="font-semibold">Listed On:</span>{" "}
             {new Date(club.createdAt).toLocaleDateString()}
           </p>
-          {user?.role === "player" && user?.isSubscription===true ? (
+          {user?.role === "player" && !user?.isSubscription ? (
+            <>
+              <p className="text-gray-700 text-base sm:text-lg">
+                <span className="font-semibold">Phone:</span>{" "}
+                {maskPhoneNumber(club.phone)}
+              </p>
+              <p className="text-gray-700 text-base sm:text-lg">
+                <span className="font-semibold">Email:</span>{" "}
+                {maskEmail(club.email)}
+              </p>
+              <p className="text-red-500 text-base sm:text-lg mt-2">
+                🔒 Subscribe to view full contact details.
+              </p>
+            </>
+          ) : user?.role === "player" && user?.isSubscription ? (
             <>
               <p className="text-gray-700 text-base sm:text-lg">
                 <span className="font-semibold">Phone:</span> {club.phone}
@@ -60,6 +73,8 @@ const ClubDetailSection = ({ club }) => {
                 <span className="font-semibold">Email:</span> {club.email}
               </p>
             </>
+          ) : user?.role === "club" ? (
+            <> </>
           ) : (
             <>
               <p className="text-gray-700 text-base sm:text-lg">
@@ -74,10 +89,9 @@ const ClubDetailSection = ({ club }) => {
                 🔒 Subscribe to view full contact details.
               </p>
             </>
-          )}
-
+          )}{" "}
+          {/* Clubs do not see anything */}
           <div className="border-t border-gray-300 my-4"></div>
-
           {/* Club Description with Read More / Read Less */}
           <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
             {showFullDesc ? club.club_desc : shortDesc}{" "}

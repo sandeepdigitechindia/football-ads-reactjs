@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }) => {
       position: "top-right",
       autoClose: 3000,
     });
+    window.location.href = "/";
   };
 
   return (

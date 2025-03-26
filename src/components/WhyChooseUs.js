@@ -35,7 +35,14 @@ const cardVariants = {
 };
 
 const WhyChooseUs = () => {
-  const { settingData } = useContext(SettingContext);
+  const { settingData, loading } = useContext(SettingContext);
+  if (loading) {
+    return <div>Loading settings...</div>;
+  }
+
+  if (!settingData) {
+    return <div>No settings available.</div>;
+  }
   return (
     <motion.div
       className="bg-blue-900 py-16"

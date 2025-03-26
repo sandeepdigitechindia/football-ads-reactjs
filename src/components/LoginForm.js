@@ -63,7 +63,7 @@ const LoginForm = () => {
       const params = new URLSearchParams(location.search);
       const redirectUrl = params.get("redirect") || "/";
 
-      if (!user.isSubscription) {
+      if (!user?.isSubscription) {
         localStorage.setItem("redirectAfterPurchase", redirectUrl);
         navigate("/user/subscriptions");
       } else {

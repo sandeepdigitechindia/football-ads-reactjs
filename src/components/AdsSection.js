@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AdsSection = ({ ads }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [applied, setApplied] = useState(false);
   const [formData, setFormData] = useState({
     upload_cv: null,
   });
@@ -16,7 +16,7 @@ const AdsSection = ({ ads }) => {
   const [showModal, setShowModal] = useState(false);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user, updateUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -84,8 +84,9 @@ const AdsSection = ({ ads }) => {
         position: "top-right",
         autoClose: 3000,
       });
-
+      setApplied(true);
       setShowModal(false);
+      await updateUser();
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Submit failed. Try again.",
@@ -106,6 +107,13 @@ const AdsSection = ({ ads }) => {
   };
   // Close modal
   const closeModal = () => {
+    if (
+      window.confirm(
+        "You haven't uploaded a CV. Are you sure you want to apply without one?"
+      )
+    ) {
+      handleSubmit(); // Apply without CV
+    }
     setShowModal(false);
     setPost(null);
   };
@@ -152,11 +160,11 @@ const AdsSection = ({ ads }) => {
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
                 Apply for {post.position}
               </h3>
-              {formData.upload_cv && (
+              {user.upload_cv && (
                 <div className="mb-4">
                   <p className="text-gray-700">Previously Uploaded CV:</p>
                   <a
-                    href={formData.upload_cv}
+                    href={BASE_URL + user.upload_cv}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
@@ -223,50 +231,80 @@ const AdsSection = ({ ads }) => {
               {/* Right Side - Content */}
               <div className="w-2/3">
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 truncate">
-                  {ad.title}
+                  {/* {ad.title} */}
+                  {ad.userId.club_name}
                 </h3>
-                <p className="text-gray-600 text-sm sm:text-base line-clamp-2 mb-3">
-                  {ad.description}
+                <p className="text-gray-600 text-sm sm:text-base line-clamp-2 mb-3 text-left">
+                  {/* {ad.description} */}
+                  <b>Country:</b> {ad.userId.country}
+                </p>
+                <p className="text-gray-600 text-sm sm:text-base line-clamp-2 mb-3 text-left">
+                  <b>Published On:</b>{" "}
+                  {new Date(ad.createdAt).toLocaleDateString()}
                 </p>
 
                 {/* Buttons */}
                 <div className="flex items-center gap-4 mt-3">
-                  <Link
-                    to={"/ads/" + ad.slug}
-                    className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
-                  >
-                    Read More
-                  </Link>
-
                   {isLoggedIn ? (
-                    <>
-                      {user.isSubscription === true ? (
-                        <Link
-                          onClick={() => openModal(ad)}
-                          className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                        >
-                          Apply Now
-                        </Link>
-                      ) : (
-                        <Link
-                          to={`/user/subscriptions?redirect=${encodeURIComponent(
-                            window.location.pathname
-                          )}`}
-                          className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                        >
-                          Apply Now
-                        </Link>
-                      )}
-                    </>
+                    user?.role === "player" ? ( // ✅ Show buttons only for "player"
+                      <>
+                        {user?.isSubscription === true ? (
+                          <>
+                            <Link
+                              to={"/ads/" + ad.slug}
+                              className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
+                            >
+                              Read More
+                            </Link>
+                            <button
+                              onClick={() => openModal(ad)}
+                              disabled={applied}
+                              className={`mt-4 block text-center text-white text-sm px-4 py-2 rounded-lg transition ${
+                                applied
+                                  ? "bg-gray-400 cursor-not-allowed"
+                                  : "bg-blue-600 hover:bg-blue-700"
+                              }`}
+                            >
+                              {applied ? "Applied" : "Apply Now"}
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              to={"/ads/" + ad.slug}
+                              className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
+                            >
+                              Read More
+                            </Link>
+                            <Link
+                              to={`/user/subscriptions?redirect=${encodeURIComponent(
+                                window.location.pathname
+                              )}`}
+                              className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                            >
+                              Apply Now
+                            </Link>
+                          </>
+                        )}
+                      </>
+                    ) : null // ✅ Hide buttons for "club" role
                   ) : (
-                    <Link
-                      to={`/login?redirect=${encodeURIComponent(
-                        window.location.pathname
-                      )}`}
-                      className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
-                    >
-                      Register
-                    </Link>
+                    <>
+                      <Link
+                        to={"/ads/" + ad.slug}
+                        className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
+                      >
+                        Read More
+                      </Link>
+                      <Link
+                        to={`/login?redirect=${encodeURIComponent(
+                          window.location.pathname
+                        )}`}
+                        className="bg-blue-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
+                      >
+                        Register
+                      </Link>
+                    </>
                   )}
                 </div>
               </div>
