@@ -26,7 +26,7 @@ const PaymentForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [subscriptionData, setSubscriptionData] = useState(null);
-  const { user } = useContext(AuthContext);
+  const { user,updateUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (user) {
@@ -145,13 +145,14 @@ const PaymentForm = () => {
         } finally {
           setLoading(false);
         }
-
+        await updateUser();
         toast.success("Payment successful!", {
           position: "top-right",
           autoClose: 3000,
         });
         elements.getElement(CardElement).clear();
-        setTimeout(() => navigate("/thank-you"), 2000);
+        // setTimeout(() => navigate("/thank-you"), 2000);
+        navigate("/club/post/create");
       }
     } catch (error) {
       toast.error(

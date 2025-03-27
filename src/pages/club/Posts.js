@@ -278,12 +278,12 @@ const Posts = () => {
                 Add New &#43;
               </Link>
             ) : (
-              <button
-                className="py-2 px-6 bg-gray-400 text-white rounded cursor-not-allowed"
-                disabled
+              <Link
+                to="/club/subscriptions"
+                className="py-2 px-6 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
               >
                 Add New &#43;
-              </button>
+              </Link>
             )}
           </header>
 

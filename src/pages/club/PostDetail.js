@@ -19,6 +19,8 @@ const PostDetail = () => {
     status: "",
     club_name: "",
     club_logo: "",
+    country: "",
+    club_desc: "",
   });
   // Fetch user data from API
   useEffect(() => {
@@ -37,6 +39,8 @@ const PostDetail = () => {
           status: postData.status,
           club_name: postData.userId?.club_name || "",
           club_logo: postData.userId?.club_logo || "",
+          country: postData.userId?.country || "",
+          club_desc: postData.userId?.club_desc || "",
         });
       } catch (error) {
         console.error("Error fetching post data:", error);
@@ -60,9 +64,8 @@ const PostDetail = () => {
     company: {
       name: formData.club_name,
       logo: BASE_URL + formData.club_logo,
-      location: "San Francisco, CA, USA",
-      subDescription:
-        "Tech Innovators Inc. is a leading tech company that builds innovative solutions to solve real-world problems.",
+      country: formData.country,
+      subDescription:formData.club_desc,
       fullDescription:
         "Company ABC was founded in 2000 and has been at the forefront of the technology industry, providing cutting-edge solutions to clients across the globe. We specialize in AI, machine learning, and enterprise software solutions. With over 500 employees and a network of partners worldwide, we continue to push the boundaries of innovation and impact the future of technology.",
     },
@@ -147,7 +150,7 @@ const PostDetail = () => {
                 <h3 className="text-xl font-semibold text-gray-800">
                   {job.company.name}
                 </h3>
-                <p className="text-gray-600">{job.company.location}</p>
+                <p className="text-gray-600">{job.company.country}</p>
 
                 {/* Show the short description initially */}
                 <p className="text-gray-700 text-sm leading-relaxed">
