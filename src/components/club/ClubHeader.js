@@ -15,6 +15,7 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { AuthContext } from "../../context/AuthContext";
+import { ServiceContext } from "../../context/ServiceContext";
 import { SettingContext } from "../../context/SettingContext";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -25,12 +26,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 //   { name: "Advertisement for jobs in football", to: "ads" },
 // ];
 
-const services = [
-  { name: "Scouting Organization", to: "services" },
-  { name: "Tournament Organization", to: "services" },
-  { name: "Custom Services", to: "services" },
-];
-
 export default function ClubHeader() {
   const [showModal, setShowModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,14 +33,18 @@ export default function ClubHeader() {
   const { settingData, loading } = useContext(SettingContext);
 
   const { user, logout } = useContext(AuthContext);
-
-  if (loading) {
+  const { serviceData, loadservices } = useContext(ServiceContext);
+  
+  // console.log(services)
+  if (loading || loadservices) {
     return <div>Loading settings...</div>;
   }
 
   if (!settingData) {
     return <div>No settings available.</div>;
   }
+
+  const services = serviceData.services;
 
   // Open modal
   const openModal = () => {
@@ -110,7 +109,7 @@ export default function ClubHeader() {
           {/* <Link to="/" className="text-sm/6 font-semibold text-white-900">
             Home
           </Link> */}
-          <Link to="/ads" className="text-sm/6 font-semibold text-white-900">
+          <Link to="/club/posts" className="text-sm/6 font-semibold text-white-900">
             Ads
           </Link>
           {/* <Popover className="relative">
@@ -142,12 +141,12 @@ export default function ClubHeader() {
               </div>
             </PopoverPanel>
           </Popover> */}
-          <Link
-            to="/subscriptions"
+          {/* <Link
+            to="/club/subscriptions"
             className="text-sm/6 font-semibold text-white-900"
           >
             Subscriptions
-          </Link>
+          </Link> */}
 
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900 border-none outline-none">
@@ -165,12 +164,12 @@ export default function ClubHeader() {
               <div className="p-4">
                 {services.map((item) => (
                   <div
-                    key={item.name}
+                    key={item.title}
                     className="group relative flex items-center gap-x-6 text-black p-4 text-sm/6 hover:bg-blue-900 hover:text-white"
                   >
                     <div className="flex-auto">
-                      <Link to={item.to} className="font-semibold">
-                        {item.name}
+                      <Link to={`/services/${item.slug}`} className="font-semibold">
+                        {item.title}
                       </Link>
                     </div>
                   </div>
@@ -260,14 +259,14 @@ export default function ClubHeader() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                {/* <Link
+                <Link
                   to="/"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Home
-                </Link> */}
+                </Link>
                 <Link
-                  to="/ads"
+                  to="/club/posts"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Ads
@@ -293,12 +292,12 @@ export default function ClubHeader() {
                     ))}
                   </DisclosurePanel>
                 </Disclosure> */}
-                <Link
-                  to="/subscriptions"
+                {/* <Link
+                  to="/club/subscriptions"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Subscriptions
-                </Link>
+                </Link> */}
 
                 <Disclosure as="div" className="-mx-3">
                   <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
@@ -311,12 +310,12 @@ export default function ClubHeader() {
                   <DisclosurePanel className="mt-2 space-y-2">
                     {[...services].map((item) => (
                       <DisclosureButton
-                        key={item.name}
+                        key={item.title}
                         as="a"
-                        href={item.to}
+                        href={item.slug}
                         className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50"
                       >
-                        {item.name}
+                        {item.title}
                       </DisclosureButton>
                     ))}
                   </DisclosurePanel>

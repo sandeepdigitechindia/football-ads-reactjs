@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import MainBanner from "../components/MainBanner";
 import AdsSection from "../components/AdsSection";
 import ClubsSection from "../components/ClubsSection";
-import SubscriptionsSection from "../components/SubscriptionsSection";
+// import SubscriptionsSection from "../components/SubscriptionsSection";
 import AdditionalServicesSection from "../components/AdditionalServicesSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import SecondaryCTASection from "../components/SecondaryCTASection";
 import WhyChooseUs from "../components/WhyChooseUs";
 import API from "../api";
 import Loader from "../components/Loader";
-const subscriptionLink = { link: "/club/payment" };
+// const subscriptionLink = { link: "/club/payment" };
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 1 } },
@@ -19,7 +20,18 @@ const sectionVariants = {
 const Home = () => {
   const [homeData, setHomeData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (token && role === "player") {
+      navigate("/");
+    } else if (token && role === "club") {
+      navigate("/club/dashboard");
+    } else {
+      navigate("/");
+    }
+  }, []);
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
@@ -72,7 +84,7 @@ const Home = () => {
       </motion.div>
 
       {/* Subscriptions Section */}
-      <motion.div
+      {/* <motion.div
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -82,7 +94,7 @@ const Home = () => {
           subscriptions={homeData.subscriptions}
           subscriptionLink={subscriptionLink}
         />
-      </motion.div>
+      </motion.div> */}
 
       {/* Additional Services Section */}
       <motion.div

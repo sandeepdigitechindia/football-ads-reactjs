@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { SettingContext } from "../context/SettingContext";
+import { ServiceContext } from "../context/ServiceContext";
 import { Link } from "react-router-dom";
 import {
   Dialog,
@@ -23,24 +24,25 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 //   { name: "Advertisement for jobs in football", to: "ads" },
 // ];
 
-const services = [
-  { name: "Scouting Organization", to: "services" },
-  { name: "Tournament Organization", to: "services" },
-  { name: "Custom Services", to: "services" },
-];
+// const services = [
+//   { name: "Scouting Organization", to: "services" },
+//   { name: "Tournament Organization", to: "services" },
+//   { name: "Custom Services", to: "services" },
+// ];
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { settingData, loading } = useContext(SettingContext);
+  const { serviceData, loadservices } = useContext(ServiceContext);
 
-  if (loading) {
+  if (loading || loadservices) {
     return <div>Loading settings...</div>;
   }
 
   if (!settingData) {
     return <div>No settings available.</div>;
   }
-
+  const services = serviceData.services;
   return (
     <header className="bg-blue-900 text-white sticky top-0 z-50">
       <nav
@@ -68,9 +70,9 @@ export default function Example() {
           </button>
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-          {/* <Link to="/" className="text-sm/6 font-semibold text-white-900">
+          <Link to="/" className="text-sm/6 font-semibold text-white-900">
             Home
-          </Link> */}
+          </Link>
           <Link to="/ads" className="text-sm/6 font-semibold text-white-900">
             Ads
           </Link>
@@ -104,7 +106,7 @@ export default function Example() {
             </PopoverPanel>
           </Popover> */}
           <Link
-            to="/subscriptions"
+            to="/user/subscriptions"
             className="text-sm/6 font-semibold text-white-900"
           >
             Subscriptions
@@ -126,12 +128,15 @@ export default function Example() {
               <div className="p-4">
                 {services.map((item) => (
                   <div
-                    key={item.name}
+                    key={item.title}
                     className="group relative flex items-center gap-x-6 text-black p-4 text-sm/6 hover:bg-blue-900 hover:text-white"
                   >
                     <div className="flex-auto">
-                      <Link to={item.to} className="font-semibold">
-                        {item.name}
+                      <Link
+                        to={`/services/${item.slug}`}
+                        className="font-semibold"
+                      >
+                        {item.title}
                       </Link>
                     </div>
                   </div>
@@ -222,7 +227,7 @@ export default function Example() {
                   </DisclosurePanel>
                 </Disclosure> */}
                 <Link
-                  to="/subscriptions"
+                  to="/user/subscriptions"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Subscriptions
@@ -239,12 +244,12 @@ export default function Example() {
                   <DisclosurePanel className="mt-2 space-y-2">
                     {[...services].map((item) => (
                       <DisclosureButton
-                        key={item.name}
+                        key={item.title}
                         as="a"
-                        href={item.to}
+                        href={`/services/${item.slug}`}
                         className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50"
                       >
-                        {item.name}
+                        {item.title}
                       </DisclosureButton>
                     ))}
                   </DisclosurePanel>
