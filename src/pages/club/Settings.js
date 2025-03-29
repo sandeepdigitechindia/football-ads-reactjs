@@ -13,6 +13,7 @@ const Settings = () => {
     club_name: "",
     club_desc: "",
     club_logo: null,
+    club_idcard: null,
     first_name: "",
     last_name: "",
     email: "",
@@ -36,11 +37,12 @@ const Settings = () => {
       try {
         const response = await API.get(`/api/club/${user._id}`);
         const getData = response.data;
-
+     
         setFormData({
           club_name: getData.club_name || "",
           club_desc: getData.club_desc || "",
           club_logo: getData.club_logo ? BASE_URL + getData.club_logo : null,
+          club_idcard: getData.club_idcard ? BASE_URL + getData.club_idcard : null,
           first_name: getData.first_name || "",
           last_name: getData.last_name || "",
           email: getData.email || "",
@@ -73,6 +75,9 @@ const Settings = () => {
       }
       if (!formData.club_logo) {
         newErrors.club_logo = "Club Logo is required.";
+      }
+      if (!formData.club_idcard) {
+        newErrors.club_idcard = "Club ID Card is required.";
       }
       if (!formData.first_name.trim()) {
         newErrors.first_name = "First Name is required.";
@@ -162,6 +167,10 @@ const Settings = () => {
         // Append file only if it's selected
         if (formData.club_logo instanceof File) {
           formDataToSend.append("club_logo", formData.club_logo);
+        }
+
+        if (formData.club_idcard instanceof File) {
+          formDataToSend.append("club_idcard", formData.club_idcard);
         }
 
         await API.put(`${BASE_URL}/api/club/${user._id}`, formDataToSend, {
@@ -331,6 +340,32 @@ const Settings = () => {
                   )}
                   <img
                     src={formData.club_logo}
+                    alt={`${formData.club_name}`}
+                    className="w-48 h-24 rounded-full mx-auto my-4"
+                  />
+                </div>
+
+                  {/* Club Id Card */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Club ID Card <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    // accept="image/*"
+                    name="club_idcard"
+                    onChange={handleFileChange}
+                    className={`w-full p-3 border ${
+                      errors.club_idcard ? "border-red-500" : "border-gray-300"
+                    } rounded-lg`}
+                  />
+                  {errors.club_idcard && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.club_idcard}
+                    </p>
+                  )}
+                  <img
+                    src={formData.club_idcard}
                     alt={`${formData.club_name}`}
                     className="w-48 h-24 rounded-full mx-auto my-4"
                   />
