@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import React, {  useEffect, useState, useContext } from "react";
 import Sidebar from "../../components/club/Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../../api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { AuthContext } from "../../context/AuthContext";
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const PostForm = () => {
@@ -18,11 +18,75 @@ const PostForm = () => {
     position: "",
     salary: "",
     location: "",
+    club_idcard: null,
   });
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { user, updateUser } = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(false);
+
+  // useEffect(() => {
+  //   if (!user?.club_idcard) {
+  //     setShowModal(true);
+  //   } else {
+  //     alert("You already have a club ID card!");
+  //   }
+  // }, [user]);
+
+  // Submit the application
+  const handleIDCardSubmit = async () => {
+    setLoading(true);
+    try {
+      // Check if a new club idcard file is selected
+      if (formData.club_idcard && formData.club_idcard instanceof File) {
+        const formDataToSendClubID = new FormData();
+        formDataToSendClubID.append("club_idcard", formData.club_idcard);
+
+        // Second API call: Upload Club ID Card (Only if file is selected)
+        await API.put(
+          `${BASE_URL}/api/user/${user._id}`,
+          formDataToSendClubID,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      }
+
+      toast.success("Club ID Card Updated Successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      setShowModal(false);
+      await updateUser();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Submit failed. Try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Open modal
+  // const openModal = () => {
+  //   if (!user?.club_idcard) {
+  //     setShowModal(true);
+  //   } else {
+  //     alert("You already have a club ID card!");
+  //   }
+  // };
+  // // Close modal
+  // const closeModal = () => {
+  //   setShowModal(false);
+  // };
 
   const validate = () => {
     const newErrors = {};
@@ -49,17 +113,6 @@ const PostForm = () => {
     });
   };
 
-  const token = localStorage.getItem("token");
-  let userId = null;
-  if (token) {
-    try {
-      const decodedToken = jwtDecode(token);
-      userId = decodedToken.id;
-    } catch (error) {
-      console.error("Invalid token", error);
-    }
-  }
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -75,7 +128,7 @@ const PostForm = () => {
       data.append("position", formData.position);
       data.append("salary", formData.salary);
       data.append("location", formData.location);
-      data.append("userId", userId);
+      data.append("userId", user._id);
 
       await API.post(`${BASE_URL}/api/club/posts`, data, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -118,6 +171,58 @@ const PostForm = () => {
 
         {/* Main Content */}
         <main className="flex-1 p-6 space-y-6">
+          {showModal && (
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                 Please Upload Your Club ID Card
+                </h3>
+                {user.club_idcard && (
+                  <div className="mb-4">
+                    <p className="text-gray-700">Previously Uploaded Club ID Card:</p>
+                    <a
+                      href={BASE_URL + user.club_idcard}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      View Club ID Card
+                    </a>
+                  </div>
+                )}
+
+                <div className="mb-4">
+                  <label className="block text-gray-700">
+                    Upload New Club ID Card{" "}
+                    {formData.club_idcard ? "(Optional)" : "(Required)"}
+                  </label>
+                  <input
+                    type="file"
+                    name="club_idcard"
+                    onChange={handleFileChange}
+                    className="mt-2"
+                    required={!formData.club_idcard}
+                  />
+                </div>
+
+                <div className="flex justify-end gap-4">
+                  {/* <button
+                    onClick={closeModal}
+                    className="py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+                  >
+                    Cancel
+                  </button> */}
+                  <button
+                    onClick={handleIDCardSubmit}
+                    className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                    disabled={loading}
+                  >
+                    {loading ? "Update..." : "Update"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <header className="flex justify-between items-center flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-800">Posts</h1>
             <Link
@@ -212,7 +317,9 @@ const PostForm = () => {
                   value={formData.long_description}
                   onChange={handleChange}
                   className={`w-full p-3 border ${
-                    errors.long_description ? "border-red-500" : "border-gray-300"
+                    errors.long_description
+                      ? "border-red-500"
+                      : "border-gray-300"
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   rows="4"
                 ></textarea>
