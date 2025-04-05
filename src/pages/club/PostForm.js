@@ -10,6 +10,7 @@ import { AuthContext } from "../../context/AuthContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const PostForm = () => {
+  const { user, updateUser } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     title: "",
     image: null,
@@ -24,16 +25,14 @@ const PostForm = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { user, updateUser } = useContext(AuthContext);
+
   const [showModal, setShowModal] = useState(false);
 
-  // useEffect(() => {
-  //   if (!user?.club_idcard) {
-  //     setShowModal(true);
-  //   } else {
-  //     alert("You already have a club ID card!");
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (!user?.club_idcard) {
+      setShowModal(true);
+    }
+  }, [user]);
 
   // Submit the application
   const handleIDCardSubmit = async () => {
@@ -43,10 +42,9 @@ const PostForm = () => {
       if (formData.club_idcard && formData.club_idcard instanceof File) {
         const formDataToSendClubID = new FormData();
         formDataToSendClubID.append("club_idcard", formData.club_idcard);
-
         // Second API call: Upload Club ID Card (Only if file is selected)
         await API.put(
-          `${BASE_URL}/api/user/${user._id}`,
+          `${BASE_URL}/api/club/${user._id}`,
           formDataToSendClubID,
           {
             headers: {
@@ -103,7 +101,11 @@ const PostForm = () => {
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
+    const { name, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }));
   };
 
   const handleChange = (e) => {
@@ -117,7 +119,6 @@ const PostForm = () => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-
     try {
       // Creating FormData to send files
       const data = new FormData();
@@ -194,14 +195,14 @@ const PostForm = () => {
                 <div className="mb-4">
                   <label className="block text-gray-700">
                     Upload New Club ID Card{" "}
-                    {formData.club_idcard ? "(Optional)" : "(Required)"}
+                    {user.club_idcard ? "(Optional)" : "(Required)"}
                   </label>
                   <input
                     type="file"
                     name="club_idcard"
                     onChange={handleFileChange}
                     className="mt-2"
-                    required={!formData.club_idcard}
+                    required={!user.club_idcard}
                   />
                 </div>
 
@@ -264,6 +265,7 @@ const PostForm = () => {
                 <input
                   type="file"
                   accept="image/*"
+                  name="image"
                   onChange={handleFileChange}
                   className={`w-full p-3 border ${
                     errors.image ? "border-red-500" : "border-gray-300"
