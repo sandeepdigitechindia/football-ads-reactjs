@@ -61,13 +61,19 @@ const LoginForm = () => {
       login(user);
       await updateUser();
       const params = new URLSearchParams(location.search);
-      const redirectUrl = params.get("redirect") || "/";
+      const redirectUrl = params.get("redirect");
 
       if (!user?.isSubscription) {
-        localStorage.setItem("redirectAfterPurchase", redirectUrl);
-        navigate("/user/subscriptions");
+        if (redirectUrl) {
+          localStorage.setItem("redirectAfterPurchase", redirectUrl);
+          navigate("/user/subscriptions");
+        }else
+        {
+          navigate("/user/dashboard");
+        }
+        
       } else {
-        navigate(redirectUrl);
+        navigate(redirectUrl || "/");
       }
 
       toast.success("Login successful!", {

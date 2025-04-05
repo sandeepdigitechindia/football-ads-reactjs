@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("redirectAfterPurchase");
     setUser(null);
     toast.success("You have been logged out.", {
       position: "top-right",
