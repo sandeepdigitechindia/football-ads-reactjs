@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,12 +24,14 @@ const RegisterForm = () => {
     acceptTerms: false,
   });
 
+  const location = useLocation();
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { login, updateUser } = useContext(AuthContext);
   const { countries } = useContext(CountryContext);
 
   const validate = () => {
@@ -112,6 +115,11 @@ const RegisterForm = () => {
     });
   };
 
+  const params = new URLSearchParams(location.search);
+  const redirectUrl = params.get("redirect");
+  if (redirectUrl) {
+  localStorage.setItem("redirectAfterPurchase", redirectUrl);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -135,13 +143,17 @@ const RegisterForm = () => {
 
       // Store token in local storage
       localStorage.setItem("token", token);
-      localStorage.setItem("role", user.role);
+      login(user);
+      await updateUser();
 
-      // Navigate based on role
-      if (user.role === "player") {
-        navigate("/user/dashboard");
+      if (!user?.isSubscription) {
+        if (redirectUrl) {
+          navigate("/user/subscriptions");
+        } else {
+          navigate("/user/dashboard");
+        }
       } else {
-        navigate("/club/dashboard");
+        navigate(redirectUrl || "/");
       }
 
       // Show success message
@@ -448,7 +460,9 @@ const RegisterForm = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   <i
-                    className={showConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"}
+                    className={
+                      showConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"
+                    }
                   ></i>
                 </button>
               </div>

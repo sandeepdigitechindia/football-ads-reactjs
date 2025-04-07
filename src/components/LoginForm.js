@@ -44,6 +44,11 @@ const LoginForm = () => {
     });
   };
 
+  const params = new URLSearchParams(location.search);
+  const redirectUrl = params.get("redirect");
+  if (redirectUrl) {
+    localStorage.setItem("redirectAfterPurchase", redirectUrl);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -60,18 +65,13 @@ const LoginForm = () => {
       localStorage.setItem("token", token);
       login(user);
       await updateUser();
-      const params = new URLSearchParams(location.search);
-      const redirectUrl = params.get("redirect");
 
       if (!user?.isSubscription) {
         if (redirectUrl) {
-          localStorage.setItem("redirectAfterPurchase", redirectUrl);
           navigate("/user/subscriptions");
-        }else
-        {
+        } else {
           navigate("/user/dashboard");
         }
-        
       } else {
         navigate(redirectUrl || "/");
       }
@@ -249,9 +249,18 @@ const LoginForm = () => {
 
           <p className="text-center mt-3">
             Don't have an account? &nbsp;
-            <Link to="/register" className="text-blue-600">
-              Sign Up
-            </Link>
+            {redirectUrl ? (
+              <Link
+                to={`/register?redirect=${redirectUrl}`}
+                className="text-blue-600"
+              >
+                Sign Up
+              </Link>
+            ) : (
+              <Link to={`/register`} className="text-blue-600">
+                Sign Up
+              </Link>
+            )}
           </p>
         </motion.div>
       </motion.div>
