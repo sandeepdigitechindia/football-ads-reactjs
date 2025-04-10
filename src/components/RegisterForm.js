@@ -146,16 +146,12 @@ const RegisterForm = () => {
       login(user);
       await updateUser();
 
-      if (!user?.isSubscription) {
         if (redirectUrl) {
-          navigate("/user/subscriptions");
+          navigate(redirectUrl || "/");
         } else {
           navigate("/user/dashboard");
         }
-      } else {
-        navigate(redirectUrl || "/");
-      }
-
+     
       // Show success message
       toast.success("User Registered Successfully!", {
         position: "top-right",

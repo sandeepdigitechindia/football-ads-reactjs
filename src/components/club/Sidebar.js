@@ -4,10 +4,10 @@ import {
   FaTimes,
   FaTachometerAlt,
   FaClipboardList,
-  FaEuroSign,
+  // FaEuroSign,
   FaCogs,
   FaSignOutAlt,
-  FaHistory,
+  // FaHistory,
 } from "react-icons/fa";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";

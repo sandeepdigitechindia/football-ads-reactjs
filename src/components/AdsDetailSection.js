@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import API from "../api";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,7 +24,7 @@ const AdsDetailSection = ({ ads }) => {
     upload_cv: null,
     isSubscription: "",
   });
-
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -100,10 +100,11 @@ const AdsDetailSection = ({ ads }) => {
         position: "top-right",
         autoClose: 3000,
       });
-
+      
       setApplied(true);
       setShowModal(false);
       await updateUser();
+      navigate("/user/posts");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Submit failed. Try again.",
