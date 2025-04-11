@@ -18,7 +18,6 @@ const ClubDetailSection = ({ club }) => {
   // Limit description to first 100 characters
   const shortDesc = club.club_desc.slice(0, 100) + "...";
 
-  console.log(user);
   if (!club) return <div>No Club Available</div>;
   return (
     <motion.section

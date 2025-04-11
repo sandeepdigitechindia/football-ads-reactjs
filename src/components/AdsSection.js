@@ -8,12 +8,12 @@ import { AuthContext } from "../context/AuthContext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AdsSection = ({ ads }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [applied, setApplied] = useState(false);
   const [formData, setFormData] = useState({
     upload_cv: null,
   });
 
   const [showModal, setShowModal] = useState(false);
+  const [appliedMap, setAppliedMap] = useState({});
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useContext(AuthContext);
@@ -40,6 +40,26 @@ const AdsSection = ({ ads }) => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
+
+  useEffect(() => {
+    const fetchAppliedStatus = async () => {
+      const map = {};
+
+      for (let ad of ads) {
+        try {
+          const res = await API.get(`/api/user/posts/has-applied/${ad._id}`);
+          map[ad._id] = res.data.applied;
+        } catch (err) {
+          console.error("Error checking applied:", err);
+        }
+      }
+      setAppliedMap(map);
+    };
+
+    if (user && user.role === "player") {
+      fetchAppliedStatus();
+    }
+  }, [ads, user]);
 
   // Handle file selection
   const handleFileChange = (e) => {
@@ -84,7 +104,6 @@ const AdsSection = ({ ads }) => {
         position: "top-right",
         autoClose: 3000,
       });
-      setApplied(true);
       setShowModal(false);
       await updateUser();
     } catch (error) {
@@ -144,9 +163,8 @@ const AdsSection = ({ ads }) => {
       viewport={{ once: true }}
     >
       <div className="max-w-7xl mx-auto text-center">
-        {/* Section Title Animation */}
         <motion.h2
-          className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8"
+          className="text-2xl md:text-3xl font-bold text-gray-800 mb-8"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -154,12 +172,14 @@ const AdsSection = ({ ads }) => {
         >
           Recent Ads
         </motion.h2>
+
         {showModal && (
           <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
                 Apply for {post.position}
               </h3>
+
               {user.upload_cv && (
                 <div className="mb-4">
                   <p className="text-gray-700">Previously Uploaded CV:</p>
@@ -174,7 +194,7 @@ const AdsSection = ({ ads }) => {
                 </div>
               )}
 
-              <div className="mb-4">
+              <div className="mb-4 text-left">
                 <label className="block text-gray-700">
                   Upload New CV{" "}
                   {formData.upload_cv ? "(Optional)" : "(Required)"}
@@ -218,7 +238,6 @@ const AdsSection = ({ ads }) => {
               viewport={{ once: true }}
               whileHover={{ scale: 1.05 }}
             >
-              {/* Left Side - Image */}
               <div className="w-1/3 flex-shrink-0">
                 <motion.img
                   src={BASE_URL + ad.image}
@@ -228,70 +247,63 @@ const AdsSection = ({ ads }) => {
                 />
               </div>
 
-              {/* Right Side - Content */}
-              <div className="w-2/3">
+              <div className="w-2/3 text-left">
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 truncate">
-                  {/* {ad.title} */}
                   {ad.userId.club_name}
                 </h3>
-                <p className="text-gray-600 text-sm sm:text-base line-clamp-2 mb-3 text-left">
-                  {/* {ad.description} */}
+                <p className="text-gray-600 text-sm sm:text-base mb-2">
                   <b>Country:</b> {ad.userId.country}
                 </p>
-                <p className="text-gray-600 text-sm sm:text-base line-clamp-2 mb-3 text-left">
+                <p className="text-gray-600 text-sm sm:text-base mb-3">
                   <b>Published On:</b>{" "}
                   {new Date(ad.createdAt).toLocaleDateString()}
                 </p>
 
-                {/* Buttons */}
-                <div className="flex items-center gap-4 mt-3">
+                <div className="flex flex-wrap gap-2 mt-3">
                   {isLoggedIn ? (
-                    user?.role === "player" ? ( // ✅ Show buttons only for "player"
+                    user?.role === "player" &&
+                    (user?.isSubscription ? (
                       <>
-                        {user?.isSubscription === true ? (
-                          <>
-                            <Link
-                              to={"/ads/" + ad.slug}
-                              className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
-                            >
-                              Read More
-                            </Link>
-                            <button
-                              onClick={() => openModal(ad)}
-                              disabled={applied}
-                              className={`mt-4 block text-center text-white text-sm px-4 py-2 rounded-lg transition ${
-                                applied
-                                  ? "bg-gray-400 cursor-not-allowed"
-                                  : "bg-blue-600 hover:bg-blue-700"
-                              }`}
-                            >
-                              {applied ? "Applied" : "Apply Now"}
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <Link
-                              to={"/ads/" + ad.slug}
-                              className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
-                            >
-                              Read More
-                            </Link>
-                            <Link
-                              to={`/user/subscriptions?redirect=${encodeURIComponent(
-                                window.location.pathname
-                              )}`}
-                              className="mt-4 block text-center bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                            >
-                              Apply Now
-                            </Link>
-                          </>
-                        )}
+                        <Link
+                          to={`/ads/${ad.slug}`}
+                          className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
+                        >
+                          Read More
+                        </Link>
+                        <button
+                          onClick={() => openModal(ad)}
+                          disabled={appliedMap[ad._id]}
+                          className={`text-white text-sm px-4 py-2 rounded-lg transition ${
+                            appliedMap[ad._id]
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : "bg-blue-600 hover:bg-blue-700"
+                          }`}
+                        >
+                          {appliedMap[ad._id] ? "Applied" : "Apply Now"}
+                        </button>
                       </>
-                    ) : null // ✅ Hide buttons for "club" role
+                    ) : (
+                      <>
+                        <Link
+                          to={`/ads/${ad.slug}`}
+                          className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
+                        >
+                          Read More
+                        </Link>
+                        <Link
+                          to={`/user/subscriptions?redirect=${encodeURIComponent(
+                            window.location.pathname
+                          )}`}
+                          className="bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                        >
+                          Apply Now
+                        </Link>
+                      </>
+                    ))
                   ) : (
                     <>
                       <Link
-                        to={"/ads/" + ad.slug}
+                        to={`/ads/${ad.slug}`}
                         className="text-blue-600 border border-blue-600 px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 hover:text-white transition"
                       >
                         Read More
@@ -312,9 +324,8 @@ const AdsSection = ({ ads }) => {
           ))}
         </div>
 
-        {/* "See All Ads" Button Animation */}
         <motion.div
-          className="mt-6 md:mt-8"
+          className="mt-8"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
@@ -322,7 +333,7 @@ const AdsSection = ({ ads }) => {
         >
           <a
             href="/ads"
-            className="inline-block px-5 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300"
+            className="inline-block px-6 py-3 text-base md:text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300"
           >
             See All Ads
           </a>

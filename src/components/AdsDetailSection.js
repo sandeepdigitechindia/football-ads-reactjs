@@ -57,6 +57,20 @@ const AdsDetailSection = ({ ads }) => {
     setIsLoggedIn(!!token);
   }, []);
 
+  useEffect(() => {
+    const fetchAppliedStatus = async () => {
+        try {
+          const res = await API.get(`/api/user/posts/has-applied/${ads._id}`);
+          setApplied(res.data.applied);
+        } catch (err) {
+          console.error("Error checking applied:", err);
+        }
+    };
+    if (user && user.role === "player") {
+      fetchAppliedStatus();
+    }
+  }, [ads, user]);
+
   // Handle file selection
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -100,7 +114,7 @@ const AdsDetailSection = ({ ads }) => {
         position: "top-right",
         autoClose: 3000,
       });
-      
+
       setApplied(true);
       setShowModal(false);
       await updateUser();

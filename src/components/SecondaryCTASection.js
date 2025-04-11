@@ -130,22 +130,22 @@ const SecondaryCTASection = () => {
               {[
                 {
                   src: "/social/facebook.png",
-                  link: `${settingData.facebook_link}`,
+                  link: `${settingData?.facebook_link}`,
                   color: "hover:scale-110",
                 },
                 {
                   src: "/social/twitter.png",
-                  link: `${settingData.twitter_link}`,
+                  link: `${settingData?.twitter_link}`,
                   color: "hover:scale-110",
                 },
                 {
                   src: "/social/instagram.png",
-                  link: `${settingData.instagram_link}`,
+                  link: `${settingData?.instagram_link}`,
                   color: "hover:scale-110",
                 },
                 {
                   src: "/social/linkedin.png",
-                  link: `${settingData.linkedin_link}`,
+                  link: `${settingData?.linkedin_link}`,
                   color: "hover:scale-110",
                 },
               ].map((item, index) => (
@@ -175,8 +175,8 @@ const SecondaryCTASection = () => {
             transition={{ duration: 1 }}
           >
             <img
-              alt={settingData.site_name}
-              src={BASE_URL + settingData.home_page_banner}
+              alt={settingData?.site_name}
+              src={BASE_URL + settingData?.home_page_banner}
               className="mt-4 rounded-lg w-full object-cover"
             />
           </motion.div>

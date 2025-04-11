@@ -25,7 +25,7 @@ const ClubsSection = ({ clubs }) => {
         {/* Clubs Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {clubs.map((club, index) => (
-            <a href={"clubs/" + club._id}>
+            <a key={club._id} href={`clubs/${club._id}`}>
               <motion.div
                 key={index}
                 className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center gap-4"
