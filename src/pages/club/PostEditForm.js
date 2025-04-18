@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import Sidebar from "../../components/club/Sidebar";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API from "../../api";
+import { AuthContext } from "../../context/AuthContext";
 // import { CKEditor } from "@ckeditor/ckeditor5-react";
 // import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const PostForm = () => {
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     title: "",
     image: null,
@@ -90,6 +92,7 @@ const PostForm = () => {
       formDataToSend.append("position", formData.position);
       formDataToSend.append("salary", formData.salary);
       formDataToSend.append("location", formData.location);
+      formDataToSend.append("userId", user._id);
 
       // Append file only if it's selected
       if (formData.image instanceof File) {
