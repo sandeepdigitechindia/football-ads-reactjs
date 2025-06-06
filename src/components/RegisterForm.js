@@ -84,12 +84,12 @@ const RegisterForm = () => {
     if (!formData.password) {
       newErrors.password = "Password is required.";
     } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/.test(
         formData.password
       )
     ) {
       newErrors.password =
-        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.";
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character (e.g., @, $, ., etc.).";
     }
 
     // Confirm Password validation
@@ -118,7 +118,7 @@ const RegisterForm = () => {
   const params = new URLSearchParams(location.search);
   const redirectUrl = params.get("redirect");
   if (redirectUrl) {
-  localStorage.setItem("redirectAfterPurchase", redirectUrl);
+    localStorage.setItem("redirectAfterPurchase", redirectUrl);
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,12 +146,12 @@ const RegisterForm = () => {
       login(user);
       await updateUser();
 
-        if (redirectUrl) {
-          navigate(redirectUrl || "/");
-        } else {
-          navigate("/user/dashboard");
-        }
-     
+      if (redirectUrl) {
+        navigate(redirectUrl || "/");
+      } else {
+        navigate("/user/dashboard");
+      }
+
       // Show success message
       toast.success("User Registered Successfully!", {
         position: "top-right",
