@@ -368,7 +368,7 @@ const Settings = () => {
                     className={`w-full px-4 py-2 border rounded-lg ${
                       errors.phone ? "border-red-500" : "border-gray-300"
                     } focus:outline-none focus:ring focus:ring-blue-300`}
-                    placeholder="Enter your phone number"
+                    placeholder="+33 9876543210"
                   />
                   {errors.phone && (
                     <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
@@ -449,7 +449,7 @@ const Settings = () => {
                       {errors.upload_cv}
                     </p>
                   )}
-                  {formData.upload_cv?.endsWith(".pdf") ? (
+                  {user.upload_cv?.endsWith(".pdf") ? (
                     <iframe
                       src={formData.upload_cv}
                       className="w-full h-96 mx-auto my-4 border"
