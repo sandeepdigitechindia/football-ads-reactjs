@@ -14,6 +14,7 @@ import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ForgetPassword from "../pages/ForgetPassword";
+import ResetPassword from "../pages/ResetPassword";
 import TermsOfService from "../pages/TermsOfService";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 import FAQ from "../pages/FAQ";
@@ -88,6 +89,7 @@ const RoutesConfig = () => {
         }
       />
       <Route path="/forget-password" element={<ForgetPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/terms-of-service" element={<TermsOfService />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/faqs" element={<FAQ />} />

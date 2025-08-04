@@ -200,6 +200,12 @@ const LoginForm = () => {
               )}
             </motion.div>
 
+            <p className="mt-3 mb-3">
+              <Link to={`/forget-password`} className="text-blue-600">
+                Forget Password?
+              </Link>
+          </p>
+
             <motion.button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
