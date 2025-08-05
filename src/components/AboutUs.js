@@ -52,15 +52,7 @@ const AboutUs = ({about}) => {
             <p className="text-lg text-gray-700 mb-6">
               {about.about_page_content}
             </p>
-           
-            {/* <motion.a
-              href="/about"
-              className="inline-block text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-md text-lg font-medium transition-transform transform hover:scale-105"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Learn More About Us
-            </motion.a> */}
+         
           </motion.div>
         </div>
       </div>

@@ -302,13 +302,7 @@ const Dashboard = () => {
                 shadow: "shadow-blue-500/50",
                 link: "/club/posts",
               },
-              // {
-              //   title: "Active Subscriptions",
-              //   count: stats.totalSubscriptionPurchase,
-              //   gradient: "from-green-500 via-teal-500 to-emerald-500",
-              //   shadow: "shadow-green-500/50",
-              //   link: "/club/subscriptions",
-              // },
+              
               {
                 title: "Downloaded Resume",
                 count: stats.totalPostApplicantStatus,

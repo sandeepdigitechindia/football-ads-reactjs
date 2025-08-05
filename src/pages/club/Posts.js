@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../../components/club/Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 // import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../../context/AuthContext";
 import API from "../../api";
 import Loader from "../../components/Loader";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -14,6 +15,7 @@ const Posts = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
+  const { user, updateUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -22,7 +24,7 @@ const Posts = () => {
 
         const response = await API.get("/api/club/posts?recent=true", {
           headers: {
-            Authorization: `Bearer ${token}`, // Pass token in header
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -268,14 +270,18 @@ const Posts = () => {
           {/* Posts Header */}
           <header className="flex justify-between items-center flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-800">All Posts</h1>
-            
-              <Link
-                to="/club/post/create"
-                className="py-2 px-6 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-              >
-                Add New &#43;
-              </Link>
-          
+            {user.role === "agent" || user.role === "coach" ? (
+              <></>
+            ) : (
+              <>
+                <Link
+                  to="/club/post/create"
+                  className="py-2 px-6 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                >
+                  Add New &#43;
+                </Link>
+              </>
+            )}
           </header>
 
           <div className="bg-white p-6 rounded shadow">

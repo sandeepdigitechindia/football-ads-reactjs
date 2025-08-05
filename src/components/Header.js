@@ -18,18 +18,6 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-// const ads = [
-//   { name: "Advertisement for players", to: "ads" },
-//   { name: "Advertisement for coaches", to: "ads" },
-//   { name: "Advertisement for jobs in football", to: "ads" },
-// ];
-
-// const services = [
-//   { name: "Scouting Organization", to: "services" },
-//   { name: "Tournament Organization", to: "services" },
-//   { name: "Custom Services", to: "services" },
-// ];
-
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { settingData, loading } = useContext(SettingContext);
@@ -76,35 +64,7 @@ export default function Example() {
           <Link to="/ads" className="text-sm/6 font-semibold text-white-900">
             Ads
           </Link>
-          {/* <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white-900 border-none outline-none">
-              Ads
-              <ChevronDownIcon
-                aria-hidden="true"
-                className="size-5 flex-none"
-              />
-            </PopoverButton>
-
-            <PopoverPanel
-              transition
-              className="absolute -left-8 top-full z-10 mt-[2rem] w-[20rem] overflow-hidden bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
-            >
-              <div className="p-4">
-                {ads.map((item) => (
-                  <div
-                    key={item.name}
-                    className="group relative flex items-center gap-x-6 text-black p-4 text-sm/6 hover:bg-blue-900 hover:text-white"
-                  >
-                    <div className="flex-auto">
-                      <Link to={item.to} className="font-semibold">
-                        {item.name}
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </PopoverPanel>
-          </Popover> */}
+         
           <Link
             to="/user/subscriptions"
             className="text-sm/6 font-semibold text-white-900"
@@ -193,39 +153,14 @@ export default function Example() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                {/* <Link
-                  to="/"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Home
-                </Link> */}
+               
                 <Link
                   to="/ads"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Ads
                 </Link>
-                {/* <Disclosure as="div" className="-mx-3">
-                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
-                    Ads
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="size-5 flex-none group-data-[open]:rotate-180"
-                    />
-                  </DisclosureButton>
-                  <DisclosurePanel className="mt-2 space-y-2">
-                    {[...ads].map((item) => (
-                      <DisclosureButton
-                        key={item.name}
-                        as="a"
-                        href={item.to}
-                        className="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50"
-                      >
-                        {item.name}
-                      </DisclosureButton>
-                    ))}
-                  </DisclosurePanel>
-                </Disclosure> */}
+              
                 <Link
                   to="/user/subscriptions"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../../components/club/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,12 +37,14 @@ const Settings = () => {
       try {
         const response = await API.get(`/api/club/${user._id}`);
         const getData = response.data;
-     
+
         setFormData({
           club_name: getData.club_name || "",
           club_desc: getData.club_desc || "",
           club_logo: getData.club_logo ? BASE_URL + getData.club_logo : null,
-          club_idcard: getData.club_idcard ? BASE_URL + getData.club_idcard : null,
+          club_idcard: getData.club_idcard
+            ? BASE_URL + getData.club_idcard
+            : null,
           first_name: getData.first_name || "",
           last_name: getData.last_name || "",
           email: getData.email || "",
@@ -67,18 +69,23 @@ const Settings = () => {
 
     // Validation similar to the registration form, adjust based on whether it's password change or profile update
     if (activeTab === "profile") {
-      if (!formData.club_name.trim()) {
-        newErrors.club_name = "Club Name is required.";
+      if (user.role === "agent" || user.role === "coach") {
+      } else {
+        if (!formData.club_name.trim()) {
+          newErrors.club_name = "Club Name is required.";
+        }
+        if (!formData.club_logo) {
+          newErrors.club_logo = "Club Logo is required.";
+        }
+        if (!formData.club_idcard) {
+          newErrors.club_idcard = "Club ID Card is required.";
+        }
       }
+
       if (!formData.club_desc.trim()) {
         newErrors.club_desc = "Club Desc is required.";
       }
-      if (!formData.club_logo) {
-        newErrors.club_logo = "Club Logo is required.";
-      }
-      if (!formData.club_idcard) {
-        newErrors.club_idcard = "Club ID Card is required.";
-      }
+
       if (!formData.first_name.trim()) {
         newErrors.first_name = "First Name is required.";
       }
@@ -293,83 +300,93 @@ const Settings = () => {
                   </p>
                 </div>
 
-                {/* Club Name Field */}
-                <div className="mb-4">
-                  <label
-                    htmlFor="club_name"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Club Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="club_name"
-                    name="club_name"
-                    value={formData.club_name}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-lg ${
-                      errors.name ? "border-red-500" : "border-gray-300"
-                    } focus:outline-none focus:ring focus:ring-blue-300`}
-                    placeholder="Enter your Club Name"
-                  />
-                  {errors.club_name && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.club_name}
-                    </p>
-                  )}
-                </div>
+                {user.role === "agent" || user.role === "coach" ? (
+                  <></>
+                ) : (
+                  <>
+                    {/* Club Name Field */}
+                    <div className="mb-4">
+                      <label
+                        htmlFor="club_name"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Club Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="club_name"
+                        name="club_name"
+                        value={formData.club_name}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 border rounded-lg ${
+                          errors.name ? "border-red-500" : "border-gray-300"
+                        } focus:outline-none focus:ring focus:ring-blue-300`}
+                        placeholder="Enter your Club Name"
+                      />
+                      {errors.club_name && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.club_name}
+                        </p>
+                      )}
+                    </div>
 
-                {/* Club Logo */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">
-                    Club Logo <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    name="club_logo"
-                    onChange={handleFileChange}
-                    className={`w-full p-3 border ${
-                      errors.club_logo ? "border-red-500" : "border-gray-300"
-                    } rounded-lg`}
-                  />
-                  {errors.club_logo && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.club_logo}
-                    </p>
-                  )}
-                  <img
-                    src={formData.club_logo}
-                    alt={`${formData.club_name}`}
-                    className="w-48 h-24 rounded-full mx-auto my-4"
-                  />
-                </div>
+                    {/* Club Logo */}
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-medium mb-2">
+                        Club Logo <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="club_logo"
+                        onChange={handleFileChange}
+                        className={`w-full p-3 border ${
+                          errors.club_logo
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-lg`}
+                      />
+                      {errors.club_logo && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.club_logo}
+                        </p>
+                      )}
+                      <img
+                        src={formData.club_logo}
+                        alt={`${formData.club_name}`}
+                        className="w-48 h-24 rounded-full mx-auto my-4"
+                      />
+                    </div>
 
-                  {/* Club Id Card */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">
-                    Club ID Card <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="file"
-                    // accept="image/*"
-                    name="club_idcard"
-                    onChange={handleFileChange}
-                    className={`w-full p-3 border ${
-                      errors.club_idcard ? "border-red-500" : "border-gray-300"
-                    } rounded-lg`}
-                  />
-                  {errors.club_idcard && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.club_idcard}
-                    </p>
-                  )}
-                  <img
-                    src={formData.club_idcard}
-                    alt={`${formData.club_name}`}
-                    className="w-48 h-24 rounded-full mx-auto my-4"
-                  />
-                </div>
+                    {/* Club Id Card */}
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-medium mb-2">
+                        Club ID Card <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="file"
+                        // accept="image/*"
+                        name="club_idcard"
+                        onChange={handleFileChange}
+                        className={`w-full p-3 border ${
+                          errors.club_idcard
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-lg`}
+                      />
+                      {errors.club_idcard && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.club_idcard}
+                        </p>
+                      )}
+                      <img
+                        src={formData.club_idcard}
+                        alt={`${formData.club_name}`}
+                        className="w-48 h-24 rounded-full mx-auto my-4"
+                      />
+                    </div>
+                  </>
+                )}
 
                 {/* Name Fields (First Name and Last Name) */}
                 <div className="flex space-x-4 mb-4">

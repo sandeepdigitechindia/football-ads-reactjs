@@ -197,7 +197,7 @@ const RegisterForm = () => {
             profile, and more!
           </p>
           <img
-            src="/about/register.jpg" // Replace with your image path
+            src="/about/register.jpg" 
             alt="Register Illustration"
             className="mt-4 rounded-lg w-full object-cover"
           />

@@ -77,7 +77,7 @@ const ForgetPasswordForm = () => {
             manage your settings.
           </p>
           <img
-            src="/about/login.jpg" // Replace with your image path
+            src="/about/login.jpg" 
             alt="Login Illustration"
             className="mt-4 rounded-lg w-full object-cover"
           />

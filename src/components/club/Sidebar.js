@@ -32,16 +32,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: "Dashboard", link: "/club/dashboard", icon: <FaTachometerAlt /> },
     { name: "Posts", link: "/club/posts", icon: <FaClipboardList /> },
-    // {
-    //   name: "Subscriptions",
-    //   link: "/club/subscriptions",
-    //   icon: <FaEuroSign />,
-    // },
-    // {
-    //   name: "Transactions",
-    //   link: "/club/transactions",
-    //   icon: <FaHistory />,
-    // },
+  
     { name: "Settings", link: "/club/settings", icon: <FaCogs /> },
     {
       name: "Logout",
