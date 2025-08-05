@@ -95,19 +95,16 @@ const RoutesConfig = () => {
       <Route path="/faqs" element={<FAQ />} />
       <Route path="/thank-you" element={<ThankYou />} />
 
-      <Route
-          path="/tournament/create"
-          element={<TournamentForm />}
-        />
+      <Route path="/tournament/create" element={<TournamentForm />} />
 
-        <Route
-          path="/scouting-organization-form/create"
-          element={<ScoutingOrganizationForm />}
-        />
-        <Route
-          path="/customer-services/create"
-          element={<CustomerServicesForm />}
-        />
+      <Route
+        path="/scouting-organization-form/create"
+        element={<ScoutingOrganizationForm />}
+      />
+      <Route
+        path="/customer-services/create"
+        element={<CustomerServicesForm />}
+      />
 
       {/* User Routes */}
       <Route element={<PrivateRoute allowedRoles={["player"]} />}>
@@ -139,7 +136,9 @@ const RoutesConfig = () => {
       />
 
       {/* Club Routes */}
-      <Route element={<PrivateRoute allowedRoles={["club", "coach"]} />}>
+      <Route
+        element={<PrivateRoute allowedRoles={["club", "coach", "agent"]} />}
+      >
         <Route path="/club/dashboard" element={<ClubDashboard />} />
         <Route
           path="/club/settings"
