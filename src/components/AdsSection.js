@@ -17,7 +17,6 @@ const AdsSection = ({ ads }) => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useContext(AuthContext);
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!user?._id) return;
@@ -261,8 +260,9 @@ const AdsSection = ({ ads }) => {
 
                 <div className="flex flex-wrap gap-2 mt-3">
                   {isLoggedIn ? (
-                    user?.role === "player" &&
-                    (user?.isSubscription ? (
+                    user?.role === "player" ||
+                    user?.role === "agent" ||
+                    (user?.role === "coach" && user?.isSubscription) ? (
                       <>
                         <Link
                           to={`/ads/${ad.slug}`}
@@ -299,7 +299,7 @@ const AdsSection = ({ ads }) => {
                           Apply Now
                         </Link>
                       </>
-                    ))
+                    )
                   ) : (
                     <>
                       <Link

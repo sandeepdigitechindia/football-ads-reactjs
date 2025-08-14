@@ -223,7 +223,7 @@ const AdsDetailSection = ({ ads }) => {
               {new Date(ads.userId.createdAt).toLocaleDateString()}
             </p>
             {!isLoggedIn ||
-            (user?.role === "player" && !user?.isSubscription) ? (
+            (user?.role === "player" || user?.role === "agent" && !user?.isSubscription) ? (
               <>
                 <p className="text-gray-700 text-base sm:text-lg">
                   <span className="font-semibold">Phone:</span>{" "}
@@ -237,7 +237,7 @@ const AdsDetailSection = ({ ads }) => {
                   🔒 Subscribe to view full contact details.
                 </p>
               </>
-            ) : user?.role === "player" && user?.isSubscription ? (
+            ) : user?.role === "player" || user?.role === "agent" && user?.isSubscription ? (
               <>
                 <p className="text-gray-700 text-base sm:text-lg">
                   <span className="font-semibold">Phone:</span>{" "}
@@ -352,7 +352,7 @@ const AdsDetailSection = ({ ads }) => {
           </div>
 
           {/* Apply Now Button */}
-          {isLoggedIn && user?.role === "player" ? (
+          {isLoggedIn && user?.role === "player" || user?.role === "agent" || user?.role === "coach" ? (
             <>
               {user?.isSubscription === true ? (
                 <button
